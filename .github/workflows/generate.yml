@@ -1,0 +1,64 @@
+name: Generate post candidates
+
+on:
+  schedule:
+    # JSTで5:30, 10:30, 15:30, 20:30（投稿時刻の30分前）
+    # GitHubのcronはUTCなので-9時間
+    - cron: "30 20 * * *"   # JST 5:30
+    - cron: "30 1 * * *"    # JST 10:30
+    - cron: "30 6 * * *"    # JST 15:30
+    - cron: "30 11 * * *"   # JST 20:30
+  workflow_dispatch:
+  repository_dispatch:
+    types: [regenerate, reject]
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - run: pip install -r requirements.txt
+
+      - name: Reject pending job (if event is reject)
+        if: github.event.action == 'reject'
+        env:
+          JOB_ID: ${{ github.event.client_payload.job_id }}
+        run: |
+          if [ -f "pending/${JOB_ID}.json" ]; then
+            rm "pending/${JOB_ID}.json"
+            echo "Removed pending/${JOB_ID}.json"
+          fi
+
+      - name: Generate candidates
+        if: github.event.action != 'reject'
+        id: gen
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: python src/generate.py
+
+      - name: Notify via LINE
+        if: github.event.action != 'reject'
+        env:
+          LINE_CHANNEL_ACCESS_TOKEN: ${{ secrets.LINE_CHANNEL_ACCESS_TOKEN }}
+          LINE_USER_ID: ${{ secrets.LINE_USER_ID }}
+        run: python src/notify.py "${{ steps.gen.outputs.file }}"
+
+      - name: Commit state
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add pending/ posted/
+          if git diff --cached --quiet; then
+            echo "no state changes"
+          else
+            git commit -m "chore: update pending state ($(date -u +%Y-%m-%dT%H:%M:%SZ))"
+            git push
+          fi

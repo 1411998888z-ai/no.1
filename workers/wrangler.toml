@@ -1,0 +1,9 @@
+name = "threads-bot-webhook"
+main = "webhook.js"
+compatibility_date = "2025-01-01"
+
+# secrets は `wrangler secret put <NAME>` で登録する：
+#   - LINE_CHANNEL_SECRET
+#   - LINE_CHANNEL_ACCESS_TOKEN
+#   - GITHUB_TOKEN
+#   - GITHUB_REPO        例: 1411998888z-ai/no.1
