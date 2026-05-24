@@ -1,183 +1,235 @@
+"""投稿候補と画像を生成し、ローカルに保存する。
+LINE送信は send_to_line.py が担当(画像をGitHubに先にpushしてraw URLを有効化するため)。"""
+
 import json
 import os
+import random
 import sys
-import urllib.error
+import urllib.parse
 import urllib.request
 from datetime import datetime
+from pathlib import Path
 from zoneinfo import ZoneInfo
 
 GEMINI_API_KEY = os.environ["GEMINI_API_KEY"]
-LINE_CHANNEL_ACCESS_TOKEN = os.environ["LINE_CHANNEL_ACCESS_TOKEN"]
-LINE_TO_USER_ID = os.environ["LINE_TO_USER_ID"]
 
 GEMINI_MODEL = "gemini-2.5-flash"
 GEMINI_ENDPOINT = (
     f"https://generativelanguage.googleapis.com/v1beta/models/{GEMINI_MODEL}:generateContent"
 )
 
+REPO_ROOT = Path(__file__).parent
+STATE_PATH = REPO_ROOT / "state.json"
+PENDING_PATH = REPO_ROOT / "pending_message.json"
+IMAGES_DIR = REPO_ROOT / "images"
+
 ACCOUNT_BRIEF = """
 【発信者】サク @「戦略的に選ばれる」セールス設計士 (@_x_saku_)
-【ターゲット】対人サービスで稼ぐ人(営業マン/セラピスト/コーチ/占い師/飲食店/エステ/整体/キャバ嬢/ホスト)
+【ターゲット】対人サービスで稼ぐ人(営業マン/セラピスト/コーチ/占い師/飲食店/エステ/整体/キャバ嬢/ホスト 等)
 【発信軸】全対人サービスに共通する「選ばれる人のコミュニケーション術」を、心理学・脳科学の用語で裏打ちして解説する。
 【トーン】柔らかい断定。語尾は「です。」「ます。」「ですよね。」を基本とする。
 """.strip()
 
-# 1行目フックで使う職業シーン候補
-PERSONA_HOOKS = [
-    "指名が止まらないキャバ嬢",
-    "指名が取れないホスト",
-    "リピート率8割超えの整体師",
-    "予約の取れないセラピスト",
-    "鑑定後に必ず予約を入れさせる占い師",
-    "全国TOPセールス",
-    "潰れないスナックのママ",
-    "口コミだけで埋まるエステティシャン",
-    "リピートだけで満席の飲食店オーナー",
-    "クライアントが3年続くコーチ",
-    "紹介だけで指名が回る美容師",
-    "1ヶ月先まで予約が埋まるネイリスト",
-    "相談が途切れないカウンセラー",
-    "売上トップの不動産営業",
-    "解約率が低い保険外交員",
-    "生徒が辞めないヨガインストラクター",
-    "成婚率の高い結婚相談所カウンセラー",
-    "リピート率の高いパーソナルトレーナー",
-    "月商7桁の個人サロンオーナー",
-    "常連で埋まるバーのマスター",
-    "法人契約が切れないコンサルタント",
-    "紹介が止まらない税理士",
-    "クチコミだけで生徒が集まる塾講師",
-    "売れ続けるアパレル販売員",
-    "二次会まで指名されるキャバ嬢",
-]
+# ティア定義: S=フォロワー獲得期の鉄板、A=2nd弾、B=応用編
+PERSONA_TIERS = {
+    "S": [
+        "指名が止まらないキャバ嬢",
+        "指名が取れないホスト",
+        "鑑定後に必ず予約を入れさせる占い師",
+        "全国TOPセールス",
+        "潰れないスナックのママ",
+    ],
+    "A": [
+        "リピート率8割超えの整体師",
+        "予約の取れないセラピスト",
+        "口コミだけで埋まるエステティシャン",
+        "リピートだけで満席の飲食店オーナー",
+        "クライアントが3年続くコーチ",
+        "紹介だけで指名が回る美容師",
+        "二次会まで指名されるキャバ嬢",
+        "常連で埋まるバーのマスター",
+    ],
+    "B": [
+        "1ヶ月先まで予約が埋まるネイリスト",
+        "相談が途切れないカウンセラー",
+        "売上トップの不動産営業",
+        "解約率が低い保険外交員",
+        "生徒が辞めないヨガインストラクター",
+        "成婚率の高い結婚相談所カウンセラー",
+        "リピート率の高いパーソナルトレーナー",
+        "月商7桁の個人サロンオーナー",
+        "法人契約が切れないコンサルタント",
+        "紹介が止まらない税理士",
+        "クチコミだけで生徒が集まる塾講師",
+        "売れ続けるアパレル販売員",
+    ],
+}
 
-# 心理学/脳科学の用語候補
-PSYCH_TERMS = [
-    "返報性",
-    "自己開示の返報性",
-    "好意の返報性",
-    "自己参照効果",
-    "初頭効果",
-    "親近効果",
-    "ザイガニック効果",
-    "ミラーリング",
-    "バックトラッキング",
-    "単純接触効果",
-    "ハロー効果",
-    "ピークエンドの法則",
-    "アンカリング",
-    "カクテルパーティー効果",
-    "メラビアンの法則",
-    "バーナム効果",
-    "ベン・フランクリン効果",
-    "認知的不協和",
-    "コミットメントと一貫性の法則",
-    "社会的証明",
-    "希少性の原理",
-    "権威への服従",
-    "フット・イン・ザ・ドア",
-    "ドア・イン・ザ・フェイス",
-    "ローボール・テクニック",
-    "プロスペクト理論",
-    "損失回避",
-    "フレーミング効果",
-    "確証バイアス",
-    "認知的流暢性",
-    "リフレーミング",
-    "ラベリング効果",
-    "ピグマリオン効果",
-    "ゴーレム効果",
-    "エンハンシング効果",
-    "両面提示の法則",
-    "スリーパー効果",
-    "つり橋効果",
-    "ハード・トゥ・ゲット",
-    "YESセット",
-    "Iメッセージ",
-]
+TERM_TIERS = {
+    "S": [
+        "返報性",
+        "ミラーリング",
+        "単純接触効果",
+        "初頭効果",
+        "ハロー効果",
+        "メラビアンの法則",
+        "アンカリング",
+        "ピークエンドの法則",
+        "認知的不協和",
+        "社会的証明",
+    ],
+    "A": [
+        "自己参照効果",
+        "ザイガニック効果",
+        "カクテルパーティー効果",
+        "バーナム効果",
+        "希少性の原理",
+        "ピグマリオン効果",
+        "つり橋効果",
+        "プロスペクト理論",
+        "損失回避",
+        "確証バイアス",
+        "ラベリング効果",
+        "フット・イン・ザ・ドア",
+        "ドア・イン・ザ・フェイス",
+    ],
+    "B": [
+        "自己開示の返報性",
+        "好意の返報性",
+        "親近効果",
+        "バックトラッキング",
+        "ベン・フランクリン効果",
+        "コミットメントと一貫性の法則",
+        "権威への服従",
+        "ローボール・テクニック",
+        "フレーミング効果",
+        "認知的流暢性",
+        "リフレーミング",
+        "ゴーレム効果",
+        "エンハンシング効果",
+        "両面提示の法則",
+        "スリーパー効果",
+        "ハード・トゥ・ゲット",
+        "YESセット",
+        "Iメッセージ",
+    ],
+}
 
-# シーン軸(投稿のフォーカスする瞬間)
-SCENE_AXES = [
-    "初回接客の最初の30秒",
-    "リピーターになるかどうかの分かれ目",
-    "クロージング・価格提示の瞬間",
-    "クレーム対応中",
-    "紹介が発生する瞬間",
-    "別れ際・見送りの30秒",
-    "アフターフォローの連絡",
-    "リピート2回目以降の関係深化",
-    "売り込み前の関係構築",
-    "高単価を提示する瞬間",
-    "断られた直後の振る舞い",
-    "雑談から本題に入る間",
-]
+PATTERN_TIERS = {
+    "S": ["共感→気づき型", "逆張り断定型", "脳科学/心理学解説型"],
+    "A": ["体験談→学び型", "箇条書きノウハウ型"],
+    "B": ["失敗エピソード型", "比喩で説明型", "Q&A自問自答型"],
+}
 
-# 対比軸(誰と誰を比べるか)
-CONTRAST_AXES = [
-    "売れる人 vs 売れない人",
-    "リピートされる人 vs されない人",
-    "指名が取れる人 vs 取れない人",
-    "紹介が発生する人 vs しない人",
-    "高単価で売れる人 vs 値引きしないと売れない人",
-    "選ばれ続ける人 vs 一回で終わる人",
-]
+PATTERN_DESCRIPTIONS = {
+    "逆張り断定型": "1行目で職業の固有シーン→常識を否定→心理学/脳科学の用語で根拠提示→普遍化した一言で締め。",
+    "共感→気づき型": "1行目で「選ばれる側」の具体行動→2行目で「選ばれない側」の対比行動→心理学/脳科学の用語で根拠→普遍化。",
+    "箇条書きノウハウ型": "1行目に職業の固有シーンを置いた導入→箇条書き3項目→普遍化した締め。",
+    "体験談→学び型": "「100人見てきて気づいた」など固有数字のエピソード→具体行動の発見→心理学/脳科学の用語で根拠→普遍化。",
+    "脳科学/心理学解説型": "職業の具体行動を1行目に→脳/心理の仕組みを解説→現象名を明示→普遍化した一言で締め。",
+    "失敗エピソード型": "1行目で職業の固有シーン→「昔は〜してた」と過去の失敗→気づき→心理学/脳科学の用語→普遍化。",
+    "比喩で説明型": "1行目で職業の固有シーン→「これは〇〇と同じ」と異領域の比喩で説明→心理学/脳科学の用語→普遍化。",
+    "Q&A自問自答型": "1行目で職業の固有シーン→読み手が抱きそうな疑問を提示→答え→心理学/脳科学の用語→普遍化。",
+}
 
-POST_PATTERNS = """
-以下8つの型からランダムに3つを選び、1案ごとに別の型で3案作る。
+# フクロウマスコット「サク」の固定描写
+OWL_DESCRIPTION = (
+    "In one corner of the illustration, include the brand mascot: a cute chibi cartoon owl character "
+    "with large round eyeglasses, a small glowing lightbulb on top of its head, "
+    "wearing a smart purple suit jacket and a bowtie, holding a tiny book labeled IDEAS, "
+    "friendly and intelligent scholarly expression, consistent simple flat character design."
+)
 
-1. 逆張り断定型
-   構成: 1行目で職業の固有シーン→常識を否定→心理学/脳科学の用語で根拠提示→普遍化した一言で締め。
 
-2. 共感→気づき型
-   構成: 1行目で「選ばれる側」の具体行動→2行目で「選ばれない側」の対比行動→心理学/脳科学の用語で根拠→普遍化。
+def load_state() -> dict:
+    if STATE_PATH.exists():
+        return json.loads(STATE_PATH.read_text(encoding="utf-8"))
+    return {"used_triples": []}
 
-3. 箇条書きノウハウ型
-   構成: 1行目に職業の固有シーンを置いた導入→箇条書き3項目(各項目に心理現象を絡める)→普遍化した締め。
 
-4. 体験談→学び型
-   構成: 「100人見てきて気づいた」など固有数字のエピソード→具体行動の発見→心理学/脳科学の用語で根拠→普遍化。
+def save_state(state: dict) -> None:
+    STATE_PATH.write_text(
+        json.dumps(state, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+    )
 
-5. 脳科学/心理学解説型
-   構成: 職業の具体行動を1行目に→脳/心理の仕組みを解説→現象名を明示→普遍化した一言で締め。
 
-6. 失敗エピソード型
-   構成: 1行目で職業の固有シーン→「昔は〜してた」と過去の失敗→気づき→心理学/脳科学の用語→普遍化。
+def items_up_to_tier(tiered: dict, max_tier: str) -> list:
+    order = ["S", "A", "B"]
+    cutoff = order.index(max_tier)
+    items = []
+    for t in order[: cutoff + 1]:
+        items.extend(tiered.get(t, []))
+    return items
 
-7. 比喩で説明型
-   構成: 1行目で職業の固有シーン→「これは〇〇と同じ」と異領域の比喩で説明→心理学/脳科学の用語→普遍化。
 
-8. Q&A自問自答型
-   構成: 1行目で職業の固有シーン→読み手が抱きそうな疑問を提示→答え→心理学/脳科学の用語→普遍化。
-""".strip()
+def select_triples(state: dict, count: int = 3) -> tuple:
+    """Phase S→A→Bの順で、未使用の(persona, term, pattern)を3つ選ぶ。
+    3案は職業・用語・型が全て被らないようにする。"""
+    used = {tuple(t) for t in state["used_triples"]}
 
-PROMPT = f"""
+    for phase in ("S", "A", "B"):
+        personas = items_up_to_tier(PERSONA_TIERS, phase)
+        terms = items_up_to_tier(TERM_TIERS, phase)
+        patterns = items_up_to_tier(PATTERN_TIERS, phase)
+
+        candidates = [
+            (p, t, pat)
+            for p in personas
+            for t in terms
+            for pat in patterns
+            if (p, t, pat) not in used
+        ]
+        if len(candidates) < count:
+            continue
+
+        random.shuffle(candidates)
+        selected = []
+        used_p, used_t, used_pat = set(), set(), set()
+        for triple in candidates:
+            p, t, pat = triple
+            if p in used_p or t in used_t or pat in used_pat:
+                continue
+            selected.append(triple)
+            used_p.add(p)
+            used_t.add(t)
+            used_pat.add(pat)
+            if len(selected) == count:
+                return selected, phase
+
+        if selected:
+            return selected, phase
+
+    # 全phase使い切ったらリセット
+    print("All triples exhausted — resetting state.", file=sys.stderr)
+    state["used_triples"] = []
+    return select_triples(state, count)
+
+
+def build_prompt(triples: list) -> str:
+    assignments = "\n".join(
+        f"- 案{i + 1}: 職業フック=「{p}」 / 心理学用語=「{t}」 / 投稿型=「{pat}」"
+        for i, (p, t, pat) in enumerate(triples)
+    )
+    pattern_explanations = "\n".join(
+        f"- {pat}: {PATTERN_DESCRIPTIONS[pat]}" for (_, _, pat) in triples
+    )
+    return f"""
 あなたはX(旧Twitter)で月間1,000万インプを叩き出す日本語コピーライターです。
 以下のアカウントの発信として、インプレッションが伸びる投稿案を3つ作ってください。
 
 {ACCOUNT_BRIEF}
 
-# 投稿の型
-{POST_PATTERNS}
+# 今回の割当て(必ずこの組み合わせで生成する)
+{assignments}
 
-# 1行目フックの職業シーン候補
-{json.dumps(PERSONA_HOOKS, ensure_ascii=False, indent=2)}
+# 各型の構成
+{pattern_explanations}
 
-# 心理学/脳科学の用語候補
-{json.dumps(PSYCH_TERMS, ensure_ascii=False, indent=2)}
-
-# シーン軸候補(投稿のフォーカスする瞬間。任意で1つ選び、行動描写を寄せる)
-{json.dumps(SCENE_AXES, ensure_ascii=False, indent=2)}
-
-# 対比軸候補(共感→気づき型などで使う)
-{json.dumps(CONTRAST_AXES, ensure_ascii=False, indent=2)}
-
-# 絶対制約
+# 投稿本文の絶対制約
 - 各案 140文字以内(全角・改行含む)。X無料アカウント前提。
-- 1案ごとに「別の型・別の職業フック・別の心理学用語」を使う(3案で全て被らせない)。
-- 1行目は必ず職業シーン候補から1つ選んで始める(指を止めさせるため)。
+- 1行目は必ず割当てられた職業フックの文字列から始める(指を止めさせるため)。
 - 中身は「全対人サービスに共通する選ばれる人のコミュニケーション術」にする。職業の話で終わらせず、必ず普遍化する。
-- 各案に心理学/脳科学の用語を必ず1つ明示する(候補リストから選ぶか、同レベルの著名な用語を使う)。
-- シーン軸/対比軸は必須ではないが、ネタが似てきたら積極的に使い分けて多様性を出す。
+- 割当てられた心理学/脳科学の用語を本文中に明示する(例: 「心理学で〇〇と言います」)。
 
 # 文体制約
 - 語尾は「です。」「ます。」「ですよね。」など柔らかい断定で統一する。「〜しろ。」「〜だ。」などの強い命令/断定は禁止。
@@ -186,20 +238,27 @@ PROMPT = f"""
 - 「〜について解説します」「いかがでしたか」など定型句は禁止。
 - 一般論ではなく、シーンが目に浮かぶ具体描写で書く。
 
+# 画像プロンプト(英語、各投稿1つずつ生成)
+各投稿に添付するイラスト画像のための英語プロンプトを生成する。
+- シーン: 投稿の主題に合わせた職業シーンの具体描写(例: a high-end Tokyo hostess club with warm lighting, two silhouettes in conversation, evening atmosphere)。
+- スタイル: clean modern editorial illustration, soft pastel palette, minimalist composition, no text, no letters, no Japanese characters。
+- マスコットの描写は不要(後でこちらが追加する)。
+- 80-150単語で具体的に書く。
+
 # 出力フォーマット(厳密にこのJSONのみ、前後に文字を入れない)
 {{
   "posts": [
-    {{"pattern": "型の名前", "persona_hook": "使った職業シーン", "term": "使った心理学/脳科学の用語", "scene_axis": "使ったシーン軸(なければ空文字)", "text": "投稿本文"}},
-    {{"pattern": "型の名前", "persona_hook": "...", "term": "...", "scene_axis": "...", "text": "..."}},
-    {{"pattern": "型の名前", "persona_hook": "...", "term": "...", "scene_axis": "...", "text": "..."}}
+    {{"pattern": "型の名前", "persona_hook": "...", "term": "...", "text": "投稿本文", "image_prompt": "English image prompt..."}},
+    {{"pattern": "...", "persona_hook": "...", "term": "...", "text": "...", "image_prompt": "..."}},
+    {{"pattern": "...", "persona_hook": "...", "term": "...", "text": "...", "image_prompt": "..."}}
   ]
 }}
 """.strip()
 
 
-def call_gemini() -> dict:
+def call_gemini(prompt: str) -> dict:
     body = {
-        "contents": [{"parts": [{"text": PROMPT}]}],
+        "contents": [{"parts": [{"text": prompt}]}],
         "generationConfig": {
             "temperature": 1.1,
             "topP": 0.95,
@@ -212,58 +271,84 @@ def call_gemini() -> dict:
         headers={"Content-Type": "application/json"},
         method="POST",
     )
-    with urllib.request.urlopen(req, timeout=60) as res:
+    with urllib.request.urlopen(req, timeout=120) as res:
         payload = json.loads(res.read().decode("utf-8"))
     text = payload["candidates"][0]["content"]["parts"][0]["text"]
     return json.loads(text)
 
 
-def format_line_message(result: dict) -> str:
+def generate_image(image_prompt: str, save_path: Path) -> bool:
+    """Pollinations.ai (FLUX) で画像生成。成功時 True。"""
+    full_prompt = f"{image_prompt} {OWL_DESCRIPTION}"
+    seed = random.randint(1, 10**9)
+    url = (
+        "https://image.pollinations.ai/prompt/"
+        + urllib.parse.quote(full_prompt)
+        + f"?width=1024&height=1024&model=flux&seed={seed}&nologo=true&enhance=true"
+    )
+    try:
+        with urllib.request.urlopen(url, timeout=180) as res:
+            data = res.read()
+        save_path.write_bytes(data)
+        return True
+    except Exception as e:
+        print(f"Image gen failed for {save_path.name}: {e}", file=sys.stderr)
+        return False
+
+
+def format_text_message(result: dict, phase: str) -> str:
     today = datetime.now(ZoneInfo("Asia/Tokyo")).strftime("%Y/%m/%d")
-    lines = [f"☀ {today} の投稿候補 3案", ""]
+    lines = [f"☀ {today} の投稿候補 3案 (Phase {phase})", ""]
     for i, post in enumerate(result["posts"], 1):
         lines.append(f"━━━ 案{i}【{post.get('pattern', '')}】━━━")
         lines.append(post["text"])
-        meta_parts = [
-            f"フック: {post.get('persona_hook', '')}",
-            f"用語: {post.get('term', '')}",
-        ]
-        if post.get("scene_axis"):
-            meta_parts.append(f"シーン: {post['scene_axis']}")
-        meta_parts.append(f"{len(post['text'])}字")
-        lines.append("(" + " / ".join(meta_parts) + ")")
+        meta = (
+            f"フック: {post.get('persona_hook', '')} / "
+            f"用語: {post.get('term', '')} / "
+            f"{len(post['text'])}字"
+        )
+        lines.append(f"({meta})")
         lines.append("")
     lines.append("精査して良ければXへ。")
     return "\n".join(lines).strip()
 
 
-def push_to_line(message: str) -> None:
-    body = {
-        "to": LINE_TO_USER_ID,
-        "messages": [{"type": "text", "text": message[:4900]}],
-    }
-    req = urllib.request.Request(
-        "https://api.line.me/v2/bot/message/push",
-        data=json.dumps(body).encode("utf-8"),
-        headers={
-            "Content-Type": "application/json",
-            "Authorization": f"Bearer {LINE_CHANNEL_ACCESS_TOKEN}",
-        },
-        method="POST",
-    )
-    try:
-        with urllib.request.urlopen(req, timeout=30) as res:
-            res.read()
-    except urllib.error.HTTPError as e:
-        print(f"LINE push failed: {e.code} {e.read().decode('utf-8')}", file=sys.stderr)
-        raise
-
-
 def main() -> None:
-    result = call_gemini()
-    message = format_line_message(result)
-    print(message)
-    push_to_line(message)
+    state = load_state()
+    triples, phase = select_triples(state, count=3)
+    print(f"Selected phase: {phase}")
+    for t in triples:
+        print(f"  - {t}")
+
+    prompt = build_prompt(triples)
+    result = call_gemini(prompt)
+
+    IMAGES_DIR.mkdir(exist_ok=True)
+    today_str = datetime.now(ZoneInfo("Asia/Tokyo")).strftime("%Y-%m-%d")
+    image_rel_paths = []
+    for i, post in enumerate(result["posts"], 1):
+        img_path = IMAGES_DIR / f"{today_str}-{i}.jpg"
+        ok = generate_image(post.get("image_prompt", ""), img_path)
+        image_rel_paths.append(
+            img_path.relative_to(REPO_ROOT).as_posix() if ok else None
+        )
+
+    state.setdefault("used_triples", []).extend(list(t) for t in triples)
+    save_state(state)
+
+    text_message = format_text_message(result, phase)
+
+    PENDING_PATH.write_text(
+        json.dumps(
+            {"text": text_message, "image_paths": image_rel_paths},
+            ensure_ascii=False,
+            indent=2,
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    print("\n--- text message ---\n" + text_message)
+    print(f"\nImages: {image_rel_paths}")
 
 
 if __name__ == "__main__":

@@ -1,0 +1,4 @@
+pending_message.json
+__pycache__/
+*.pyc
+.DS_Store
