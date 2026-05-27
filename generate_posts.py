@@ -317,6 +317,15 @@ def generate_image(image_prompt: str, save_path: Path, max_retries: int = 3) -> 
     body = {
         "contents": [{"parts": [{"text": full_prompt}]}],
         "generationConfig": {"responseModalities": ["TEXT", "IMAGE"]},
+        "safetySettings": [
+            {"category": c, "threshold": "BLOCK_ONLY_HIGH"}
+            for c in (
+                "HARM_CATEGORY_HARASSMENT",
+                "HARM_CATEGORY_HATE_SPEECH",
+                "HARM_CATEGORY_SEXUALLY_EXPLICIT",
+                "HARM_CATEGORY_DANGEROUS_CONTENT",
+            )
+        ],
     }
     data = json.dumps(body).encode("utf-8")
 
@@ -328,17 +337,32 @@ def generate_image(image_prompt: str, save_path: Path, max_retries: int = 3) -> 
             method="POST",
         )
         try:
-            with urllib.request.urlopen(req, timeout=120) as res:
+            with urllib.request.urlopen(req, timeout=180) as res:
                 payload = json.loads(res.read().decode("utf-8"))
-            for part in payload["candidates"][0]["content"]["parts"]:
-                inline = part.get("inlineData") or part.get("inline_data")
-                if inline and inline.get("data"):
-                    save_path.write_bytes(base64.b64decode(inline["data"]))
-                    return True
-            print(
-                f"No image part in Gemini response for {save_path.name} (attempt {attempt})",
-                file=sys.stderr,
-            )
+            candidates = payload.get("candidates") or []
+            if not candidates:
+                pf = payload.get("promptFeedback") or {}
+                print(
+                    f"No candidates for {save_path.name} (attempt {attempt}): promptFeedback={pf}",
+                    file=sys.stderr,
+                )
+            else:
+                cand = candidates[0]
+                finish = cand.get("finishReason", "")
+                for part in cand.get("content", {}).get("parts", []) or []:
+                    inline = part.get("inlineData") or part.get("inline_data")
+                    if inline and inline.get("data"):
+                        save_path.write_bytes(base64.b64decode(inline["data"]))
+                        return True
+                # No image part — dump response for debugging
+                text_parts = [
+                    p.get("text", "") for p in cand.get("content", {}).get("parts", []) or []
+                ]
+                print(
+                    f"No image part for {save_path.name} (attempt {attempt}, finish={finish}): "
+                    f"text={' | '.join(text_parts)[:300]}",
+                    file=sys.stderr,
+                )
         except urllib.error.HTTPError as e:
             err_body = e.read().decode("utf-8", errors="replace")[:500]
             print(
@@ -357,20 +381,21 @@ def generate_image(image_prompt: str, save_path: Path, max_retries: int = 3) -> 
     return False
 
 
-def format_text_message(result: dict, phase: str) -> str:
+def format_post_message(post: dict, index: int, total: int, phase: str, include_header: bool) -> str:
     today = datetime.now(ZoneInfo("Asia/Tokyo")).strftime("%Y/%m/%d")
-    lines = [f"☀ {today} の投稿候補 3案 (Phase {phase})", ""]
-    for i, post in enumerate(result["posts"], 1):
-        lines.append(f"━━━ 案{i}【{post.get('pattern', '')}】━━━")
-        lines.append(post["text"])
-        meta = (
-            f"フック: {post.get('persona_hook', '')} / "
-            f"用語: {post.get('term', '')} / "
-            f"{len(post['text'])}字"
-        )
-        lines.append(f"({meta})")
+    lines = []
+    if include_header:
+        lines.append(f"☀ {today} の投稿候補 (Phase {phase})")
         lines.append("")
-    lines.append("精査して良ければXへ。")
+    lines.append(f"━━━ 案{index}/{total}【{post.get('pattern', '')}】━━━")
+    lines.append(post["text"])
+    lines.append("")
+    meta = (
+        f"フック: {post.get('persona_hook', '')} / "
+        f"用語: {post.get('term', '')} / "
+        f"{len(post['text'])}字"
+    )
+    lines.append(f"({meta})")
     return "\n".join(lines).strip()
 
 
@@ -397,18 +422,22 @@ def main() -> None:
     state.setdefault("used_triples", []).extend(list(t) for t in triples)
     save_state(state)
 
-    text_message = format_text_message(result, phase)
+    posts_payload = []
+    total = len(result["posts"])
+    for i, post in enumerate(result["posts"], 1):
+        posts_payload.append(
+            {
+                "text": format_post_message(post, i, total, phase, include_header=(i == 1)),
+                "image_path": image_rel_paths[i - 1],
+            }
+        )
 
     PENDING_PATH.write_text(
-        json.dumps(
-            {"text": text_message, "image_paths": image_rel_paths},
-            ensure_ascii=False,
-            indent=2,
-        )
-        + "\n",
+        json.dumps({"posts": posts_payload}, ensure_ascii=False, indent=2) + "\n",
         encoding="utf-8",
     )
-    print("\n--- text message ---\n" + text_message)
+    for p in posts_payload:
+        print("\n---\n" + p["text"])
     print(f"\nImages: {image_rel_paths}")
 
 
