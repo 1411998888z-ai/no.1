@@ -265,7 +265,7 @@ def build_prompt(triples: list) -> str:
 """.strip()
 
 
-def call_gemini(prompt: str) -> dict:
+def call_gemini(prompt: str, max_retries: int = 4) -> dict:
     body = {
         "contents": [{"parts": [{"text": prompt}]}],
         "generationConfig": {
@@ -274,16 +274,41 @@ def call_gemini(prompt: str) -> dict:
             "responseMimeType": "application/json",
         },
     }
-    req = urllib.request.Request(
-        f"{GEMINI_ENDPOINT}?key={GEMINI_API_KEY}",
-        data=json.dumps(body).encode("utf-8"),
-        headers={"Content-Type": "application/json"},
-        method="POST",
-    )
-    with urllib.request.urlopen(req, timeout=120) as res:
-        payload = json.loads(res.read().decode("utf-8"))
-    text = payload["candidates"][0]["content"]["parts"][0]["text"]
-    return json.loads(text)
+    data = json.dumps(body).encode("utf-8")
+
+    last_err: Exception | None = None
+    for attempt in range(1, max_retries + 1):
+        req = urllib.request.Request(
+            f"{GEMINI_ENDPOINT}?key={GEMINI_API_KEY}",
+            data=data,
+            headers={"Content-Type": "application/json"},
+            method="POST",
+        )
+        try:
+            with urllib.request.urlopen(req, timeout=120) as res:
+                payload = json.loads(res.read().decode("utf-8"))
+            text = payload["candidates"][0]["content"]["parts"][0]["text"]
+            return json.loads(text)
+        except urllib.error.HTTPError as e:
+            err_body = e.read().decode("utf-8", errors="replace")[:300]
+            print(
+                f"Gemini text HTTP {e.code} (attempt {attempt}/{max_retries}): {err_body}",
+                file=sys.stderr,
+            )
+            last_err = e
+            if e.code not in (429, 500, 502, 503, 504):
+                raise
+        except Exception as e:
+            print(
+                f"Gemini text call failed (attempt {attempt}/{max_retries}): {e}",
+                file=sys.stderr,
+            )
+            last_err = e
+
+        if attempt < max_retries:
+            time.sleep(2 ** attempt)
+
+    raise RuntimeError(f"Gemini text generation failed after {max_retries} attempts: {last_err}")
 
 
 def generate_image(image_prompt: str, save_path: Path, max_retries: int = 3) -> bool:
