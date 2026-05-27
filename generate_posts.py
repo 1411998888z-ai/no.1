@@ -1,11 +1,13 @@
 """投稿候補と画像を生成し、ローカルに保存する。
 LINE送信は send_to_line.py が担当(画像をGitHubに先にpushしてraw URLを有効化するため)。"""
 
+import base64
 import json
 import os
 import random
 import sys
-import urllib.parse
+import time
+import urllib.error
 import urllib.request
 from datetime import datetime
 from pathlib import Path
@@ -16,6 +18,10 @@ GEMINI_API_KEY = os.environ["GEMINI_API_KEY"]
 GEMINI_MODEL = "gemini-2.5-flash"
 GEMINI_ENDPOINT = (
     f"https://generativelanguage.googleapis.com/v1beta/models/{GEMINI_MODEL}:generateContent"
+)
+GEMINI_IMAGE_MODEL = "gemini-2.5-flash-image-preview"
+GEMINI_IMAGE_ENDPOINT = (
+    f"https://generativelanguage.googleapis.com/v1beta/models/{GEMINI_IMAGE_MODEL}:generateContent"
 )
 
 REPO_ROOT = Path(__file__).parent
@@ -280,23 +286,50 @@ def call_gemini(prompt: str) -> dict:
     return json.loads(text)
 
 
-def generate_image(image_prompt: str, save_path: Path) -> bool:
-    """Pollinations.ai (FLUX) で画像生成。成功時 True。"""
-    full_prompt = f"{image_prompt} {MASCOT_DESCRIPTION}"
-    seed = random.randint(1, 10**9)
-    url = (
-        "https://image.pollinations.ai/prompt/"
-        + urllib.parse.quote(full_prompt)
-        + f"?width=1024&height=1024&model=flux&seed={seed}&nologo=true&enhance=true"
-    )
-    try:
-        with urllib.request.urlopen(url, timeout=180) as res:
-            data = res.read()
-        save_path.write_bytes(data)
-        return True
-    except Exception as e:
-        print(f"Image gen failed for {save_path.name}: {e}", file=sys.stderr)
-        return False
+def generate_image(image_prompt: str, save_path: Path, max_retries: int = 3) -> bool:
+    """Gemini 2.5 Flash Image で画像生成。成功時 True。失敗時はリトライ。"""
+    full_prompt = f"{image_prompt}\n\n{MASCOT_DESCRIPTION}"
+    body = {
+        "contents": [{"parts": [{"text": full_prompt}]}],
+        "generationConfig": {"responseModalities": ["TEXT", "IMAGE"]},
+    }
+    data = json.dumps(body).encode("utf-8")
+
+    for attempt in range(1, max_retries + 1):
+        req = urllib.request.Request(
+            f"{GEMINI_IMAGE_ENDPOINT}?key={GEMINI_API_KEY}",
+            data=data,
+            headers={"Content-Type": "application/json"},
+            method="POST",
+        )
+        try:
+            with urllib.request.urlopen(req, timeout=120) as res:
+                payload = json.loads(res.read().decode("utf-8"))
+            for part in payload["candidates"][0]["content"]["parts"]:
+                inline = part.get("inlineData") or part.get("inline_data")
+                if inline and inline.get("data"):
+                    save_path.write_bytes(base64.b64decode(inline["data"]))
+                    return True
+            print(
+                f"No image part in Gemini response for {save_path.name} (attempt {attempt})",
+                file=sys.stderr,
+            )
+        except urllib.error.HTTPError as e:
+            err_body = e.read().decode("utf-8", errors="replace")[:500]
+            print(
+                f"Image gen HTTP {e.code} for {save_path.name} (attempt {attempt}): {err_body}",
+                file=sys.stderr,
+            )
+        except Exception as e:
+            print(
+                f"Image gen failed for {save_path.name} (attempt {attempt}): {e}",
+                file=sys.stderr,
+            )
+
+        if attempt < max_retries:
+            time.sleep(2 ** attempt)
+
+    return False
 
 
 def format_text_message(result: dict, phase: str) -> str:
