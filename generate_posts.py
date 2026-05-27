@@ -132,12 +132,15 @@ PATTERN_DESCRIPTIONS = {
     "Q&A自問自答型": "1行目で職業の固有シーン→読み手が抱きそうな疑問を提示→答え→心理学/脳科学の用語→普遍化。",
 }
 
-# フクロウマスコット「サク」の固定描写
-OWL_DESCRIPTION = (
-    "In one corner of the illustration, include the brand mascot: a cute chibi cartoon owl character "
-    "with large round eyeglasses, a small glowing lightbulb on top of its head, "
-    "wearing a smart purple suit jacket and a bowtie, holding a tiny book labeled IDEAS, "
-    "friendly and intelligent scholarly expression, consistent simple flat character design."
+# マスコット「もち太」の固定描写
+MASCOT_DESCRIPTION = (
+    "In one corner of the illustration, include the brand mascot named Mochita: "
+    "a cute chibi kawaii octopus character shaped like a squishy round dome of mochi rice cake, "
+    "smooth coral-pink body with a glossy soft texture, "
+    "a small yellow-orange beak, two tiny black dot eyes, two small pink cheek blushes, "
+    "a few white highlight markings on the body, "
+    "a wavy melting bottom edge as if the body is gently spreading on the ground, "
+    "thick black outline, simple flat kawaii illustration style, consistent character design."
 )
 
 
@@ -279,7 +282,7 @@ def call_gemini(prompt: str) -> dict:
 
 def generate_image(image_prompt: str, save_path: Path) -> bool:
     """Pollinations.ai (FLUX) で画像生成。成功時 True。"""
-    full_prompt = f"{image_prompt} {OWL_DESCRIPTION}"
+    full_prompt = f"{image_prompt} {MASCOT_DESCRIPTION}"
     seed = random.randint(1, 10**9)
     url = (
         "https://image.pollinations.ai/prompt/"
