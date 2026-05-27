@@ -19,10 +19,14 @@ GEMINI_MODEL = "gemini-2.5-flash"
 GEMINI_ENDPOINT = (
     f"https://generativelanguage.googleapis.com/v1beta/models/{GEMINI_MODEL}:generateContent"
 )
-GEMINI_IMAGE_MODEL = "gemini-2.5-flash-image-preview"
-GEMINI_IMAGE_ENDPOINT = (
-    f"https://generativelanguage.googleapis.com/v1beta/models/{GEMINI_IMAGE_MODEL}:generateContent"
-)
+# 試行順: 最初に成功したモデルをキャッシュして以降使う
+GEMINI_IMAGE_MODELS = [
+    "gemini-2.5-flash-image",
+    "gemini-2.5-flash-image-preview",
+    "gemini-2.0-flash-preview-image-generation",
+    "gemini-2.0-flash-exp-image-generation",
+]
+_resolved_image_model: str | None = None
 
 REPO_ROOT = Path(__file__).parent
 STATE_PATH = REPO_ROOT / "state.json"
@@ -311,8 +315,61 @@ def call_gemini(prompt: str, max_retries: int = 4) -> dict:
     raise RuntimeError(f"Gemini text generation failed after {max_retries} attempts: {last_err}")
 
 
+def _call_image_model(model: str, data: bytes, save_path: Path) -> str:
+    """1モデルで1回試す。戻り値: 'ok' | 'not_found' | 'retry' | 'no_image'。"""
+    endpoint = (
+        f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
+    )
+    req = urllib.request.Request(
+        f"{endpoint}?key={GEMINI_API_KEY}",
+        data=data,
+        headers={"Content-Type": "application/json"},
+        method="POST",
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=180) as res:
+            payload = json.loads(res.read().decode("utf-8"))
+        candidates = payload.get("candidates") or []
+        if not candidates:
+            pf = payload.get("promptFeedback") or {}
+            print(
+                f"  [{model}] no candidates for {save_path.name}: promptFeedback={pf}",
+                file=sys.stderr,
+            )
+            return "no_image"
+        cand = candidates[0]
+        finish = cand.get("finishReason", "")
+        for part in cand.get("content", {}).get("parts", []) or []:
+            inline = part.get("inlineData") or part.get("inline_data")
+            if inline and inline.get("data"):
+                save_path.write_bytes(base64.b64decode(inline["data"]))
+                return "ok"
+        text_parts = [
+            p.get("text", "") for p in cand.get("content", {}).get("parts", []) or []
+        ]
+        print(
+            f"  [{model}] no image part for {save_path.name} (finish={finish}): "
+            f"text={' | '.join(text_parts)[:300]}",
+            file=sys.stderr,
+        )
+        return "no_image"
+    except urllib.error.HTTPError as e:
+        err_body = e.read().decode("utf-8", errors="replace")[:500]
+        print(
+            f"  [{model}] HTTP {e.code} for {save_path.name}: {err_body}",
+            file=sys.stderr,
+        )
+        if e.code == 404:
+            return "not_found"
+        return "retry"
+    except Exception as e:
+        print(f"  [{model}] failed for {save_path.name}: {e}", file=sys.stderr)
+        return "retry"
+
+
 def generate_image(image_prompt: str, save_path: Path, max_retries: int = 3) -> bool:
-    """Gemini 2.5 Flash Image で画像生成。成功時 True。失敗時はリトライ。"""
+    """Gemini Flash Image で画像生成。複数のモデル名を順に試し、最初に成功したものを以降キャッシュ。"""
+    global _resolved_image_model
     full_prompt = f"{image_prompt}\n\n{MASCOT_DESCRIPTION}"
     body = {
         "contents": [{"parts": [{"text": full_prompt}]}],
@@ -329,51 +386,21 @@ def generate_image(image_prompt: str, save_path: Path, max_retries: int = 3) -> 
     }
     data = json.dumps(body).encode("utf-8")
 
+    models_to_try = [_resolved_image_model] if _resolved_image_model else GEMINI_IMAGE_MODELS
+
     for attempt in range(1, max_retries + 1):
-        req = urllib.request.Request(
-            f"{GEMINI_IMAGE_ENDPOINT}?key={GEMINI_API_KEY}",
-            data=data,
-            headers={"Content-Type": "application/json"},
-            method="POST",
-        )
-        try:
-            with urllib.request.urlopen(req, timeout=180) as res:
-                payload = json.loads(res.read().decode("utf-8"))
-            candidates = payload.get("candidates") or []
-            if not candidates:
-                pf = payload.get("promptFeedback") or {}
-                print(
-                    f"No candidates for {save_path.name} (attempt {attempt}): promptFeedback={pf}",
-                    file=sys.stderr,
-                )
-            else:
-                cand = candidates[0]
-                finish = cand.get("finishReason", "")
-                for part in cand.get("content", {}).get("parts", []) or []:
-                    inline = part.get("inlineData") or part.get("inline_data")
-                    if inline and inline.get("data"):
-                        save_path.write_bytes(base64.b64decode(inline["data"]))
-                        return True
-                # No image part — dump response for debugging
-                text_parts = [
-                    p.get("text", "") for p in cand.get("content", {}).get("parts", []) or []
-                ]
-                print(
-                    f"No image part for {save_path.name} (attempt {attempt}, finish={finish}): "
-                    f"text={' | '.join(text_parts)[:300]}",
-                    file=sys.stderr,
-                )
-        except urllib.error.HTTPError as e:
-            err_body = e.read().decode("utf-8", errors="replace")[:500]
-            print(
-                f"Image gen HTTP {e.code} for {save_path.name} (attempt {attempt}): {err_body}",
-                file=sys.stderr,
-            )
-        except Exception as e:
-            print(
-                f"Image gen failed for {save_path.name} (attempt {attempt}): {e}",
-                file=sys.stderr,
-            )
+        for model in models_to_try:
+            if model is None:
+                continue
+            print(f"Image gen attempt {attempt} with model={model} for {save_path.name}", file=sys.stderr)
+            result = _call_image_model(model, data, save_path)
+            if result == "ok":
+                _resolved_image_model = model
+                return True
+            if result == "not_found":
+                continue  # 次のモデル候補を試す
+            # retry or no_image — このモデルでバックオフして再試行
+            break
 
         if attempt < max_retries:
             time.sleep(2 ** attempt)
