@@ -1,7 +1,6 @@
 """投稿候補と画像を生成し、ローカルに保存する。
 LINE送信は send_to_line.py が担当(画像をGitHubに先にpushしてraw URLを有効化するため)。"""
 
-import base64
 import json
 import os
 import random
@@ -13,20 +12,33 @@ from datetime import datetime
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
+from PIL import Image, ImageDraw, ImageFont
+
 GEMINI_API_KEY = os.environ["GEMINI_API_KEY"]
 
 GEMINI_MODEL = "gemini-2.5-flash"
 GEMINI_ENDPOINT = (
     f"https://generativelanguage.googleapis.com/v1beta/models/{GEMINI_MODEL}:generateContent"
 )
-# 試行順: 最初に成功したモデルをキャッシュして以降使う
-GEMINI_IMAGE_MODELS = [
-    "gemini-2.5-flash-image",
-    "gemini-2.5-flash-image-preview",
-    "gemini-2.0-flash-preview-image-generation",
-    "gemini-2.0-flash-exp-image-generation",
+
+# クオートカード設定
+CARD_SIZE = 1080
+CARD_BG_TOP = (26, 26, 46)        # #1a1a2e
+CARD_BG_BOTTOM = (40, 22, 62)     # #28163e
+CARD_TEXT_COLOR = (245, 245, 245)
+CARD_ACCENT_COLOR = (255, 188, 92)  # 暖色アクセント
+CARD_SUB_COLOR = (170, 170, 180)
+HANDLE = "@_x_saku_"
+
+FONT_CANDIDATES = [
+    "/usr/share/fonts/opentype/noto/NotoSansCJK-Bold.ttc",
+    "/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc",
+    "/usr/share/fonts/opentype/ipafont-gothic/ipag.ttf",
+    "/usr/share/fonts/truetype/wqy/wqy-zenhei.ttc",
+    "/System/Library/Fonts/ヒラギノ角ゴシック W6.ttc",
+    "/System/Library/Fonts/ヒラギノ角ゴシック W3.ttc",
 ]
-_resolved_image_model: str | None = None
+FONT_PATH = next((p for p in FONT_CANDIDATES if Path(p).exists()), None)
 
 REPO_ROOT = Path(__file__).parent
 STATE_PATH = REPO_ROOT / "state.json"
@@ -142,18 +154,6 @@ PATTERN_DESCRIPTIONS = {
     "Q&A自問自答型": "1行目で職業の固有シーン→読み手が抱きそうな疑問を提示→答え→心理学/脳科学の用語→普遍化。",
 }
 
-# マスコット「もち太」の固定描写
-MASCOT_DESCRIPTION = (
-    "In one corner of the illustration, include the brand mascot named Mochita: "
-    "a cute chibi kawaii octopus character shaped like a squishy round dome of mochi rice cake, "
-    "smooth coral-pink body with a glossy soft texture, "
-    "a small yellow-orange beak, two tiny black dot eyes, two small pink cheek blushes, "
-    "a few white highlight markings on the body, "
-    "a wavy melting bottom edge as if the body is gently spreading on the ground, "
-    "thick black outline, simple flat kawaii illustration style, consistent character design."
-)
-
-
 def load_state() -> dict:
     if STATE_PATH.exists():
         return json.loads(STATE_PATH.read_text(encoding="utf-8"))
@@ -251,19 +251,15 @@ def build_prompt(triples: list) -> str:
 - 「〜について解説します」「いかがでしたか」など定型句は禁止。
 - 一般論ではなく、シーンが目に浮かぶ具体描写で書く。
 
-# 画像プロンプト(英語、各投稿1つずつ生成)
-各投稿に添付するイラスト画像のための英語プロンプトを生成する。
-- シーン: 投稿の主題に合わせた職業シーンの具体描写(例: a high-end Tokyo hostess club with warm lighting, two silhouettes in conversation, evening atmosphere)。
-- スタイル: clean modern editorial illustration, soft pastel palette, minimalist composition, no text, no letters, no Japanese characters。
-- マスコットの描写は不要(後でこちらが追加する)。
-- 80-150単語で具体的に書く。
+# クオートカード用の抜粋
+card_quoteには、本文中で一番強い1〜2文(計40〜70字程度)を抜粋する。SNS画像にそのまま載る前提で、スマホ画面で映える短さに。
 
 # 出力フォーマット(厳密にこのJSONのみ、前後に文字を入れない)
 {{
   "posts": [
-    {{"pattern": "型の名前", "persona_hook": "...", "term": "...", "text": "投稿本文", "image_prompt": "English image prompt..."}},
-    {{"pattern": "...", "persona_hook": "...", "term": "...", "text": "...", "image_prompt": "..."}},
-    {{"pattern": "...", "persona_hook": "...", "term": "...", "text": "...", "image_prompt": "..."}}
+    {{"pattern": "型の名前", "persona_hook": "...", "term": "...", "text": "投稿本文", "card_quote": "カード用の抜粋"}},
+    {{"pattern": "...", "persona_hook": "...", "term": "...", "text": "...", "card_quote": "..."}},
+    {{"pattern": "...", "persona_hook": "...", "term": "...", "text": "...", "card_quote": "..."}}
   ]
 }}
 """.strip()
@@ -315,97 +311,115 @@ def call_gemini(prompt: str, max_retries: int = 4) -> dict:
     raise RuntimeError(f"Gemini text generation failed after {max_retries} attempts: {last_err}")
 
 
-def _call_image_model(model: str, data: bytes, save_path: Path) -> str:
-    """1モデルで1回試す。戻り値: 'ok' | 'not_found' | 'retry' | 'no_image'。"""
-    endpoint = (
-        f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
-    )
-    req = urllib.request.Request(
-        f"{endpoint}?key={GEMINI_API_KEY}",
-        data=data,
-        headers={"Content-Type": "application/json"},
-        method="POST",
-    )
-    try:
-        with urllib.request.urlopen(req, timeout=180) as res:
-            payload = json.loads(res.read().decode("utf-8"))
-        candidates = payload.get("candidates") or []
-        if not candidates:
-            pf = payload.get("promptFeedback") or {}
-            print(
-                f"  [{model}] no candidates for {save_path.name}: promptFeedback={pf}",
-                file=sys.stderr,
-            )
-            return "no_image"
-        cand = candidates[0]
-        finish = cand.get("finishReason", "")
-        for part in cand.get("content", {}).get("parts", []) or []:
-            inline = part.get("inlineData") or part.get("inline_data")
-            if inline and inline.get("data"):
-                save_path.write_bytes(base64.b64decode(inline["data"]))
-                return "ok"
-        text_parts = [
-            p.get("text", "") for p in cand.get("content", {}).get("parts", []) or []
-        ]
+def _wrap_text(text: str, font: ImageFont.FreeTypeFont, max_width: int) -> list:
+    """日本語は単語境界がないので文字単位で改行する。"""
+    lines = []
+    current = ""
+    for ch in text:
+        if ch == "\n":
+            lines.append(current)
+            current = ""
+            continue
+        trial = current + ch
+        if font.getbbox(trial)[2] <= max_width:
+            current = trial
+        else:
+            lines.append(current)
+            current = ch
+    if current:
+        lines.append(current)
+    return lines
+
+
+def _paint_gradient(img: Image.Image, top: tuple, bottom: tuple) -> None:
+    draw = ImageDraw.Draw(img)
+    h = img.height
+    for y in range(h):
+        ratio = y / max(h - 1, 1)
+        r = int(top[0] + (bottom[0] - top[0]) * ratio)
+        g = int(top[1] + (bottom[1] - top[1]) * ratio)
+        b = int(top[2] + (bottom[2] - top[2]) * ratio)
+        draw.line([(0, y), (img.width, y)], fill=(r, g, b))
+
+
+def generate_image(post: dict, save_path: Path) -> bool:
+    """投稿からクオートカードを生成。PILだけで完結、外部API不要。"""
+    if not FONT_PATH:
         print(
-            f"  [{model}] no image part for {save_path.name} (finish={finish}): "
-            f"text={' | '.join(text_parts)[:300]}",
+            f"Japanese font not found in {FONT_CANDIDATES}; skipping image for {save_path.name}",
             file=sys.stderr,
         )
-        return "no_image"
-    except urllib.error.HTTPError as e:
-        err_body = e.read().decode("utf-8", errors="replace")[:500]
-        print(
-            f"  [{model}] HTTP {e.code} for {save_path.name}: {err_body}",
-            file=sys.stderr,
+        return False
+
+    quote = (post.get("card_quote") or post.get("text", "")).strip()
+    term = post.get("term", "")
+
+    img = Image.new("RGB", (CARD_SIZE, CARD_SIZE), CARD_BG_TOP)
+    _paint_gradient(img, CARD_BG_TOP, CARD_BG_BOTTOM)
+    draw = ImageDraw.Draw(img)
+
+    padding = 90
+    inner_width = CARD_SIZE - padding * 2
+
+    # 上部: 用語ラベル
+    if term:
+        term_font = ImageFont.truetype(FONT_PATH, 38, index=0)
+        label = f"心理学  ×  {term}"
+        bbox = term_font.getbbox(label)
+        label_w = bbox[2] - bbox[0]
+        # 角丸風の塗りつぶしバッジ
+        badge_pad = 24
+        badge_x0 = padding
+        badge_y0 = padding
+        badge_x1 = badge_x0 + label_w + badge_pad * 2
+        badge_y1 = badge_y0 + (bbox[3] - bbox[1]) + badge_pad
+        draw.rounded_rectangle(
+            [badge_x0, badge_y0, badge_x1, badge_y1],
+            radius=20,
+            fill=CARD_ACCENT_COLOR,
         )
-        if e.code == 404:
-            return "not_found"
-        return "retry"
-    except Exception as e:
-        print(f"  [{model}] failed for {save_path.name}: {e}", file=sys.stderr)
-        return "retry"
+        draw.text(
+            (badge_x0 + badge_pad, badge_y0 + badge_pad // 2),
+            label,
+            font=term_font,
+            fill=(20, 20, 30),
+        )
 
+    # 中央: クオート本文 (フォントサイズを文字数に応じて調整)
+    quote_len = len(quote)
+    if quote_len <= 50:
+        quote_size = 68
+    elif quote_len <= 80:
+        quote_size = 58
+    elif quote_len <= 120:
+        quote_size = 50
+    else:
+        quote_size = 44
+    quote_font = ImageFont.truetype(FONT_PATH, quote_size, index=0)
+    wrapped = _wrap_text(quote, quote_font, inner_width)
+    line_height = int(quote_size * 1.55)
+    total_text_h = line_height * len(wrapped)
+    start_y = (CARD_SIZE - total_text_h) // 2
+    for i, line in enumerate(wrapped):
+        draw.text(
+            (padding, start_y + i * line_height),
+            line,
+            font=quote_font,
+            fill=CARD_TEXT_COLOR,
+        )
 
-def generate_image(image_prompt: str, save_path: Path, max_retries: int = 3) -> bool:
-    """Gemini Flash Image で画像生成。複数のモデル名を順に試し、最初に成功したものを以降キャッシュ。"""
-    global _resolved_image_model
-    full_prompt = f"{image_prompt}\n\n{MASCOT_DESCRIPTION}"
-    body = {
-        "contents": [{"parts": [{"text": full_prompt}]}],
-        "generationConfig": {"responseModalities": ["TEXT", "IMAGE"]},
-        "safetySettings": [
-            {"category": c, "threshold": "BLOCK_ONLY_HIGH"}
-            for c in (
-                "HARM_CATEGORY_HARASSMENT",
-                "HARM_CATEGORY_HATE_SPEECH",
-                "HARM_CATEGORY_SEXUALLY_EXPLICIT",
-                "HARM_CATEGORY_DANGEROUS_CONTENT",
-            )
-        ],
-    }
-    data = json.dumps(body).encode("utf-8")
+    # 下部: ハンドル
+    handle_font = ImageFont.truetype(FONT_PATH, 34, index=0)
+    handle_bbox = handle_font.getbbox(HANDLE)
+    draw.text(
+        (CARD_SIZE - padding - (handle_bbox[2] - handle_bbox[0]), CARD_SIZE - padding - 40),
+        HANDLE,
+        font=handle_font,
+        fill=CARD_SUB_COLOR,
+    )
 
-    models_to_try = [_resolved_image_model] if _resolved_image_model else GEMINI_IMAGE_MODELS
-
-    for attempt in range(1, max_retries + 1):
-        for model in models_to_try:
-            if model is None:
-                continue
-            print(f"Image gen attempt {attempt} with model={model} for {save_path.name}", file=sys.stderr)
-            result = _call_image_model(model, data, save_path)
-            if result == "ok":
-                _resolved_image_model = model
-                return True
-            if result == "not_found":
-                continue  # 次のモデル候補を試す
-            # retry or no_image — このモデルでバックオフして再試行
-            break
-
-        if attempt < max_retries:
-            time.sleep(2 ** attempt)
-
-    return False
+    img.save(save_path, "JPEG", quality=90, optimize=True)
+    return True
 
 
 def format_post_message(post: dict, index: int, total: int, phase: str, include_header: bool) -> str:
@@ -441,7 +455,7 @@ def main() -> None:
     image_rel_paths = []
     for i, post in enumerate(result["posts"], 1):
         img_path = IMAGES_DIR / f"{today_str}-{i}.jpg"
-        ok = generate_image(post.get("image_prompt", ""), img_path)
+        ok = generate_image(post, img_path)
         image_rel_paths.append(
             img_path.relative_to(REPO_ROOT).as_posix() if ok else None
         )
