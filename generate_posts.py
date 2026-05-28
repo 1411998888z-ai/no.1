@@ -12,8 +12,6 @@ from datetime import datetime
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
-from PIL import Image, ImageDraw, ImageFont
-
 GEMINI_API_KEY = os.environ["GEMINI_API_KEY"]
 
 GEMINI_MODEL = "gemini-2.5-flash"
@@ -21,29 +19,9 @@ GEMINI_ENDPOINT = (
     f"https://generativelanguage.googleapis.com/v1beta/models/{GEMINI_MODEL}:generateContent"
 )
 
-# クオートカード設定
-CARD_SIZE = 1080
-CARD_BG_TOP = (26, 26, 46)        # #1a1a2e
-CARD_BG_BOTTOM = (40, 22, 62)     # #28163e
-CARD_TEXT_COLOR = (245, 245, 245)
-CARD_ACCENT_COLOR = (255, 188, 92)  # 暖色アクセント
-CARD_SUB_COLOR = (170, 170, 180)
-HANDLE = "@_x_saku_"
-
-FONT_CANDIDATES = [
-    "/usr/share/fonts/opentype/noto/NotoSansCJK-Bold.ttc",
-    "/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc",
-    "/usr/share/fonts/opentype/ipafont-gothic/ipag.ttf",
-    "/usr/share/fonts/truetype/wqy/wqy-zenhei.ttc",
-    "/System/Library/Fonts/ヒラギノ角ゴシック W6.ttc",
-    "/System/Library/Fonts/ヒラギノ角ゴシック W3.ttc",
-]
-FONT_PATH = next((p for p in FONT_CANDIDATES if Path(p).exists()), None)
-
 REPO_ROOT = Path(__file__).parent
 STATE_PATH = REPO_ROOT / "state.json"
 PENDING_PATH = REPO_ROOT / "pending_message.json"
-IMAGES_DIR = REPO_ROOT / "images"
 
 ACCOUNT_BRIEF = """
 【発信者】サク @「戦略的に選ばれる」セールス設計士 (@_x_saku_)
@@ -251,15 +229,12 @@ def build_prompt(triples: list) -> str:
 - 「〜について解説します」「いかがでしたか」など定型句は禁止。
 - 一般論ではなく、シーンが目に浮かぶ具体描写で書く。
 
-# クオートカード用の抜粋
-card_quoteには、本文中で一番強い1〜2文(計40〜70字程度)を抜粋する。SNS画像にそのまま載る前提で、スマホ画面で映える短さに。
-
 # 出力フォーマット(厳密にこのJSONのみ、前後に文字を入れない)
 {{
   "posts": [
-    {{"pattern": "型の名前", "persona_hook": "...", "term": "...", "text": "投稿本文", "card_quote": "カード用の抜粋"}},
-    {{"pattern": "...", "persona_hook": "...", "term": "...", "text": "...", "card_quote": "..."}},
-    {{"pattern": "...", "persona_hook": "...", "term": "...", "text": "...", "card_quote": "..."}}
+    {{"pattern": "型の名前", "persona_hook": "...", "term": "...", "text": "投稿本文"}},
+    {{"pattern": "...", "persona_hook": "...", "term": "...", "text": "..."}},
+    {{"pattern": "...", "persona_hook": "...", "term": "...", "text": "..."}}
   ]
 }}
 """.strip()
@@ -311,117 +286,6 @@ def call_gemini(prompt: str, max_retries: int = 4) -> dict:
     raise RuntimeError(f"Gemini text generation failed after {max_retries} attempts: {last_err}")
 
 
-def _wrap_text(text: str, font: ImageFont.FreeTypeFont, max_width: int) -> list:
-    """日本語は単語境界がないので文字単位で改行する。"""
-    lines = []
-    current = ""
-    for ch in text:
-        if ch == "\n":
-            lines.append(current)
-            current = ""
-            continue
-        trial = current + ch
-        if font.getbbox(trial)[2] <= max_width:
-            current = trial
-        else:
-            lines.append(current)
-            current = ch
-    if current:
-        lines.append(current)
-    return lines
-
-
-def _paint_gradient(img: Image.Image, top: tuple, bottom: tuple) -> None:
-    draw = ImageDraw.Draw(img)
-    h = img.height
-    for y in range(h):
-        ratio = y / max(h - 1, 1)
-        r = int(top[0] + (bottom[0] - top[0]) * ratio)
-        g = int(top[1] + (bottom[1] - top[1]) * ratio)
-        b = int(top[2] + (bottom[2] - top[2]) * ratio)
-        draw.line([(0, y), (img.width, y)], fill=(r, g, b))
-
-
-def generate_image(post: dict, save_path: Path) -> bool:
-    """投稿からクオートカードを生成。PILだけで完結、外部API不要。"""
-    if not FONT_PATH:
-        print(
-            f"Japanese font not found in {FONT_CANDIDATES}; skipping image for {save_path.name}",
-            file=sys.stderr,
-        )
-        return False
-
-    quote = (post.get("card_quote") or post.get("text", "")).strip()
-    term = post.get("term", "")
-
-    img = Image.new("RGB", (CARD_SIZE, CARD_SIZE), CARD_BG_TOP)
-    _paint_gradient(img, CARD_BG_TOP, CARD_BG_BOTTOM)
-    draw = ImageDraw.Draw(img)
-
-    padding = 90
-    inner_width = CARD_SIZE - padding * 2
-
-    # 上部: 用語ラベル
-    if term:
-        term_font = ImageFont.truetype(FONT_PATH, 38, index=0)
-        label = f"心理学  ×  {term}"
-        bbox = term_font.getbbox(label)
-        label_w = bbox[2] - bbox[0]
-        # 角丸風の塗りつぶしバッジ
-        badge_pad = 24
-        badge_x0 = padding
-        badge_y0 = padding
-        badge_x1 = badge_x0 + label_w + badge_pad * 2
-        badge_y1 = badge_y0 + (bbox[3] - bbox[1]) + badge_pad
-        draw.rounded_rectangle(
-            [badge_x0, badge_y0, badge_x1, badge_y1],
-            radius=20,
-            fill=CARD_ACCENT_COLOR,
-        )
-        draw.text(
-            (badge_x0 + badge_pad, badge_y0 + badge_pad // 2),
-            label,
-            font=term_font,
-            fill=(20, 20, 30),
-        )
-
-    # 中央: クオート本文 (フォントサイズを文字数に応じて調整)
-    quote_len = len(quote)
-    if quote_len <= 50:
-        quote_size = 68
-    elif quote_len <= 80:
-        quote_size = 58
-    elif quote_len <= 120:
-        quote_size = 50
-    else:
-        quote_size = 44
-    quote_font = ImageFont.truetype(FONT_PATH, quote_size, index=0)
-    wrapped = _wrap_text(quote, quote_font, inner_width)
-    line_height = int(quote_size * 1.55)
-    total_text_h = line_height * len(wrapped)
-    start_y = (CARD_SIZE - total_text_h) // 2
-    for i, line in enumerate(wrapped):
-        draw.text(
-            (padding, start_y + i * line_height),
-            line,
-            font=quote_font,
-            fill=CARD_TEXT_COLOR,
-        )
-
-    # 下部: ハンドル
-    handle_font = ImageFont.truetype(FONT_PATH, 34, index=0)
-    handle_bbox = handle_font.getbbox(HANDLE)
-    draw.text(
-        (CARD_SIZE - padding - (handle_bbox[2] - handle_bbox[0]), CARD_SIZE - padding - 40),
-        HANDLE,
-        font=handle_font,
-        fill=CARD_SUB_COLOR,
-    )
-
-    img.save(save_path, "JPEG", quality=90, optimize=True)
-    return True
-
-
 def format_post_message(post: dict, index: int, total: int, phase: str, include_header: bool) -> str:
     today = datetime.now(ZoneInfo("Asia/Tokyo")).strftime("%Y/%m/%d")
     lines = []
@@ -450,16 +314,6 @@ def main() -> None:
     prompt = build_prompt(triples)
     result = call_gemini(prompt)
 
-    IMAGES_DIR.mkdir(exist_ok=True)
-    today_str = datetime.now(ZoneInfo("Asia/Tokyo")).strftime("%Y-%m-%d")
-    image_rel_paths = []
-    for i, post in enumerate(result["posts"], 1):
-        img_path = IMAGES_DIR / f"{today_str}-{i}.jpg"
-        ok = generate_image(post, img_path)
-        image_rel_paths.append(
-            img_path.relative_to(REPO_ROOT).as_posix() if ok else None
-        )
-
     state.setdefault("used_triples", []).extend(list(t) for t in triples)
     save_state(state)
 
@@ -469,7 +323,6 @@ def main() -> None:
         posts_payload.append(
             {
                 "text": format_post_message(post, i, total, phase, include_header=(i == 1)),
-                "image_path": image_rel_paths[i - 1],
             }
         )
 
@@ -479,7 +332,6 @@ def main() -> None:
     )
     for p in posts_payload:
         print("\n---\n" + p["text"])
-    print(f"\nImages: {image_rel_paths}")
 
 
 if __name__ == "__main__":
