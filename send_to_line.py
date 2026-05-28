@@ -1,4 +1,4 @@
-"""pending_message.jsonを読んで、LINEに案ごと(text+image)を別プッシュで送信する。"""
+"""pending_message.jsonを読んで、LINEに案ごとに別プッシュでテキスト送信する。"""
 
 import json
 import os
@@ -10,15 +10,9 @@ from pathlib import Path
 
 LINE_CHANNEL_ACCESS_TOKEN = os.environ["LINE_CHANNEL_ACCESS_TOKEN"]
 LINE_TO_USER_ID = os.environ["LINE_TO_USER_ID"]
-GITHUB_REPOSITORY = os.environ.get("GITHUB_REPOSITORY", "1411998888z-ai/no.1")
-GITHUB_REF_NAME = os.environ.get("GITHUB_REF_NAME", "main")
 
 REPO_ROOT = Path(__file__).parent
 PENDING_PATH = REPO_ROOT / "pending_message.json"
-
-
-def raw_url_for(rel_path: str) -> str:
-    return f"https://raw.githubusercontent.com/{GITHUB_REPOSITORY}/{GITHUB_REF_NAME}/{rel_path}"
 
 
 def push_messages(messages: list) -> None:
@@ -48,17 +42,7 @@ def main() -> None:
 
     posts = pending.get("posts", [])
     for i, post in enumerate(posts, 1):
-        messages = [{"type": "text", "text": post["text"][:4900]}]
-        if post.get("image_path"):
-            url = raw_url_for(post["image_path"])
-            messages.append(
-                {
-                    "type": "image",
-                    "originalContentUrl": url,
-                    "previewImageUrl": url,
-                }
-            )
-        push_messages(messages)
+        push_messages([{"type": "text", "text": post["text"][:4900]}])
         print(f"Sent post {i}/{len(posts)} to LINE.")
         if i < len(posts):
             time.sleep(0.5)  # rate limit margin

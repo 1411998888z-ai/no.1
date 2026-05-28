@@ -1,13 +1,12 @@
 # X投稿候補 自動生成bot（→ LINEに毎朝配信）
 
-@_x_saku_ 用の投稿アシスタント。毎朝7時(JST)に、投稿候補3案 + 各案のイラスト画像をLINEに届けます。
+@_x_saku_ 用の投稿アシスタント。毎朝7時(JST)に、投稿候補3案をLINEに届けます。
 あなたは届いた案を精査してXに投稿するだけ。
 
 ## 構成
 
 - **GitHub Actions**（毎朝cron実行・無料枠）
-- **Google Gemini API**（投稿本文 + 画像プロンプト生成・無料枠）
-- **Pollinations.ai (FLUX)**（イラスト画像生成・APIキー不要、完全無料）
+- **Google Gemini API**（投稿本文生成・無料枠）
 - **LINE Messaging API**（配信・月200通無料）
 
 すべて完全無料。
@@ -33,19 +32,14 @@
 - 比喩で説明型（B）
 - Q&A自問自答型（B）
 
-## 添付画像
-
-各投稿に対応した職業シーンのイラストを生成、マスコット「もち太」（もちもちタコ）を毎回隅に登場させます（テキスト描写でAI依頼するため見た目は多少ブレます）。
-
 ## セットアップ
 
 [SETUP.md](./SETUP.md) を参照してください（15分）。
 
 ## ファイル
 
-- `generate_posts.py` — 投稿本文 + 画像生成、`state.json` 更新、`pending_message.json` 出力
+- `generate_posts.py` — 投稿本文生成、`state.json` 更新、`pending_message.json` 出力
 - `send_to_line.py` — `pending_message.json` を読んで LINE に送信
-- `.github/workflows/daily.yml` — 毎朝の自動実行（生成 → コミット&プッシュ → LINE送信）
+- `.github/workflows/daily.yml` — 毎朝の自動実行（生成 → state コミット → LINE送信）
 - `state.json` — 使用済み(職業, 用語, 型)三つ組の記録
-- `images/` — 生成画像（raw URLでLINEに渡す）
 - `SETUP.md` — 初期セットアップ手順
