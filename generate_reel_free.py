@@ -48,6 +48,15 @@ FONT_CANDIDATES = [
 FONT_PATH = next((p for p in FONT_CANDIDATES if Path(p).exists()), None)
 
 
+def run_ffmpeg(cmd: list) -> None:
+    """ffmpegを実行。失敗時はstderr末尾を表示してから例外。"""
+    proc = subprocess.run(cmd, capture_output=True, text=True)
+    if proc.returncode != 0:
+        tail = "\n".join(proc.stderr.strip().splitlines()[-20:])
+        print(f"ffmpeg failed (exit {proc.returncode}):\n{tail}", file=sys.stderr)
+        raise RuntimeError("ffmpeg failed")
+
+
 def split_sentences(text: str) -> list:
     parts = re.split(r"(?<=[。！？\n])", text)
     return [p.strip() for p in parts if p.strip()]
@@ -141,13 +150,13 @@ def build_segment(scene_img: Path, sub_png: Path, audio_wav: Path,
         x_expr, y_expr = "iw-(iw/zoom)", "ih/2-(ih/zoom/2)"        # 右から
 
     vf = (
-        f"[0:v]scale={big_w}:{big_h}:force_original_aspect_ratio=cover,"
+        f"[0:v]scale={big_w}:{big_h}:force_original_aspect_ratio=increase,"
         f"crop={big_w}:{big_h},"
         f"zoompan=z='{zoom_expr}':x='{x_expr}':y='{y_expr}':"
         f"d={frames}:s={W}x{H}:fps={FPS}[bg];"
         f"[bg][2:v]overlay=0:0[v]"
     )
-    subprocess.run(
+    run_ffmpeg(
         [
             "ffmpeg", "-y",
             "-i", str(scene_img),
@@ -160,9 +169,7 @@ def build_segment(scene_img: Path, sub_png: Path, audio_wav: Path,
             "-c:v", "libx264", "-pix_fmt", "yuv420p",
             "-c:a", "aac", "-b:a", "192k",
             str(out_mp4),
-        ],
-        check=True,
-        capture_output=True,
+        ]
     )
 
 
@@ -171,15 +178,13 @@ def concat_segments(segments: list, out_mp4: Path) -> None:
     list_file.write_text(
         "".join(f"file '{seg.resolve()}'\n" for seg in segments), encoding="utf-8"
     )
-    subprocess.run(
+    run_ffmpeg(
         [
             "ffmpeg", "-y",
             "-f", "concat", "-safe", "0", "-i", str(list_file),
             "-c:v", "libx264", "-pix_fmt", "yuv420p", "-c:a", "aac",
             str(out_mp4),
-        ],
-        check=True,
-        capture_output=True,
+        ]
     )
 
 
