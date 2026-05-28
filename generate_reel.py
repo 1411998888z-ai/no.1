@@ -194,7 +194,7 @@ def render_subtitle_png(sentence: str, save_path: Path) -> None:
 def build_segment(clip_mp4: Path, sub_png: Path, audio_wav: Path, duration: float, out_mp4: Path) -> None:
     """Klingクリップを9:16にし、字幕を重ね、音声長に合わせて尺調整、音声を付与。"""
     vf = (
-        f"[0:v]scale={W}:{H}:force_original_aspect_ratio=cover,"
+        f"[0:v]scale={W}:{H}:force_original_aspect_ratio=increase,"
         f"crop={W}:{H},tpad=stop_mode=clone:stop_duration=30[v0];"
         f"[v0][1:v]overlay=0:0[v]"
     )
