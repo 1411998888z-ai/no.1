@@ -8,9 +8,7 @@ import sys
 import time
 import urllib.error
 import urllib.request
-from datetime import datetime
 from pathlib import Path
-from zoneinfo import ZoneInfo
 
 GEMINI_API_KEY = os.environ["GEMINI_API_KEY"]
 
@@ -286,24 +284,6 @@ def call_gemini(prompt: str, max_retries: int = 4) -> dict:
     raise RuntimeError(f"Gemini text generation failed after {max_retries} attempts: {last_err}")
 
 
-def format_post_message(post: dict, index: int, total: int, phase: str, include_header: bool) -> str:
-    today = datetime.now(ZoneInfo("Asia/Tokyo")).strftime("%Y/%m/%d")
-    lines = []
-    if include_header:
-        lines.append(f"☀ {today} の投稿候補 (Phase {phase})")
-        lines.append("")
-    lines.append(f"━━━ 案{index}/{total}【{post.get('pattern', '')}】━━━")
-    lines.append(post["text"])
-    lines.append("")
-    meta = (
-        f"フック: {post.get('persona_hook', '')} / "
-        f"用語: {post.get('term', '')} / "
-        f"{len(post['text'])}字"
-    )
-    lines.append(f"({meta})")
-    return "\n".join(lines).strip()
-
-
 def main() -> None:
     state = load_state()
     triples, phase = select_triples(state, count=3)
@@ -317,14 +297,7 @@ def main() -> None:
     state.setdefault("used_triples", []).extend(list(t) for t in triples)
     save_state(state)
 
-    posts_payload = []
-    total = len(result["posts"])
-    for i, post in enumerate(result["posts"], 1):
-        posts_payload.append(
-            {
-                "text": format_post_message(post, i, total, phase, include_header=(i == 1)),
-            }
-        )
+    posts_payload = [{"text": post["text"].strip()} for post in result["posts"]]
 
     PENDING_PATH.write_text(
         json.dumps({"posts": posts_payload}, ensure_ascii=False, indent=2) + "\n",
