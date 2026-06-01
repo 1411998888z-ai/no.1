@@ -43,3 +43,17 @@
 - `.github/workflows/daily.yml` — 毎朝の自動実行（生成 → state コミット → LINE送信）
 - `state.json` — 使用済み(職業, 用語, 型)三つ組の記録
 - `SETUP.md` — 初期セットアップ手順
+
+---
+
+## Univapay 決済ステータス → スプレッドシート（営業向け）
+
+Univapay の Webhook を Google Apps Script で受け取り、決済の成功/失敗を
+Google スプレッドシートにリアルタイム反映します。営業メンバーはシートを
+開いておくだけで状況を把握できます（サーバー不要・無料）。
+
+- `gas/Code.gs` — Webhook を受信してシートへ 1決済=1行で upsert する Web アプリ
+- `register_univapay_webhook.py` — Univapay に Webhook を API で登録する（管理画面登録でも可）
+- `UNIVAPAY_SHEET_SETUP.md` — セットアップ手順
+
+詳しくは [UNIVAPAY_SHEET_SETUP.md](./UNIVAPAY_SHEET_SETUP.md) を参照してください。
