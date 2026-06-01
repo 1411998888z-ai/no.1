@@ -46,17 +46,20 @@ var HEADERS = [
   "status(raw)",    // 4
   "決済ID",         // 5 ← upsert キー
   "カード名義",     // 6
-  "メールアドレス", // 7
-  "モード",         // 8
-  "金額",           // 9
-  "通貨",           // 10
-  "サブスクID",     // 11
-  "トークンID",     // 12
-  "エラーコード",   // 13
-  "エラー詳細",     // 14
-  "決済作成日時",   // 15
-  "説明",           // 16
-  "metadata"        // 17
+  "氏名（漢字）",   // 7
+  "フリガナ",       // 8
+  "電話番号",       // 9
+  "メールアドレス", // 10
+  "モード",         // 11
+  "金額",           // 12
+  "通貨",           // 13
+  "サブスクID",     // 14
+  "トークンID",     // 15
+  "エラーコード",   // 16
+  "エラー詳細",     // 17
+  "決済作成日時",   // 18
+  "説明",           // 19
+  "metadata"        // 20
 ];
 
 var ID_COL = 5; // 「決済ID」列（1始まり）。upsert のキー。
@@ -142,6 +145,9 @@ function buildRow_(event, data) {
     status,                                        // status(raw)
     pick_(data, "id") || "",                      // 決済ID
     person.cardholder,                             // カード名義
+    person.name,                                   // 氏名（漢字）
+    person.furigana,                               // フリガナ
+    person.phone,                                  // 電話番号
     person.email,                                  // メールアドレス
     pick_(data, "mode") || "",                    // モード
     amount,                                        // 金額
@@ -157,11 +163,12 @@ function buildRow_(event, data) {
 }
 
 /**
- * transaction_token_id からカード名義・メールを取得する。
+ * transaction_token_id からカード名義・氏名(漢字)・フリガナ・電話・メールを取得する。
+ * 氏名/フリガナ/電話はトークンの metadata（univapay-name 等）から拾う。
  * UNIVAPAY_JWT / UNIVAPAY_SECRET が未設定、または取得失敗時は空文字を返す（Webhook は失敗させない）。
  */
 function lookupCardholder_(storeId, tokenId) {
-  var empty = { cardholder: "", email: "" };
+  var empty = { cardholder: "", name: "", furigana: "", phone: "", email: "" };
   if (!storeId || !tokenId) return empty;
 
   var props = PropertiesService.getScriptProperties();
@@ -184,9 +191,15 @@ function lookupCardholder_(storeId, tokenId) {
     var token = JSON.parse(res.getContentText());
     var tdata = token.data || {};
     var card = tdata.card || {};
+    var meta = token.metadata || {};
+
     var cardholder = card.cardholder || tdata.cardholder || tdata.customer_name || "";
-    var email = token.email || tdata.email || "";
-    return { cardholder: cardholder, email: email };
+    var name = meta["univapay-name"] || meta["name"] || "";
+    var furigana = meta["univapay-name-furigana"] || meta["name-furigana"] || meta["furigana"] || "";
+    var phone = meta["univapay-phone-number"] || meta["phone-number"] || meta["phone"] || "";
+    var email = token.email || tdata.email || meta["univapay-email"] || meta["email"] || "";
+
+    return { cardholder: cardholder, name: name, furigana: furigana, phone: phone, email: email };
   } catch (err) {
     return empty;
   }
