@@ -58,6 +58,59 @@
   @keyframes float{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(4vw,-3vw) scale(1.08)}66%{transform:translate(-3vw,3vw) scale(.95)}}
   @media(prefers-reduced-motion:reduce){.blob{animation:none}}
 
+  /* ===== scattered fashion icons ===== */
+  .fashion-scatter{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
+  .fashion-scatter span{position:absolute;font-size:clamp(1.6rem,3vw,2.8rem);opacity:.16;
+    filter:saturate(1.2);animation:drift 22s ease-in-out infinite;will-change:transform}
+  @keyframes drift{0%,100%{transform:translateY(0) rotate(-8deg)}50%{transform:translateY(-26px) rotate(8deg)}}
+  @media(prefers-reduced-motion:reduce){.fashion-scatter span{animation:none}}
+
+  /* ===== rotating globe (hero) ===== */
+  .globe-wrap{display:flex;justify-content:center;margin-top:50px}
+  .globe{position:relative;width:clamp(160px,30vw,230px);aspect-ratio:1;border-radius:50%;
+    background:
+      radial-gradient(circle at 32% 28%,rgba(255,255,255,.55),transparent 38%),
+      conic-gradient(from 0deg,#2dd4ff,#7c3aed,#ff4d8d,#ffd23f,#22e3a3,#2dd4ff);
+    box-shadow:0 30px 60px -22px rgba(124,58,237,.6),inset 0 0 40px rgba(255,255,255,.25);
+    overflow:hidden;animation:spin 18s linear infinite}
+  .globe::before{content:"";position:absolute;inset:0;border-radius:50%;
+    background:
+      radial-gradient(ellipse 22% 30% at 22% 38%,rgba(26,17,48,.55),transparent 60%),
+      radial-gradient(ellipse 30% 18% at 60% 30%,rgba(26,17,48,.5),transparent 60%),
+      radial-gradient(ellipse 18% 26% at 72% 65%,rgba(26,17,48,.55),transparent 60%),
+      radial-gradient(ellipse 14% 16% at 40% 72%,rgba(26,17,48,.5),transparent 60%);
+    mix-blend-mode:multiply}
+  .globe .grid-lines{position:absolute;inset:0;border-radius:50%;opacity:.35;
+    background:
+      repeating-linear-gradient(0deg,transparent 0 14%,rgba(255,255,255,.5) 14% 14.6%),
+      repeating-linear-gradient(90deg,transparent 0 12%,rgba(255,255,255,.4) 12% 12.5%)}
+  .globe-ring{position:absolute;inset:-12%;border-radius:50%;border:2px dashed rgba(124,58,237,.35);
+    animation:spin-rev 26s linear infinite}
+  .globe-pin{position:absolute;font-size:1.4rem;animation:pin 4s ease-in-out infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  @keyframes spin-rev{to{transform:rotate(-360deg)}}
+  @keyframes pin{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+  @media(prefers-reduced-motion:reduce){.globe,.globe-ring,.globe-pin{animation:none}}
+
+  /* ===== world map section ===== */
+  .worldmap{position:relative;background:linear-gradient(160deg,#221544,#3a1d6e 60%,#7c3aed);
+    border-radius:36px;padding:clamp(40px,6vw,70px);color:#fff;overflow:hidden;box-shadow:var(--shadow)}
+  .worldmap::before{content:"";position:absolute;inset:0;opacity:.5;
+    background-image:radial-gradient(rgba(255,255,255,.7) 1.3px,transparent 1.4px);
+    background-size:14px 14px;
+    -webkit-mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 50'><path fill='black' d='M5,18 Q12,10 20,14 T34,16 36,24 28,30 18,28 10,30 6,24 Z M40,8 Q52,4 60,10 70,8 78,14 84,12 90,18 86,26 78,24 70,30 60,26 54,30 46,24 42,16 Z M44,32 Q50,30 54,36 52,44 46,46 42,40 Z M64,32 Q72,30 76,36 74,44 68,46 64,40 Z'/></svg>");
+    mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 50'><path fill='black' d='M5,18 Q12,10 20,14 T34,16 36,24 28,30 18,28 10,30 6,24 Z M40,8 Q52,4 60,10 70,8 78,14 84,12 90,18 86,26 78,24 70,30 60,26 54,30 46,24 42,16 Z M44,32 Q50,30 54,36 52,44 46,46 42,40 Z M64,32 Q72,30 76,36 74,44 68,46 64,40 Z'/></svg>");
+    -webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-size:contain;mask-size:contain;
+    -webkit-mask-position:center;mask-position:center}
+  .worldmap .wm-in{position:relative;text-align:center}
+  .worldmap .eyebrow{background:rgba(255,255,255,.18)}
+  .worldmap h2{font-size:clamp(1.8rem,4.5vw,2.9rem);font-weight:900;line-height:1.25}
+  .worldmap p.sub{margin:14px auto 0;max-width:620px;opacity:.92;font-weight:500}
+  .wm-stats{display:flex;gap:clamp(24px,5vw,70px);justify-content:center;flex-wrap:wrap;margin-top:46px}
+  .wm-stats .num{font-family:"Poppins";font-weight:900;font-size:clamp(2.2rem,5vw,3.4rem);line-height:1;
+    background:var(--grad2);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .wm-stats .lbl{font-weight:700;font-size:.85rem;opacity:.9;margin-top:6px}
+
   /* ===== nav ===== */
   header.nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(14px);
     background:rgba(255,253,250,.72);border-bottom:1px solid rgba(124,58,237,.1)}
@@ -231,6 +284,9 @@
   <div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div><div class="blob b4"></div>
 </div>
 
+<!-- scattered world-fashion icons -->
+<div class="fashion-scatter" id="scatter" aria-hidden="true"></div>
+
 <!-- NAV -->
 <header class="nav">
   <div class="wrap nav-in">
@@ -250,7 +306,7 @@
 <!-- HERO -->
 <section class="hero" id="top">
   <div class="wrap">
-    <span class="badge reveal"><span class="pulse"></span> 海外ブランド販売 × 売上UPサポート</span>
+    <span class="badge reveal"><span class="pulse"></span> 🌍 世界15ヶ国のファッションを仕入れる × 売上UPサポート</span>
     <h1 class="reveal">海外ブランド販売を、<br><span class="grad">もっと自由に、もっと稼げる。</span></h1>
     <p class="lead reveal">Nova Prime（ノヴァプライム）は、厳選した<strong>仕入先の共有</strong>・<strong>会員限定の動画講座</strong>・<strong>チャット個別サポート</strong>で、あなたのEC事業の売上を最短で伸ばすパートナーです。</p>
     <div class="hero-cta reveal">
@@ -262,6 +318,18 @@
       <div class="stat reveal"><div class="num">20<small>社+</small></div><div class="lbl">直営店直送ネットワーク</div></div>
       <div class="stat reveal"><div class="num">約7<small>h</small></div><div class="lbl">動画講座コンテンツ</div></div>
       <div class="stat reveal"><div class="num">6<small>STEP</small></div><div class="lbl">体系化されたカリキュラム</div></div>
+    </div>
+
+    <div class="globe-wrap reveal" aria-hidden="true">
+      <div class="globe">
+        <div class="grid-lines"></div>
+        <div class="globe-ring"></div>
+        <div class="globe-pin" style="top:18%;left:30%">👜</div>
+        <div class="globe-pin" style="top:30%;right:22%;animation-delay:-1s">👠</div>
+        <div class="globe-pin" style="bottom:24%;left:24%;animation-delay:-2s">👗</div>
+        <div class="globe-pin" style="bottom:18%;right:28%;animation-delay:-3s">🕶️</div>
+        <div class="globe-pin" style="top:46%;left:50%;transform:translateX(-50%);animation-delay:-1.5s">🧥</div>
+      </div>
     </div>
 
     <div class="marquee reveal" aria-hidden="true">
@@ -305,6 +373,25 @@
         <div class="ic">💬</div>
         <h3>チャット個別サポート</h3>
         <p>運営者とチャットワークで直接やり取り。いつでも質問を送れる個別コンサルティングで、つまずきをその場で解消します。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WORLD MAP / GLOBAL REACH -->
+<section id="world">
+  <div class="wrap">
+    <div class="worldmap reveal">
+      <div class="wm-in">
+        <span class="eyebrow">Worldwide Network</span>
+        <h2>世界中のファッションを、<br>あなたの商品棚に。</h2>
+        <p class="sub">👜 バッグ・👗 アパレル・👟 シューズ・🕶️ アクセサリー — 15ヶ国以上のバイヤーと直営店直送ネットワークが、世界のトレンドをまとめてお届けします。</p>
+        <div class="wm-stats">
+          <div><div class="num">15<small>ヶ国+</small></div><div class="lbl">海外バイヤー連携</div></div>
+          <div><div class="num">20<small>社+</small></div><div class="lbl">直営店直送</div></div>
+          <div><div class="num">5<small>ルート</small></div><div class="lbl">仕入れチャネル</div></div>
+          <div><div class="num">∞</div><div class="lbl">取り扱いブランド</div></div>
+        </div>
       </div>
     </div>
   </div>
@@ -500,6 +587,25 @@
 </footer>
 
 <script>
+  // scatter world-fashion icons across the background
+  (function(){
+    const icons=['👜','👗','👠','👟','🧥','🕶️','👒','🧣','👔','👞','🥿','👛','🎒','💼','🧤','👚','🛍️','🌍','🌏','✈️'];
+    const layer=document.getElementById('scatter');
+    if(!layer) return;
+    const N=22;
+    for(let i=0;i<N;i++){
+      const s=document.createElement('span');
+      s.textContent=icons[i%icons.length];
+      s.style.left=(2+ (i*4099%96))+'%';
+      s.style.top=(3+ (i*7919%92))+'%';
+      const dur=(16+(i*53%14));
+      s.style.animationDuration=dur+'s';
+      s.style.animationDelay=(-(i*37%dur))+'s';
+      s.style.fontSize=(1.4+ (i*31%18)/10)+'rem';
+      layer.appendChild(s);
+    }
+  })();
+
   // mobile menu
   const toggle=document.getElementById('toggle'), menu=document.getElementById('menu');
   toggle.addEventListener('click',()=>menu.classList.toggle('open'));
