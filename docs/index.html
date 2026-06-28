@@ -3,276 +3,252 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Nova Prime ｜ 海外ブランド販売を、もっと自由に。</title>
-<meta name="description" content="Nova Prime（ノヴァプライム）は、海外ブランド販売の売上向上を仕入先の共有・会員限定の動画講座・個別コンサルティングでサポートするサービスです。" />
-<meta name="theme-color" content="#7c3aed" />
-
-<!-- OGP -->
-<meta property="og:title" content="Nova Prime ｜ 海外ブランド販売を、もっと自由に。" />
-<meta property="og:description" content="海外バイヤー15ヶ国以上・直営店直送20社以上の仕入先を共有。BUYMA売上UPの動画講座とチャット個別サポート付き。" />
+<title>Nova Prime ｜ 世界のファッションを、あなたのビジネスへ。</title>
+<meta name="description" content="Nova Prime（ノヴァプライム）— 15ヶ国以上のバイヤーと直営店直送ネットワークで世界のファッションを仕入れ、海外ブランド販売の売上を伸ばす。会員限定の動画講座と個別サポート付き。" />
+<meta name="theme-color" content="#0b0b10" />
+<meta property="og:title" content="Nova Prime ｜ 世界のファッションを、あなたのビジネスへ。" />
+<meta property="og:description" content="15ヶ国以上のバイヤー・直営店直送20社以上。世界のファッションを仕入れ、売上を伸ばす海外ブランド販売サポート。" />
 <meta property="og:type" content="website" />
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Poppins:wght@600;700;800;900&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Noto+Sans+JP:wght@300;400;500;700&family=Noto+Serif+JP:wght@500;600;700;900&family=Playfair+Display:wght@600;700;800;900&display=swap" rel="stylesheet" />
 
 <style>
   :root{
-    --pink:#ff4d8d;
-    --purple:#7c3aed;
-    --blue:#2dd4ff;
-    --yellow:#ffd23f;
-    --green:#22e3a3;
-    --orange:#ff8a3d;
-    --ink:#1a1130;
-    --paper:#fffdfa;
-    --grad: linear-gradient(120deg,#ff4d8d 0%,#7c3aed 45%,#2dd4ff 100%);
-    --grad2: linear-gradient(120deg,#ffd23f 0%,#ff8a3d 50%,#ff4d8d 100%);
-    --grad3: linear-gradient(120deg,#22e3a3 0%,#2dd4ff 100%);
-    --shadow: 0 18px 40px -18px rgba(124,58,237,.45);
-    --radius:26px;
+    --bg:#0a0a0f;
+    --bg2:#101019;
+    --panel:#13131e;
+    --gold:#d7b46a;
+    --gold-bright:#f1dca8;
+    --gold-deep:#a9854a;
+    --cream:#ece6da;
+    --muted:#938c7e;
+    --line:rgba(215,180,106,.20);
+    --line-soft:rgba(215,180,106,.10);
+    --radius:4px;
+    --grad-gold:linear-gradient(120deg,#a9854a,#f1dca8 45%,#d7b46a);
   }
   *{box-sizing:border-box;margin:0;padding:0}
   html{scroll-behavior:smooth}
   body{
-    font-family:"Noto Sans JP",sans-serif;
-    color:var(--ink);
-    background:var(--paper);
-    line-height:1.8;
-    overflow-x:hidden;
-    -webkit-font-smoothing:antialiased;
+    font-family:"Noto Sans JP",sans-serif;font-weight:400;
+    color:var(--cream);background:var(--bg);line-height:1.95;
+    overflow-x:hidden;-webkit-font-smoothing:antialiased;letter-spacing:.02em;
   }
-  h1,h2,h3,.font-display{font-family:"Poppins","Noto Sans JP",sans-serif}
+  /* cinematic backdrop */
+  body::before{content:"";position:fixed;inset:0;z-index:-3;pointer-events:none;
+    background:
+      radial-gradient(900px 600px at 78% 8%,rgba(120,70,40,.22),transparent 60%),
+      radial-gradient(800px 700px at 12% 30%,rgba(40,38,80,.28),transparent 60%),
+      radial-gradient(1000px 800px at 50% 110%,rgba(120,90,45,.18),transparent 55%),
+      linear-gradient(180deg,#0a0a0f,#0c0c14 40%,#0a0a0f)}
+  body::after{content:"";position:fixed;inset:0;z-index:-3;pointer-events:none;opacity:.4;
+    background-image:radial-gradient(rgba(255,255,255,.04) .5px,transparent .6px);background-size:3px 3px}
+
+  .serif{font-family:"Noto Serif JP","Playfair Display",serif}
+  .display{font-family:"Playfair Display","Noto Serif JP",serif}
+  .corm{font-family:"Cormorant Garamond",serif}
   a{color:inherit;text-decoration:none}
-  img{max-width:100%;display:block}
-  .wrap{width:min(1120px,92vw);margin-inline:auto}
-  section{position:relative;padding:clamp(70px,11vw,140px) 0}
+  .gold{color:var(--gold)}
+  .goldgrad{background:var(--grad-gold);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .wrap{width:min(1180px,90vw);margin-inline:auto}
+  section{position:relative;padding:clamp(80px,12vw,160px) 0}
 
-  /* ===== floating blobs background ===== */
-  .blobs{position:fixed;inset:0;z-index:-2;overflow:hidden;pointer-events:none}
-  .blob{position:absolute;border-radius:50%;filter:blur(60px);opacity:.55;animation:float 16s ease-in-out infinite}
-  .blob.b1{width:46vw;height:46vw;background:var(--pink);top:-12vw;left:-10vw}
-  .blob.b2{width:40vw;height:40vw;background:var(--blue);top:30vh;right:-12vw;animation-delay:-4s}
-  .blob.b3{width:38vw;height:38vw;background:var(--yellow);bottom:-10vw;left:20vw;animation-delay:-8s}
-  .blob.b4{width:32vw;height:32vw;background:var(--green);top:120vh;right:10vw;animation-delay:-2s}
-  @keyframes float{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(4vw,-3vw) scale(1.08)}66%{transform:translate(-3vw,3vw) scale(.95)}}
-  @media(prefers-reduced-motion:reduce){.blob{animation:none}}
+  /* scattered fashion line-icons */
+  .scatter{position:fixed;inset:0;z-index:-2;overflow:hidden;pointer-events:none}
+  .scatter svg{position:absolute;color:var(--gold);opacity:.07;animation:drift 26s ease-in-out infinite;will-change:transform}
+  @keyframes drift{0%,100%{transform:translateY(0) rotate(-6deg)}50%{transform:translateY(-30px) rotate(6deg)}}
+  @media(prefers-reduced-motion:reduce){.scatter svg{animation:none}}
 
-  /* ===== scattered fashion icons ===== */
-  .fashion-scatter{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
-  .fashion-scatter span{position:absolute;font-size:clamp(1.6rem,3vw,2.8rem);opacity:.16;
-    filter:saturate(1.2);animation:drift 22s ease-in-out infinite;will-change:transform}
-  @keyframes drift{0%,100%{transform:translateY(0) rotate(-8deg)}50%{transform:translateY(-26px) rotate(8deg)}}
-  @media(prefers-reduced-motion:reduce){.fashion-scatter span{animation:none}}
-
-  /* ===== rotating globe (hero) ===== */
-  .globe-wrap{display:flex;justify-content:center;margin-top:50px}
-  .globe{position:relative;width:clamp(160px,30vw,230px);aspect-ratio:1;border-radius:50%;
-    background:
-      radial-gradient(circle at 32% 28%,rgba(255,255,255,.55),transparent 38%),
-      conic-gradient(from 0deg,#2dd4ff,#7c3aed,#ff4d8d,#ffd23f,#22e3a3,#2dd4ff);
-    box-shadow:0 30px 60px -22px rgba(124,58,237,.6),inset 0 0 40px rgba(255,255,255,.25);
-    overflow:hidden;animation:spin 18s linear infinite}
-  .globe::before{content:"";position:absolute;inset:0;border-radius:50%;
-    background:
-      radial-gradient(ellipse 22% 30% at 22% 38%,rgba(26,17,48,.55),transparent 60%),
-      radial-gradient(ellipse 30% 18% at 60% 30%,rgba(26,17,48,.5),transparent 60%),
-      radial-gradient(ellipse 18% 26% at 72% 65%,rgba(26,17,48,.55),transparent 60%),
-      radial-gradient(ellipse 14% 16% at 40% 72%,rgba(26,17,48,.5),transparent 60%);
-    mix-blend-mode:multiply}
-  .globe .grid-lines{position:absolute;inset:0;border-radius:50%;opacity:.35;
-    background:
-      repeating-linear-gradient(0deg,transparent 0 14%,rgba(255,255,255,.5) 14% 14.6%),
-      repeating-linear-gradient(90deg,transparent 0 12%,rgba(255,255,255,.4) 12% 12.5%)}
-  .globe-ring{position:absolute;inset:-12%;border-radius:50%;border:2px dashed rgba(124,58,237,.35);
-    animation:spin-rev 26s linear infinite}
-  .globe-pin{position:absolute;font-size:1.4rem;animation:pin 4s ease-in-out infinite}
-  @keyframes spin{to{transform:rotate(360deg)}}
-  @keyframes spin-rev{to{transform:rotate(-360deg)}}
-  @keyframes pin{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
-  @media(prefers-reduced-motion:reduce){.globe,.globe-ring,.globe-pin{animation:none}}
-
-  /* ===== world map section ===== */
-  .worldmap{position:relative;background:linear-gradient(160deg,#221544,#3a1d6e 60%,#7c3aed);
-    border-radius:36px;padding:clamp(40px,6vw,70px);color:#fff;overflow:hidden;box-shadow:var(--shadow)}
-  .worldmap::before{content:"";position:absolute;inset:0;opacity:.5;
-    background-image:radial-gradient(rgba(255,255,255,.7) 1.3px,transparent 1.4px);
-    background-size:14px 14px;
-    -webkit-mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 50'><path fill='black' d='M5,18 Q12,10 20,14 T34,16 36,24 28,30 18,28 10,30 6,24 Z M40,8 Q52,4 60,10 70,8 78,14 84,12 90,18 86,26 78,24 70,30 60,26 54,30 46,24 42,16 Z M44,32 Q50,30 54,36 52,44 46,46 42,40 Z M64,32 Q72,30 76,36 74,44 68,46 64,40 Z'/></svg>");
-    mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 50'><path fill='black' d='M5,18 Q12,10 20,14 T34,16 36,24 28,30 18,28 10,30 6,24 Z M40,8 Q52,4 60,10 70,8 78,14 84,12 90,18 86,26 78,24 70,30 60,26 54,30 46,24 42,16 Z M44,32 Q50,30 54,36 52,44 46,46 42,40 Z M64,32 Q72,30 76,36 74,44 68,46 64,40 Z'/></svg>");
-    -webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-size:contain;mask-size:contain;
-    -webkit-mask-position:center;mask-position:center}
-  .worldmap .wm-in{position:relative;text-align:center}
-  .worldmap .eyebrow{background:rgba(255,255,255,.18)}
-  .worldmap h2{font-size:clamp(1.8rem,4.5vw,2.9rem);font-weight:900;line-height:1.25}
-  .worldmap p.sub{margin:14px auto 0;max-width:620px;opacity:.92;font-weight:500}
-  .wm-stats{display:flex;gap:clamp(24px,5vw,70px);justify-content:center;flex-wrap:wrap;margin-top:46px}
-  .wm-stats .num{font-family:"Poppins";font-weight:900;font-size:clamp(2.2rem,5vw,3.4rem);line-height:1;
-    background:var(--grad2);-webkit-background-clip:text;background-clip:text;color:transparent}
-  .wm-stats .lbl{font-weight:700;font-size:.85rem;opacity:.9;margin-top:6px}
-
-  /* ===== nav ===== */
-  header.nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(14px);
-    background:rgba(255,253,250,.72);border-bottom:1px solid rgba(124,58,237,.1)}
-  .nav-in{display:flex;align-items:center;justify-content:space-between;height:70px}
-  .logo{display:flex;align-items:center;gap:10px;font-family:"Poppins";font-weight:800;font-size:1.25rem;letter-spacing:.5px}
-  .logo .dot{width:30px;height:30px;border-radius:9px;background:var(--grad);box-shadow:var(--shadow);
-    display:grid;place-items:center;color:#fff;font-size:.95rem;transform:rotate(-8deg)}
-  .nav-links{display:flex;gap:28px;align-items:center;font-weight:700;font-size:.92rem}
-  .nav-links a.menu{position:relative}
-  .nav-links a.menu::after{content:"";position:absolute;left:0;bottom:-4px;width:0;height:3px;border-radius:3px;background:var(--grad);transition:.3s}
+  /* nav */
+  header.nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(12px);
+    background:rgba(10,10,15,.7);border-bottom:1px solid var(--line-soft)}
+  .nav-in{display:flex;align-items:center;justify-content:space-between;height:78px}
+  .logo{display:flex;align-items:center;gap:12px;font-family:"Playfair Display",serif;font-weight:800;
+    font-size:1.4rem;letter-spacing:.06em}
+  .logo .mark{width:34px;height:34px;display:grid;place-items:center;border:1px solid var(--gold);
+    color:var(--gold);border-radius:50%;font-size:1rem}
+  .nav-links{display:flex;gap:34px;align-items:center;font-size:.82rem;letter-spacing:.12em;font-weight:500}
+  .nav-links a.menu{color:var(--muted);transition:color .3s;position:relative}
+  .nav-links a.menu:hover{color:var(--gold-bright)}
+  .nav-links a.menu::after{content:"";position:absolute;left:0;bottom:-6px;width:0;height:1px;background:var(--gold);transition:width .3s}
   .nav-links a.menu:hover::after{width:100%}
-  .btn{display:inline-flex;align-items:center;gap:8px;font-weight:800;font-family:"Noto Sans JP";
-    padding:13px 26px;border-radius:999px;background:var(--grad);color:#fff;box-shadow:var(--shadow);
-    transition:transform .2s ease, box-shadow .2s ease;border:none;cursor:pointer;font-size:.95rem}
-  .btn:hover{transform:translateY(-3px) scale(1.03);box-shadow:0 24px 50px -18px rgba(255,77,141,.6)}
-  .btn.ghost{background:#fff;color:var(--purple);border:2px solid rgba(124,58,237,.18);box-shadow:none}
-  .btn.ghost:hover{border-color:var(--purple)}
-  .nav-toggle{display:none;background:none;border:none;font-size:1.6rem;cursor:pointer;color:var(--purple)}
+  .btn{display:inline-flex;align-items:center;gap:10px;font-family:"Noto Sans JP";font-weight:500;
+    letter-spacing:.1em;font-size:.82rem;padding:14px 30px;border-radius:2px;cursor:pointer;
+    border:1px solid var(--gold);color:#0a0a0f;background:var(--grad-gold);
+    transition:transform .3s ease, box-shadow .3s ease;box-shadow:0 10px 30px -12px rgba(215,180,106,.5)}
+  .btn:hover{transform:translateY(-2px);box-shadow:0 16px 40px -12px rgba(241,220,168,.6)}
+  .btn.ghost{background:transparent;color:var(--gold-bright);box-shadow:none}
+  .btn.ghost:hover{background:rgba(215,180,106,.08)}
+  .nav-toggle{display:none;background:none;border:none;color:var(--gold);font-size:1.5rem;cursor:pointer}
 
-  /* ===== hero ===== */
-  .hero{padding-top:clamp(50px,8vw,90px);text-align:center}
-  .badge{display:inline-flex;align-items:center;gap:8px;background:#fff;border:2px solid rgba(124,58,237,.15);
-    border-radius:999px;padding:8px 18px;font-weight:700;font-size:.85rem;box-shadow:var(--shadow);margin-bottom:26px}
-  .badge .pulse{width:9px;height:9px;border-radius:50%;background:var(--green);box-shadow:0 0 0 0 rgba(34,227,163,.7);animation:pulse 2s infinite}
-  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(34,227,163,.6)}70%{box-shadow:0 0 0 12px rgba(34,227,163,0)}100%{box-shadow:0 0 0 0 rgba(34,227,163,0)}}
-  .hero h1{font-size:clamp(2.4rem,7vw,5rem);line-height:1.12;font-weight:900;letter-spacing:-1px}
-  .hero h1 .grad{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
-  .hero p.lead{font-size:clamp(1rem,2.3vw,1.3rem);max-width:680px;margin:26px auto 0;color:#4a3f63;font-weight:500}
-  .hero-cta{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-top:38px}
-  .hero-stats{display:flex;gap:clamp(20px,5vw,64px);justify-content:center;flex-wrap:wrap;margin-top:64px}
-  .stat .num{font-family:"Poppins";font-weight:900;font-size:clamp(2rem,5vw,3.2rem);background:var(--grad2);
-    -webkit-background-clip:text;background-clip:text;color:transparent;line-height:1}
-  .stat .lbl{font-weight:700;font-size:.85rem;color:#6b5f85;margin-top:6px}
+  /* hero */
+  .hero{text-align:center;padding-top:clamp(60px,8vw,110px);padding-bottom:clamp(40px,6vw,80px)}
+  .kicker{display:inline-flex;align-items:center;gap:14px;color:var(--gold);letter-spacing:.32em;
+    font-size:.72rem;font-weight:500;text-transform:uppercase;margin-bottom:38px}
+  .kicker::before,.kicker::after{content:"";width:36px;height:1px;background:linear-gradient(90deg,transparent,var(--gold))}
+  .kicker::after{background:linear-gradient(90deg,var(--gold),transparent)}
+  .hero h1{font-family:"Noto Serif JP",serif;font-weight:700;font-size:clamp(2.3rem,6.2vw,4.6rem);
+    line-height:1.28;letter-spacing:.02em}
+  .hero h1 .en{font-family:"Playfair Display",serif;font-style:italic;font-weight:700}
+  .hero .lead{max-width:660px;margin:34px auto 0;color:#c9c2b4;font-weight:300;font-size:clamp(1rem,2vw,1.18rem);line-height:2.1}
+  .hero-cta{display:flex;gap:18px;justify-content:center;flex-wrap:wrap;margin-top:46px}
 
-  /* marquee */
-  .marquee{margin-top:70px;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);
-    mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent)}
-  .marquee-in{display:flex;gap:18px;width:max-content;animation:scroll 28s linear infinite}
-  .marquee:hover .marquee-in{animation-play-state:paused}
-  .chip{white-space:nowrap;font-weight:800;font-size:.95rem;padding:12px 22px;border-radius:999px;background:#fff;
-    border:2px solid rgba(124,58,237,.12);box-shadow:0 8px 20px -12px rgba(124,58,237,.4)}
-  .chip span{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
-  @keyframes scroll{to{transform:translateX(-50%)}}
+  /* globe */
+  .globe-stage{display:flex;justify-content:center;margin-top:62px;position:relative}
+  .globe-stage .ggrad{position:absolute;width:min(560px,86vw);aspect-ratio:1;border-radius:50%;
+    background:radial-gradient(circle,rgba(215,180,106,.16),transparent 60%);filter:blur(20px);top:50%;left:50%;transform:translate(-50%,-50%)}
+  .globe{width:clamp(230px,38vw,330px);aspect-ratio:1;position:relative;animation:rot 40s linear infinite}
+  .globe svg{width:100%;height:100%;overflow:visible}
+  .globe .node{position:absolute;width:34px;height:34px;margin:-17px;display:grid;place-items:center;
+    border:1px solid var(--gold);border-radius:50%;background:rgba(10,10,15,.85);color:var(--gold);
+    box-shadow:0 0 18px rgba(215,180,106,.35);animation:counter 40s linear infinite}
+  .globe .node svg{width:18px;height:18px}
+  @keyframes rot{to{transform:rotate(360deg)}}
+  @keyframes counter{to{transform:rotate(-360deg)}}
+  @media(prefers-reduced-motion:reduce){.globe,.globe .node{animation:none}}
 
-  /* ===== section heading ===== */
-  .head{text-align:center;margin-bottom:60px}
-  .eyebrow{display:inline-block;font-family:"Poppins";font-weight:800;letter-spacing:3px;font-size:.8rem;
-    padding:6px 16px;border-radius:999px;color:#fff;background:var(--grad);margin-bottom:18px;text-transform:uppercase}
-  .head h2{font-size:clamp(1.8rem,4.5vw,2.9rem);font-weight:900;line-height:1.25}
-  .head p{margin-top:14px;color:#5b5078;font-weight:500;max-width:620px;margin-inline:auto}
+  .hero-stats{display:flex;gap:clamp(26px,6vw,80px);justify-content:center;flex-wrap:wrap;margin-top:70px}
+  .stat .num{font-family:"Playfair Display",serif;font-weight:800;font-size:clamp(2.2rem,5vw,3.4rem);
+    line-height:1;color:var(--gold-bright)}
+  .stat .num small{font-size:.42em;color:var(--gold);font-style:italic}
+  .stat .lbl{color:var(--muted);font-size:.78rem;letter-spacing:.18em;margin-top:10px;text-transform:uppercase}
 
-  /* ===== feature cards ===== */
-  .grid{display:grid;gap:24px}
+  /* section heading */
+  .head{text-align:center;margin-bottom:72px}
+  .eyebrow{display:inline-block;color:var(--gold);letter-spacing:.34em;font-size:.7rem;text-transform:uppercase;
+    margin-bottom:22px;font-weight:500}
+  .head h2{font-family:"Noto Serif JP",serif;font-weight:700;font-size:clamp(1.8rem,4.4vw,3rem);line-height:1.4}
+  .head p{margin:20px auto 0;max-width:640px;color:#b7b0a2;font-weight:300}
+  .rule{width:60px;height:1px;background:var(--gold);margin:24px auto 0;opacity:.6}
+
+  /* worldwide network */
+  .world{border:1px solid var(--line);border-radius:8px;overflow:hidden;position:relative;
+    background:radial-gradient(900px 500px at 50% -10%,rgba(40,38,80,.4),transparent 60%),linear-gradient(180deg,#0c0c16,#0a0a0f)}
+  .world .net{position:relative;width:100%;display:block}
+  .world .net svg{width:100%;height:auto;display:block}
+  .world .copy{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;
+    align-items:center;text-align:center;padding:30px}
+  .world .copy h2{font-family:"Noto Serif JP",serif;font-weight:700;font-size:clamp(1.7rem,4.6vw,3.2rem);
+    line-height:1.4;text-shadow:0 4px 30px rgba(0,0,0,.6)}
+  .world .copy p{margin-top:18px;max-width:600px;color:#cfc8ba;font-weight:300}
+  .wm-stats{display:flex;gap:clamp(20px,5vw,64px);justify-content:center;flex-wrap:wrap;margin-top:34px}
+  .wm-stats .n{font-family:"Playfair Display",serif;font-weight:800;font-size:clamp(1.8rem,4vw,2.8rem);color:var(--gold-bright)}
+  .wm-stats .n small{font-size:.4em;font-style:italic;color:var(--gold)}
+  .wm-stats .l{color:var(--muted);font-size:.72rem;letter-spacing:.16em;margin-top:6px;text-transform:uppercase}
+  .arc{stroke-dasharray:6 8;animation:flow 4s linear infinite}
+  @keyframes flow{to{stroke-dashoffset:-28}}
+  .pnode{animation:pulse 3s ease-in-out infinite}
+  @keyframes pulse{0%,100%{opacity:.5;r:3}50%{opacity:1;r:5}}
+  @media(prefers-reduced-motion:reduce){.arc,.pnode{animation:none}}
+
+  /* cards */
+  .grid{display:grid;gap:1px;background:var(--line-soft);border:1px solid var(--line-soft)}
   .grid.c3{grid-template-columns:repeat(3,1fr)}
   .grid.c2{grid-template-columns:repeat(2,1fr)}
-  .card{background:#fff;border-radius:var(--radius);padding:34px;border:1px solid rgba(124,58,237,.08);
-    box-shadow:0 24px 50px -30px rgba(124,58,237,.4);transition:transform .3s ease, box-shadow .3s ease;position:relative;overflow:hidden}
-  .card::before{content:"";position:absolute;inset:0 0 auto 0;height:6px;background:var(--grad)}
-  .card.g2::before{background:var(--grad2)}.card.g3::before{background:var(--grad3)}
-  .card:hover{transform:translateY(-8px);box-shadow:0 34px 60px -28px rgba(124,58,237,.55)}
-  .ic{width:62px;height:62px;border-radius:18px;display:grid;place-items:center;font-size:1.7rem;margin-bottom:20px;
-    background:linear-gradient(135deg,rgba(255,77,141,.15),rgba(124,58,237,.15))}
-  .card h3{font-size:1.25rem;font-weight:900;margin-bottom:10px}
-  .card p{color:#5b5078;font-weight:500;font-size:.97rem}
+  .cell{background:var(--bg);padding:48px 40px;transition:background .4s ease}
+  .cell:hover{background:var(--bg2)}
+  .cell .ic{color:var(--gold);margin-bottom:26px}
+  .cell .ic svg{width:46px;height:46px}
+  .cell h3{font-family:"Noto Serif JP",serif;font-weight:600;font-size:1.3rem;margin-bottom:14px;line-height:1.5}
+  .cell .no{font-family:"Playfair Display",serif;font-style:italic;color:var(--gold);font-size:.95rem;letter-spacing:.1em;margin-bottom:10px}
+  .cell p{color:#aaa294;font-weight:300;font-size:.96rem}
 
-  /* ===== steps ===== */
-  .steps{display:grid;gap:20px;grid-template-columns:repeat(3,1fr)}
-  .step{position:relative;background:#fff;border-radius:22px;padding:30px 28px 28px;border:1px solid rgba(124,58,237,.08);
-    box-shadow:0 20px 44px -30px rgba(124,58,237,.5);transition:transform .3s ease}
-  .step:hover{transform:translateY(-6px)}
-  .step .no{font-family:"Poppins";font-weight:900;font-size:2.6rem;line-height:1;background:var(--grad);
-    -webkit-background-clip:text;background-clip:text;color:transparent}
-  .step .tag{display:inline-block;font-weight:800;font-size:.72rem;letter-spacing:1px;color:var(--purple);
-    background:rgba(124,58,237,.1);border-radius:999px;padding:4px 12px;margin:14px 0 10px}
-  .step h3{font-size:1.12rem;font-weight:900;margin-bottom:8px}
-  .step p{color:#5b5078;font-weight:500;font-size:.92rem}
+  /* steps */
+  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line-soft);border:1px solid var(--line-soft)}
+  .step{background:var(--bg);padding:46px 38px;transition:background .4s}
+  .step:hover{background:var(--bg2)}
+  .step .top{display:flex;align-items:baseline;gap:16px;margin-bottom:18px}
+  .step .num{font-family:"Playfair Display",serif;font-weight:800;font-size:2.6rem;color:var(--gold);line-height:1}
+  .step .tag{color:var(--muted);letter-spacing:.22em;font-size:.66rem;text-transform:uppercase}
+  .step h3{font-family:"Noto Serif JP",serif;font-weight:600;font-size:1.18rem;margin-bottom:10px}
+  .step p{color:#aaa294;font-weight:300;font-size:.92rem}
 
-  /* ===== pricing ===== */
+  /* suppliers */
+  .supply{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1px;background:var(--line-soft);border:1px solid var(--line-soft)}
+  .supply .item{background:var(--bg);padding:34px 30px;display:flex;flex-direction:column;gap:16px;transition:background .4s}
+  .supply .item:hover{background:var(--bg2)}
+  .supply .item svg{width:34px;height:34px;color:var(--gold)}
+  .supply .item span{font-family:"Noto Serif JP",serif;font-weight:500;font-size:1rem}
+
+  /* support + flow */
+  .split{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--line-soft)}
+  .split .pane{padding:clamp(40px,5vw,64px)}
+  .split .pane.dark{background:linear-gradient(160deg,#16121f,#0d0d16);border-left:1px solid var(--line-soft)}
+  .split h3{font-family:"Noto Serif JP",serif;font-weight:700;font-size:clamp(1.5rem,3vw,2rem);margin-bottom:30px;line-height:1.4}
+  .srow{display:flex;gap:20px;padding:22px 0;border-top:1px solid var(--line-soft)}
+  .srow:first-of-type{border-top:none}
+  .srow svg{width:30px;height:30px;color:var(--gold);flex:none;margin-top:4px}
+  .srow h4{font-family:"Noto Serif JP",serif;font-weight:600;font-size:1.05rem;margin-bottom:4px}
+  .srow p{color:#a39c8e;font-weight:300;font-size:.9rem}
+  .flow{list-style:none;counter-reset:f;display:grid;gap:26px}
+  .flow li{counter-increment:f;display:flex;gap:20px;align-items:flex-start}
+  .flow li::before{content:counter(f,decimal-leading-zero);font-family:"Playfair Display",serif;font-weight:800;
+    color:var(--gold);font-size:1.1rem;border:1px solid var(--line);width:44px;height:44px;border-radius:50%;
+    display:grid;place-items:center;flex:none}
+  .flow b{display:block;font-family:"Noto Serif JP",serif;font-weight:600;margin-bottom:3px}
+  .flow span{color:#a39c8e;font-weight:300;font-size:.88rem}
+
+  /* pricing */
   .plans{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;align-items:stretch}
-  .plan{background:#fff;border-radius:var(--radius);padding:38px 32px;border:2px solid rgba(124,58,237,.1);
-    box-shadow:0 24px 50px -32px rgba(124,58,237,.45);display:flex;flex-direction:column;transition:transform .3s ease;position:relative}
-  .plan:hover{transform:translateY(-8px)}
-  .plan.feat{border-color:transparent;background:linear-gradient(160deg,#fff, #fff) padding-box, var(--grad) border-box;
-    border:3px solid transparent;box-shadow:0 36px 70px -30px rgba(255,77,141,.55);transform:scale(1.04)}
-  .plan.feat:hover{transform:scale(1.04) translateY(-8px)}
-  .plan .pop{position:absolute;top:-15px;left:50%;transform:translateX(-50%);background:var(--grad2);color:#fff;
-    font-weight:900;font-size:.78rem;letter-spacing:1px;padding:7px 18px;border-radius:999px;box-shadow:var(--shadow);white-space:nowrap}
-  .plan .pname{font-family:"Poppins";font-weight:900;font-size:1.4rem}
-  .plan .ptier{font-weight:800;font-size:.78rem;letter-spacing:2px;color:var(--purple);margin-bottom:6px;text-transform:uppercase}
-  .plan .period{margin:18px 0;padding:18px;border-radius:16px;background:linear-gradient(135deg,rgba(45,212,255,.1),rgba(124,58,237,.1));text-align:center}
-  .plan .period .big{font-family:"Poppins";font-weight:900;font-size:2.4rem;line-height:1;background:var(--grad);
-    -webkit-background-clip:text;background-clip:text;color:transparent}
-  .plan .period .sub{font-weight:700;font-size:.85rem;color:#6b5f85;margin-top:4px}
-  .plan ul{list-style:none;margin:8px 0 26px;display:grid;gap:12px}
-  .plan li{display:flex;gap:10px;font-weight:600;font-size:.95rem;color:#3f3559}
-  .plan li .ck{color:var(--green);font-weight:900;flex:none}
+  .plan{border:1px solid var(--line-soft);border-radius:6px;padding:48px 38px;display:flex;flex-direction:column;
+    background:linear-gradient(180deg,#101019,#0b0b12);transition:transform .4s ease, border-color .4s ease;position:relative}
+  .plan:hover{transform:translateY(-8px);border-color:var(--line)}
+  .plan.feat{border-color:var(--gold);background:linear-gradient(180deg,#1a1610,#0d0c10);
+    box-shadow:0 40px 80px -40px rgba(215,180,106,.4)}
+  .plan .pop{position:absolute;top:-1px;right:-1px;background:var(--grad-gold);color:#0a0a0f;font-weight:600;
+    font-size:.66rem;letter-spacing:.16em;padding:8px 16px;text-transform:uppercase;border-radius:0 6px 0 8px}
+  .plan .tier{font-family:"Playfair Display",serif;font-style:italic;color:var(--gold);letter-spacing:.1em;font-size:.95rem}
+  .plan .pname{font-family:"Noto Serif JP",serif;font-weight:700;font-size:1.5rem;margin-top:6px}
+  .plan .period{margin:30px 0;padding:26px 0;border-top:1px solid var(--line-soft);border-bottom:1px solid var(--line-soft);text-align:center}
+  .plan .period .big{font-family:"Playfair Display",serif;font-weight:800;font-size:3rem;color:var(--gold-bright);line-height:1}
+  .plan .period .big small{font-size:.32em;color:var(--gold);font-style:italic;letter-spacing:.05em}
+  .plan .period .s{color:var(--muted);font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;margin-top:8px}
+  .plan ul{list-style:none;display:grid;gap:15px;margin-bottom:34px}
+  .plan li{display:flex;gap:12px;font-weight:300;font-size:.92rem;color:#c0b9ab}
+  .plan li svg{width:16px;height:16px;color:var(--gold);flex:none;margin-top:5px}
   .plan .btn{margin-top:auto;justify-content:center;width:100%}
-  .plan.feat .btn{background:var(--grad2)}
+  .plan:not(.feat) .btn{background:transparent;color:var(--gold-bright);box-shadow:none}
+  .plan:not(.feat) .btn:hover{background:rgba(215,180,106,.08)}
+  .note{margin-top:30px;text-align:center;color:var(--muted);font-size:.78rem;font-weight:300;max-width:760px;margin-inline:auto;line-height:1.9}
 
-  /* ===== supplier list ===== */
-  .supply{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px}
-  .supply .item{background:#fff;border-radius:18px;padding:24px 26px;border:1px solid rgba(124,58,237,.08);
-    box-shadow:0 18px 40px -30px rgba(124,58,237,.5);display:flex;align-items:center;gap:14px;font-weight:800;transition:transform .25s}
-  .supply .item:hover{transform:translateY(-5px)}
-  .supply .item .e{font-size:1.6rem}
+  /* cta */
+  .cta{text-align:center;border:1px solid var(--line);border-radius:8px;padding:clamp(60px,9vw,110px) 30px;position:relative;overflow:hidden;
+    background:radial-gradient(700px 400px at 50% 0%,rgba(215,180,106,.12),transparent 60%),linear-gradient(180deg,#13110d,#0a0a0f)}
+  .cta h2{font-family:"Noto Serif JP",serif;font-weight:700;font-size:clamp(1.9rem,5vw,3.4rem);line-height:1.4}
+  .cta p{margin:22px auto 38px;max-width:560px;color:#c2bbad;font-weight:300}
 
-  /* ===== support / flow ===== */
-  .split{display:grid;grid-template-columns:1.1fr .9fr;gap:50px;align-items:center}
-  .support-list{display:grid;gap:16px;margin-top:8px}
-  .support-list .row{display:flex;gap:14px;background:#fff;border-radius:18px;padding:20px 22px;
-    border:1px solid rgba(124,58,237,.08);box-shadow:0 16px 36px -30px rgba(124,58,237,.5)}
-  .support-list .row .e{font-size:1.5rem;flex:none}
-  .support-list .row h4{font-weight:900;font-size:1.02rem;margin-bottom:3px}
-  .support-list .row p{color:#5b5078;font-weight:500;font-size:.92rem}
-  .flow{background:linear-gradient(160deg,var(--purple),var(--pink));border-radius:var(--radius);padding:40px;color:#fff;box-shadow:var(--shadow)}
-  .flow h3{font-size:1.4rem;font-weight:900;margin-bottom:24px}
-  .flow ol{list-style:none;display:grid;gap:18px;counter-reset:f}
-  .flow li{counter-increment:f;display:flex;gap:16px;align-items:flex-start;font-weight:600}
-  .flow li::before{content:counter(f);font-family:"Poppins";font-weight:900;background:#fff;color:var(--purple);
-    width:34px;height:34px;border-radius:50%;display:grid;place-items:center;flex:none;font-size:1rem}
-  .flow li b{display:block;font-weight:900;margin-bottom:2px}
-  .flow li span{opacity:.92;font-size:.9rem;font-weight:500}
-
-  /* ===== CTA ===== */
-  .cta{margin:0 auto;text-align:center;color:#fff;border-radius:36px;padding:clamp(50px,8vw,90px) 30px;
-    background:var(--grad);box-shadow:0 40px 80px -30px rgba(124,58,237,.6);position:relative;overflow:hidden}
-  .cta::after{content:"";position:absolute;inset:-50% -10% auto;height:120%;
-    background:radial-gradient(circle at 30% 20%,rgba(255,255,255,.3),transparent 40%),radial-gradient(circle at 80% 60%,rgba(255,255,255,.22),transparent 45%)}
-  .cta h2{position:relative;font-size:clamp(1.9rem,5vw,3.2rem);font-weight:900;line-height:1.2}
-  .cta p{position:relative;margin:18px auto 34px;max-width:560px;font-weight:500;opacity:.95}
-  .cta .btn{position:relative;background:#fff;color:var(--purple);font-size:1.05rem;padding:17px 40px}
-  .cta .btn:hover{box-shadow:0 24px 50px -16px rgba(0,0,0,.35)}
-
-  /* ===== faq ===== */
-  .faq{max-width:760px;margin-inline:auto;display:grid;gap:14px}
-  details{background:#fff;border-radius:18px;border:1px solid rgba(124,58,237,.1);box-shadow:0 16px 36px -32px rgba(124,58,237,.5);overflow:hidden}
-  summary{cursor:pointer;list-style:none;padding:22px 26px;font-weight:800;display:flex;justify-content:space-between;gap:16px;align-items:center}
+  /* faq */
+  .faq{max-width:820px;margin-inline:auto;border-top:1px solid var(--line-soft)}
+  details{border-bottom:1px solid var(--line-soft)}
+  summary{cursor:pointer;list-style:none;padding:28px 8px;display:flex;justify-content:space-between;gap:20px;align-items:center;
+    font-family:"Noto Serif JP",serif;font-weight:500;font-size:1.05rem;transition:color .3s}
+  summary:hover{color:var(--gold-bright)}
   summary::-webkit-details-marker{display:none}
-  summary .pm{font-family:"Poppins";font-weight:900;color:var(--purple);transition:.3s;flex:none}
+  summary .pm{color:var(--gold);font-weight:300;font-size:1.4rem;transition:transform .3s;flex:none}
   details[open] summary .pm{transform:rotate(45deg)}
-  details .ans{padding:0 26px 24px;color:#5b5078;font-weight:500}
+  details .ans{padding:0 8px 28px;color:#aaa294;font-weight:300;font-size:.94rem}
 
-  /* ===== footer ===== */
-  footer{padding:60px 0 40px;border-top:1px solid rgba(124,58,237,.1);margin-top:40px}
-  .foot-in{display:flex;justify-content:space-between;gap:30px;flex-wrap:wrap;align-items:flex-start}
-  .foot-in p{color:#6b5f85;font-weight:500;font-size:.9rem;max-width:340px;margin-top:12px}
-  .foot-links{display:flex;gap:28px;flex-wrap:wrap;font-weight:700;font-size:.9rem}
-  .copy{margin-top:36px;text-align:center;color:#9a8fb5;font-size:.82rem;font-weight:500}
-  .note{margin-top:10px;text-align:center;color:#b3a9c9;font-size:.74rem;font-weight:500;max-width:720px;margin-inline:auto}
+  /* footer */
+  footer{border-top:1px solid var(--line-soft);padding:70px 0 44px}
+  .foot-in{display:flex;justify-content:space-between;gap:40px;flex-wrap:wrap;align-items:flex-start}
+  .foot-in p{color:var(--muted);font-weight:300;font-size:.88rem;max-width:360px;margin-top:16px;line-height:2}
+  .foot-links{display:flex;gap:34px;flex-wrap:wrap;font-size:.8rem;letter-spacing:.1em;color:var(--muted)}
+  .foot-links a:hover{color:var(--gold-bright)}
+  .copy{margin-top:48px;text-align:center;color:#5f5a50;font-size:.76rem;letter-spacing:.1em}
+  .disc{margin-top:12px;text-align:center;color:#4f4b43;font-size:.7rem;font-weight:300;max-width:740px;margin-inline:auto;line-height:1.8}
 
-  /* reveal */
-  .reveal{opacity:0;transform:translateY(28px);transition:opacity .7s ease, transform .7s ease}
+  .reveal{opacity:0;transform:translateY(34px);transition:opacity 1s ease, transform 1s ease}
   .reveal.in{opacity:1;transform:none}
 
-  /* responsive */
-  @media(max-width:900px){
-    .grid.c3,.steps,.plans{grid-template-columns:1fr}
-    .grid.c2,.split{grid-template-columns:1fr}
-    .plan.feat{transform:none}.plan.feat:hover{transform:translateY(-8px)}
-    .nav-links{position:fixed;inset:70px 0 auto 0;flex-direction:column;background:rgba(255,253,250,.98);
-      backdrop-filter:blur(14px);padding:24px;gap:20px;border-bottom:1px solid rgba(124,58,237,.12);
-      transform:translateY(-130%);transition:transform .35s ease}
+  @media(max-width:920px){
+    .grid.c3,.grid.c2,.steps,.plans,.split{grid-template-columns:1fr}
+    .split .pane.dark{border-left:none;border-top:1px solid var(--line-soft)}
+    .world .copy{position:static;padding:50px 30px}
+    .world .net{display:none}
+    .nav-links{position:fixed;inset:78px 0 auto 0;flex-direction:column;background:rgba(10,10,15,.97);
+      backdrop-filter:blur(14px);padding:30px;gap:26px;border-bottom:1px solid var(--line);transform:translateY(-130%);transition:transform .4s ease}
     .nav-links.open{transform:none}
     .nav-toggle{display:block}
   }
@@ -280,22 +256,39 @@
 </head>
 <body>
 
-<div class="blobs" aria-hidden="true">
-  <div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div><div class="blob b4"></div>
-</div>
+<!-- ===== SVG icon library ===== -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <g id="i-bag"><path d="M5 9h14l1.2 12.5a.8.8 0 0 1-.8.9H4.6a.8.8 0 0 1-.8-.9L5 9Z" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><path d="M8.5 9V6.6a3.5 3.5 0 0 1 7 0V9" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></g>
+    <g id="i-heel"><path d="M4.5 3.5c0 5.2.2 8.6 2.4 10.6 1.9 1.8 5 2.4 11.6 2.6l.5 2.3c0 .4-.3.7-.7.6-7.6-.8-11.5-1.6-13.8-4C2.6 13.7 2.4 9.6 2.4 3.5Z" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/><path d="M7 14.3c1.2-1 3-1.2 4.5-.4" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/></g>
+    <g id="i-dress"><path d="M9 3h6l-1 3 1.3 2-.8 1.8L18 21H6l3.3-11.2L8.5 8 9.8 6 9 3Z" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><path d="M9.5 6.2c1.6 1.1 3.4 1.1 5 0" fill="none" stroke="currentColor" stroke-width="1.1"/></g>
+    <g id="i-coat"><path d="M12 3 7.5 5.2 4 7.3l2 2.2-1 11.5h14l-1-11.5 2-2.2-3.5-2.1L12 3Z" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><path d="M12 3v18M9 5.2 12 8l3-2.8" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></g>
+    <g id="i-glasses"><circle cx="6.5" cy="13" r="3.4" fill="none" stroke="currentColor" stroke-width="1.3"/><circle cx="17.5" cy="13" r="3.4" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M9.9 12.4h4.2M3.2 11 5 9.2M20.8 11 19 9.2" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></g>
+    <g id="i-watch"><circle cx="12" cy="12" r="5" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M12 9.4V12l1.8 1.1M9.4 7.2 10 4h4l.6 3.2M9.4 16.8 10 20h4l.6-3.2" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></g>
+    <g id="i-perfume"><rect x="8" y="9.5" width="8" height="10.5" rx="1.4" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M10 9.5V6.5h4v3M11 6.5V4.2h2v2.3" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/><path d="M16.5 6.5h1.6v2.4" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/></g>
+    <g id="i-hanger"><path d="M11 6.4a1.4 1.4 0 1 1 1.8 1.3L21 13.4c.9.6.5 2-.6 2H3.6c-1.1 0-1.5-1.4-.6-2L11 7.7" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></g>
+    <g id="i-diamond"><path d="M6 4h12l3.2 4.5L12 21 2.8 8.5 6 4Z" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/><path d="M2.8 8.5h18.4M8.5 4 7 8.5 12 21l5-12.5L15.5 4" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linejoin="round"/></g>
+    <g id="i-globe"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.2"/><path d="M3 12h18M12 3c3 3.2 3 14.8 0 18M12 3c-3 3.2-3 14.8 0 18M4.5 7.5c4.6 2.4 10.4 2.4 15 0M4.5 16.5c4.6-2.4 10.4-2.4 15 0" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round"/></g>
+    <g id="i-chat"><path d="M4 5h16v11H9l-4 3.5V16H4V5Z" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><path d="M8 9h8M8 12h5" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></g>
+    <g id="i-play"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M10 8.5 16 12l-6 3.5v-7Z" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></g>
+    <g id="i-truck"><path d="M2.5 6.5h11v9h-11v-9ZM13.5 9.5h4l3 3v3h-7v-6Z" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><circle cx="6.5" cy="17.5" r="1.6" fill="none" stroke="currentColor" stroke-width="1.2"/><circle cx="17" cy="17.5" r="1.6" fill="none" stroke="currentColor" stroke-width="1.2"/></g>
+    <g id="i-store"><path d="M4 9.5 5.5 4.5h13L20 9.5M4 9.5v10.5h16V9.5M4 9.5a2.3 2.3 0 0 0 4 0 2.3 2.3 0 0 0 4 0 2.3 2.3 0 0 0 4 0 2.3 2.3 0 0 0 4 0M9.5 20v-6h5v6" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></g>
+    <g id="i-tag"><path d="M4 4h7.5l8 8a1.5 1.5 0 0 1 0 2.1l-5.4 5.4a1.5 1.5 0 0 1-2.1 0l-8-8V4Z" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><circle cx="8" cy="8" r="1.4" fill="none" stroke="currentColor" stroke-width="1.2"/></g>
+    <g id="i-check"><path d="M5 12.5 10 17l9-10" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></g>
+  </defs>
+</svg>
 
-<!-- scattered world-fashion icons -->
-<div class="fashion-scatter" id="scatter" aria-hidden="true"></div>
+<div class="scatter" id="scatter" aria-hidden="true"></div>
 
 <!-- NAV -->
 <header class="nav">
   <div class="wrap nav-in">
-    <a href="#top" class="logo"><span class="dot">✦</span> Nova Prime</a>
+    <a href="#top" class="logo"><span class="mark">N</span>NOVA&nbsp;PRIME</a>
     <nav class="nav-links" id="menu">
-      <a class="menu" href="#about">サービス</a>
-      <a class="menu" href="#contents">内容</a>
-      <a class="menu" href="#steps">講座</a>
-      <a class="menu" href="#price">料金</a>
+      <a class="menu" href="#world">WORLD</a>
+      <a class="menu" href="#about">SERVICE</a>
+      <a class="menu" href="#steps">CURRICULUM</a>
+      <a class="menu" href="#price">PLAN</a>
       <a class="menu" href="#faq">FAQ</a>
       <a class="btn" href="#cta">無料で相談する</a>
     </nav>
@@ -306,45 +299,86 @@
 <!-- HERO -->
 <section class="hero" id="top">
   <div class="wrap">
-    <span class="badge reveal"><span class="pulse"></span> 🌍 世界15ヶ国のファッションを仕入れる × 売上UPサポート</span>
-    <h1 class="reveal">海外ブランド販売を、<br><span class="grad">もっと自由に、もっと稼げる。</span></h1>
-    <p class="lead reveal">Nova Prime（ノヴァプライム）は、厳選した<strong>仕入先の共有</strong>・<strong>会員限定の動画講座</strong>・<strong>チャット個別サポート</strong>で、あなたのEC事業の売上を最短で伸ばすパートナーです。</p>
+    <div class="kicker reveal">WORLDWIDE FASHION SOURCING</div>
+    <h1 class="reveal">世界の<span class="goldgrad">ファッション</span>を、<br>あなたの<span class="en goldgrad">&nbsp;Business&nbsp;</span>へ。</h1>
+    <p class="lead reveal">15ヶ国以上のバイヤーと、直営店直送のネットワーク。<br>世界中の一流ブランドを仕入れ、海外ブランド販売の売上を最大化する——<br>Nova Prime は、その全行程に伴走するパートナーです。</p>
     <div class="hero-cta reveal">
-      <a class="btn" href="#price">プランを見る →</a>
-      <a class="btn ghost" href="#contents">サービス内容を見る</a>
-    </div>
-    <div class="hero-stats">
-      <div class="stat reveal"><div class="num">15<small>ヶ国+</small></div><div class="lbl">海外バイヤー連携</div></div>
-      <div class="stat reveal"><div class="num">20<small>社+</small></div><div class="lbl">直営店直送ネットワーク</div></div>
-      <div class="stat reveal"><div class="num">約7<small>h</small></div><div class="lbl">動画講座コンテンツ</div></div>
-      <div class="stat reveal"><div class="num">6<small>STEP</small></div><div class="lbl">体系化されたカリキュラム</div></div>
+      <a class="btn" href="#price">プランを見る</a>
+      <a class="btn ghost" href="#about">サービスを知る →</a>
     </div>
 
-    <div class="globe-wrap reveal" aria-hidden="true">
+    <div class="globe-stage reveal" aria-hidden="true">
+      <div class="ggrad"></div>
       <div class="globe">
-        <div class="grid-lines"></div>
-        <div class="globe-ring"></div>
-        <div class="globe-pin" style="top:18%;left:30%">👜</div>
-        <div class="globe-pin" style="top:30%;right:22%;animation-delay:-1s">👠</div>
-        <div class="globe-pin" style="bottom:24%;left:24%;animation-delay:-2s">👗</div>
-        <div class="globe-pin" style="bottom:18%;right:28%;animation-delay:-3s">🕶️</div>
-        <div class="globe-pin" style="top:46%;left:50%;transform:translateX(-50%);animation-delay:-1.5s">🧥</div>
+        <svg viewBox="0 0 200 200">
+          <defs><radialGradient id="gg" cx="40%" cy="35%" r="75%">
+            <stop offset="0%" stop-color="#2a2438"/><stop offset="100%" stop-color="#0c0c14"/>
+          </radialGradient></defs>
+          <circle cx="100" cy="100" r="92" fill="url(#gg)" stroke="#d7b46a" stroke-width="1" stroke-opacity=".7"/>
+          <g fill="none" stroke="#d7b46a" stroke-width=".8" stroke-opacity=".45">
+            <ellipse cx="100" cy="100" rx="92" ry="30"/><ellipse cx="100" cy="100" rx="92" ry="60"/>
+            <ellipse cx="100" cy="100" rx="30" ry="92"/><ellipse cx="100" cy="100" rx="60" ry="92"/>
+            <line x1="8" y1="100" x2="192" y2="100"/><line x1="100" y1="8" x2="100" y2="192"/>
+          </g>
+        </svg>
+        <span class="node" style="top:24%;left:30%"><svg><use href="#i-bag"/></svg></span>
+        <span class="node" style="top:32%;left:72%"><svg><use href="#i-glasses"/></svg></span>
+        <span class="node" style="top:64%;left:24%"><svg><use href="#i-heel"/></svg></span>
+        <span class="node" style="top:70%;left:68%"><svg><use href="#i-watch"/></svg></span>
+        <span class="node" style="top:50%;left:50%"><svg><use href="#i-diamond"/></svg></span>
       </div>
     </div>
 
-    <div class="marquee reveal" aria-hidden="true">
-      <div class="marquee-in">
-        <div class="chip">🌍 海外バイヤー買付</div><div class="chip"><span>直営店直送</span></div>
-        <div class="chip">🏷 セレクトショップVIP価格</div><div class="chip"><span>有在庫卸</span></div>
-        <div class="chip">📈 BUYMA売上UP</div><div class="chip"><span>SEO対策</span></div>
-        <div class="chip">🎬 画像加工テクニック</div><div class="chip"><span>外注化</span></div>
-        <div class="chip">💬 チャット個別サポート</div>
-        <!-- duplicate for seamless loop -->
-        <div class="chip">🌍 海外バイヤー買付</div><div class="chip"><span>直営店直送</span></div>
-        <div class="chip">🏷 セレクトショップVIP価格</div><div class="chip"><span>有在庫卸</span></div>
-        <div class="chip">📈 BUYMA売上UP</div><div class="chip"><span>SEO対策</span></div>
-        <div class="chip">🎬 画像加工テクニック</div><div class="chip"><span>外注化</span></div>
-        <div class="chip">💬 チャット個別サポート</div>
+    <div class="hero-stats">
+      <div class="stat reveal"><div class="num">15<small>ヶ国+</small></div><div class="lbl">Global Buyers</div></div>
+      <div class="stat reveal"><div class="num">20<small>社+</small></div><div class="lbl">Direct Network</div></div>
+      <div class="stat reveal"><div class="num">7<small>h</small></div><div class="lbl">Video Lessons</div></div>
+      <div class="stat reveal"><div class="num">6<small>Step</small></div><div class="lbl">Curriculum</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- WORLDWIDE NETWORK -->
+<section id="world">
+  <div class="wrap">
+    <div class="world reveal">
+      <div class="net" aria-hidden="true">
+        <svg viewBox="0 0 1000 460" preserveAspectRatio="xMidYMid slice">
+          <rect width="1000" height="460" fill="none"/>
+          <!-- dotted field -->
+          <g fill="#d7b46a" fill-opacity=".10">
+            <!-- generated grid of dots suggesting continents -->
+          </g>
+          <g id="dotfield"></g>
+          <!-- trade arcs from hub -->
+          <g fill="none" stroke="#d7b46a" stroke-width="1.4" stroke-opacity=".55">
+            <path class="arc" d="M815 150 Q600 40 360 150"/>
+            <path class="arc" style="animation-delay:-1s" d="M815 150 Q650 30 470 110"/>
+            <path class="arc" style="animation-delay:-2s" d="M815 150 Q500 320 250 300"/>
+            <path class="arc" style="animation-delay:-1.5s" d="M815 150 Q620 360 430 330"/>
+            <path class="arc" style="animation-delay:-2.5s" d="M815 150 Q860 280 760 360"/>
+          </g>
+          <!-- nodes -->
+          <g fill="#f1dca8">
+            <circle class="pnode" cx="360" cy="150" r="4"/>
+            <circle class="pnode" style="animation-delay:-1s" cx="470" cy="110" r="4"/>
+            <circle class="pnode" style="animation-delay:-2s" cx="250" cy="300" r="4"/>
+            <circle class="pnode" style="animation-delay:-1.4s" cx="430" cy="330" r="4"/>
+            <circle class="pnode" style="animation-delay:-2.4s" cx="760" cy="360" r="4"/>
+          </g>
+          <circle cx="815" cy="150" r="7" fill="#f1dca8"/>
+          <circle cx="815" cy="150" r="13" fill="none" stroke="#f1dca8" stroke-opacity=".5"/>
+        </svg>
+      </div>
+      <div class="copy">
+        <span class="eyebrow">Worldwide Network</span>
+        <h2 class="serif">世界を仕入れ先に。<br>国境のない、ファッション調達。</h2>
+        <p>バッグ、アパレル、シューズ、アクセサリー。<br>15ヶ国以上のバイヤーと直営店直送ネットワークが、世界のトレンドをあなたの商品棚へ届けます。</p>
+        <div class="wm-stats">
+          <div><div class="n">15<small>ヶ国+</small></div><div class="l">Global Buyers</div></div>
+          <div><div class="n">20<small>社+</small></div><div class="l">Direct Shipping</div></div>
+          <div><div class="n">5<small>Routes</small></div><div class="l">Sourcing</div></div>
+        </div>
       </div>
     </div>
   </div>
@@ -354,45 +388,15 @@
 <section id="about">
   <div class="wrap">
     <div class="head reveal">
-      <span class="eyebrow">About</span>
-      <h2>「仕入れ」と「ノウハウ」の壁を、<br>まとめて取り払う。</h2>
-      <p>特定のECモールにおける海外ブランド販売で、売上が伸び悩む最大の理由は“仕入先”と“正しいやり方”。Nova Primeは、その両方を会員様に共有します。</p>
+      <span class="eyebrow">Service</span>
+      <h2>「仕入れ」と「ノウハウ」、<br>その両方を、あなたに。</h2>
+      <div class="rule"></div>
+      <p>海外ブランド販売で売上が伸び悩む理由は、たいてい “仕入先” と “正しいやり方”。Nova Prime は、その両方を会員様に共有します。</p>
     </div>
-    <div class="grid c3">
-      <div class="card reveal">
-        <div class="ic">🤝</div>
-        <h3>提携仕入先を共有</h3>
-        <p>海外バイヤー15ヶ国以上、直営店直送20社以上の連携、セレクトショップのVIP価格卸、有在庫卸など。個人では繋がれない仕入網にアクセスできます。</p>
-      </div>
-      <div class="card g2 reveal">
-        <div class="ic">🎓</div>
-        <h3>会員限定の動画講座</h3>
-        <p>長年のECモール運営で培ったBUYMA売上UPのノウハウを、実践できる動画講座に体系化。基礎から外注化まで全6STEP・約7時間。</p>
-      </div>
-      <div class="card g3 reveal">
-        <div class="ic">💬</div>
-        <h3>チャット個別サポート</h3>
-        <p>運営者とチャットワークで直接やり取り。いつでも質問を送れる個別コンサルティングで、つまずきをその場で解消します。</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- WORLD MAP / GLOBAL REACH -->
-<section id="world">
-  <div class="wrap">
-    <div class="worldmap reveal">
-      <div class="wm-in">
-        <span class="eyebrow">Worldwide Network</span>
-        <h2>世界中のファッションを、<br>あなたの商品棚に。</h2>
-        <p class="sub">👜 バッグ・👗 アパレル・👟 シューズ・🕶️ アクセサリー — 15ヶ国以上のバイヤーと直営店直送ネットワークが、世界のトレンドをまとめてお届けします。</p>
-        <div class="wm-stats">
-          <div><div class="num">15<small>ヶ国+</small></div><div class="lbl">海外バイヤー連携</div></div>
-          <div><div class="num">20<small>社+</small></div><div class="lbl">直営店直送</div></div>
-          <div><div class="num">5<small>ルート</small></div><div class="lbl">仕入れチャネル</div></div>
-          <div><div class="num">∞</div><div class="lbl">取り扱いブランド</div></div>
-        </div>
-      </div>
+    <div class="grid c3 reveal">
+      <div class="cell"><div class="ic"><svg><use href="#i-globe"/></svg></div><h3>提携仕入先の共有</h3><p>海外バイヤー15ヶ国以上、直営店直送20社以上、セレクトショップのVIP価格卸、有在庫卸。個人では繋がれない仕入網へアクセスできます。</p></div>
+      <div class="cell"><div class="ic"><svg><use href="#i-play"/></svg></div><h3>会員限定の動画講座</h3><p>長年のECモール運営で培ったBUYMA売上UPのノウハウを体系化。基礎から外注化まで全6STEP・約7時間。</p></div>
+      <div class="cell"><div class="ic"><svg><use href="#i-chat"/></svg></div><h3>個別チャットサポート</h3><p>運営者とチャットワークで直接やり取り。いつでも質問でき、つまずきをその場で解消します。</p></div>
     </div>
   </div>
 </section>
@@ -401,40 +405,34 @@
 <section id="contents">
   <div class="wrap">
     <div class="head reveal">
-      <span class="eyebrow">Contents</span>
+      <span class="eyebrow">What You Get</span>
       <h2>会員になると、受け取れるもの。</h2>
-      <p>登録確認後、専用サイトのURLをチャットワークでお送りします。必要なものはすべて、ここに。</p>
+      <div class="rule"></div>
+      <p>登録確認後、専用サイトのURLをチャットワークでお送りします。必要なものは、すべてここに。</p>
     </div>
-    <div class="grid c2">
-      <div class="card reveal">
-        <div class="ic">🌍</div>
-        <h3>① 弊社提携の仕入先を共有</h3>
-        <p>・海外バイヤー15ヶ国以上<br>・直営店直送20社以上の連携<br>・セレクトショップVIP価格卸<br>・有在庫卸 ほか</p>
-      </div>
-      <div class="card g2 reveal">
-        <div class="ic">📺</div>
-        <h3>② 会員限定サイトの講義動画</h3>
-        <p>BUYMA売上UPのノウハウを実践するための動画講座（約7時間）。基礎知識・アカウント設計・出品ジャンル選定・画像加工・SEO・外注化までを全6STEPで網羅。</p>
-      </div>
+    <div class="grid c2 reveal">
+      <div class="cell"><div class="no">01 — Suppliers</div><h3>弊社提携の仕入先を共有</h3><p>・海外バイヤー15ヶ国以上<br>・直営店直送20社以上の連携<br>・セレクトショップ VIP価格卸<br>・有在庫卸 ほか</p></div>
+      <div class="cell"><div class="no">02 — Academy</div><h3>会員限定サイトの講義動画</h3><p>BUYMA売上UPのノウハウを実践するための動画講座（約7時間）。基礎知識・アカウント設計・ジャンル選定・画像加工・SEO・外注化までを全6STEPで網羅。</p></div>
     </div>
   </div>
 </section>
 
-<!-- STEPS -->
+<!-- CURRICULUM -->
 <section id="steps">
   <div class="wrap">
     <div class="head reveal">
       <span class="eyebrow">Curriculum</span>
-      <h2>結果に直結する、全6STEP。</h2>
+      <h2>結果へ導く、全6STEP。</h2>
+      <div class="rule"></div>
       <p>「何から始めればいいか分からない」をなくす、体系化されたカリキュラム。</p>
     </div>
-    <div class="steps">
-      <div class="step reveal"><div class="no">01</div><div class="tag">基礎</div><h3>ECモールの基礎知識</h3><p>利益が出る仕組みなど、海外ブランド販売の土台となる知識を解説します。</p></div>
-      <div class="step reveal"><div class="no">02</div><div class="tag">設計</div><h3>アカウント設計</h3><p>売れるアカウントのコンセプトとペルソナ設計について解説します。</p></div>
-      <div class="step reveal"><div class="no">03</div><div class="tag">選定</div><h3>出品ジャンル選定</h3><p>売れやすいブランド・商品・カテゴリの選び方を解説します。</p></div>
-      <div class="step reveal"><div class="no">04</div><div class="tag">魅せる</div><h3>画像加工テクニック</h3><p>インプレッションを最大化させるための画像加工の方法を解説します。</p></div>
-      <div class="step reveal"><div class="no">05</div><div class="tag">集客</div><h3>SEO対策テクニック</h3><p>検索で上位表示させ、アクセスを集めるためのSEO施策を解説します。</p></div>
-      <div class="step reveal"><div class="no">06</div><div class="tag">仕組化</div><h3>外注化について</h3><p>商品の質を落とさず外注化し、手離れさせていく方法を解説します。</p></div>
+    <div class="steps reveal">
+      <div class="step"><div class="top"><span class="num">01</span><span class="tag">Foundation</span></div><h3>ECモールの基礎知識</h3><p>利益が出る仕組みなど、海外ブランド販売の土台となる知識を解説します。</p></div>
+      <div class="step"><div class="top"><span class="num">02</span><span class="tag">Design</span></div><h3>アカウント設計</h3><p>売れるアカウントのコンセプトとペルソナ設計について解説します。</p></div>
+      <div class="step"><div class="top"><span class="num">03</span><span class="tag">Selection</span></div><h3>出品ジャンル選定</h3><p>売れやすいブランド・商品・カテゴリの選び方を解説します。</p></div>
+      <div class="step"><div class="top"><span class="num">04</span><span class="tag">Visual</span></div><h3>画像加工テクニック</h3><p>インプレッションを最大化させるための画像加工の方法を解説します。</p></div>
+      <div class="step"><div class="top"><span class="num">05</span><span class="tag">Traffic</span></div><h3>SEO対策テクニック</h3><p>検索で上位表示させ、アクセスを集めるためのSEO施策を解説します。</p></div>
+      <div class="step"><div class="top"><span class="num">06</span><span class="tag">Systemize</span></div><h3>外注化について</h3><p>商品の質を落とさず外注化し、手離れさせていく方法を解説します。</p></div>
     </div>
   </div>
 </section>
@@ -443,40 +441,42 @@
 <section id="supply">
   <div class="wrap">
     <div class="head reveal">
-      <span class="eyebrow">Network</span>
+      <span class="eyebrow">Sourcing</span>
       <h2>5つの仕入れルート。</h2>
-      <p>多彩な仕入れ元を共有することで、価格競争力と品揃えを両立します。</p>
+      <div class="rule"></div>
+      <p>多彩なルートを共有することで、価格競争力と品揃えを両立します。</p>
     </div>
-    <div class="supply">
-      <div class="item reveal"><span class="e">🏬</span>国内直営店仕入れ</div>
-      <div class="item reveal"><span class="e">💎</span>海外セレクトショップVIP仕入れ</div>
-      <div class="item reveal"><span class="e">🏷</span>海外アウトレット仕入れ</div>
-      <div class="item reveal"><span class="e">🚚</span>直営店直送仕入れ</div>
-      <div class="item reveal"><span class="e">🌐</span>海外バイヤー買い付け仕入れ</div>
+    <div class="supply reveal">
+      <div class="item"><svg><use href="#i-store"/></svg><span>国内直営店仕入れ</span></div>
+      <div class="item"><svg><use href="#i-diamond"/></svg><span>海外セレクトショップ VIP仕入れ</span></div>
+      <div class="item"><svg><use href="#i-tag"/></svg><span>海外アウトレット仕入れ</span></div>
+      <div class="item"><svg><use href="#i-truck"/></svg><span>直営店直送仕入れ</span></div>
+      <div class="item"><svg><use href="#i-globe"/></svg><span>海外バイヤー買い付け</span></div>
     </div>
   </div>
 </section>
 
 <!-- SUPPORT + FLOW -->
 <section id="support">
-  <div class="wrap split">
-    <div class="reveal">
-      <span class="eyebrow">Support</span>
-      <h2 style="font-size:clamp(1.8rem,4vw,2.6rem);font-weight:900;line-height:1.25;margin:14px 0 8px;font-family:'Poppins','Noto Sans JP'">一人にしない、<br>伴走サポート。</h2>
-      <div class="support-list">
-        <div class="row"><span class="e">💬</span><div><h4>チャットワークで個別コンサル</h4><p>運営者と直接やり取り。いつでも質問を送っていただけます。</p></div></div>
-        <div class="row"><span class="e">🎬</span><div><h4>学習用動画コンテンツ（約7時間）</h4><p>登録確認後、専用サイトのURLをチャットワークでお送りします。</p></div></div>
-        <div class="row"><span class="e">🤝</span><div><h4>提携仕入先の共有</h4><p>海外バイヤー15ヶ国以上・直営店直送20社以上・VIP卸・有在庫卸など。</p></div></div>
+  <div class="wrap reveal">
+    <div class="split">
+      <div class="pane">
+        <span class="eyebrow">Support</span>
+        <h3 class="serif">一人にしない、<br>伴走サポート。</h3>
+        <div class="srow"><svg><use href="#i-chat"/></svg><div><h4>チャットワークで個別コンサル</h4><p>運営者と直接やり取り。いつでも質問を送っていただけます。</p></div></div>
+        <div class="srow"><svg><use href="#i-play"/></svg><div><h4>学習用動画コンテンツ（約7時間）</h4><p>登録確認後、専用サイトのURLをチャットワークでお送りします。</p></div></div>
+        <div class="srow"><svg><use href="#i-globe"/></svg><div><h4>提携仕入先の共有</h4><p>海外バイヤー15ヶ国以上・直営店直送20社以上・VIP卸・有在庫卸など。</p></div></div>
       </div>
-    </div>
-    <div class="flow reveal">
-      <h3>ご利用の流れ</h3>
-      <ol>
-        <li><div><b>プランを選ぶ</b><span>目的に合わせてスターター／プロ／マスターから選択。</span></div></li>
-        <li><div><b>クレジットカードで決済</b><span>オンラインで手続き完了。</span></div></li>
-        <li><div><b>1営業日以内に会員サイトを送付</b><span>ご登録のメールアドレスへご案内します。</span></div></li>
-        <li><div><b>専用URL＆仕入先を受け取りスタート</b><span>チャットワークでサポート開始。</span></div></li>
-      </ol>
+      <div class="pane dark">
+        <span class="eyebrow">How It Works</span>
+        <h3 class="serif">ご利用の流れ</h3>
+        <ol class="flow">
+          <li><div><b>プランを選ぶ</b><span>目的に合わせてスターター／プロ／マスターから選択。</span></div></li>
+          <li><div><b>クレジットカードで決済</b><span>オンラインで手続き完了。</span></div></li>
+          <li><div><b>1営業日以内に会員サイトを送付</b><span>ご登録のメールアドレスへご案内します。</span></div></li>
+          <li><div><b>専用URL＆仕入先を受け取り、開始</b><span>チャットワークでサポートがスタート。</span></div></li>
+        </ol>
+      </div>
     </div>
   </div>
 </section>
@@ -485,52 +485,48 @@
 <section id="price">
   <div class="wrap">
     <div class="head reveal">
-      <span class="eyebrow">Plan</span>
-      <h2>あなたのペースで選べる、3プラン。</h2>
-      <p>サポート期間が違うだけ。受け取れる仕入先・動画講座・個別サポートはすべてのプランに含まれます。</p>
+      <span class="eyebrow">Membership</span>
+      <h2>あなたのペースで選べる、3つの会員。</h2>
+      <div class="rule"></div>
+      <p>違いはサポート期間だけ。仕入先・動画講座・個別サポートは、すべての会員に含まれます。</p>
     </div>
-    <div class="plans">
-      <div class="plan reveal">
-        <div class="ptier">Starter</div>
-        <div class="pname">スターター会員</div>
-        <div class="period"><div class="big">3<small>ヶ月</small></div><div class="sub">サポート期間</div></div>
+    <div class="plans reveal">
+      <div class="plan">
+        <div class="tier">Starter</div><div class="pname">スターター会員</div>
+        <div class="period"><div class="big">3<small>ヶ月</small></div><div class="s">Support Period</div></div>
         <ul>
-          <li><span class="ck">✓</span>まずは短期間で試してみたい方</li>
-          <li><span class="ck">✓</span>短期集中でスタートダッシュを切りたい方</li>
-          <li><span class="ck">✓</span>仕入先の共有</li>
-          <li><span class="ck">✓</span>動画講座（全6STEP・約7時間）</li>
-          <li><span class="ck">✓</span>チャット個別サポート</li>
-        </ul>
-        <a class="btn ghost" href="#cta">このプランで相談</a>
-      </div>
-
-      <div class="plan feat reveal">
-        <div class="pop">★ 人気No.1 バランス型</div>
-        <div class="ptier">Pro</div>
-        <div class="pname">プロ会員</div>
-        <div class="period"><div class="big">6<small>ヶ月</small></div><div class="sub">サポート期間</div></div>
-        <ul>
-          <li><span class="ck">✓</span>本業と両立しながら進めたい方</li>
-          <li><span class="ck">✓</span>コストとサポート期間のバランス重視の方</li>
-          <li><span class="ck">✓</span>仕入先の共有</li>
-          <li><span class="ck">✓</span>動画講座（全6STEP・約7時間）</li>
-          <li><span class="ck">✓</span>チャット個別サポート</li>
+          <li><svg><use href="#i-check"/></svg>まずは短期間で試してみたい方</li>
+          <li><svg><use href="#i-check"/></svg>短期集中でスタートダッシュを</li>
+          <li><svg><use href="#i-check"/></svg>仕入先の共有</li>
+          <li><svg><use href="#i-check"/></svg>動画講座（全6STEP・約7h）</li>
+          <li><svg><use href="#i-check"/></svg>チャット個別サポート</li>
         </ul>
         <a class="btn" href="#cta">このプランで相談</a>
       </div>
-
-      <div class="plan reveal">
-        <div class="ptier">Master</div>
-        <div class="pname">マスター会員</div>
-        <div class="period"><div class="big">12<small>ヶ月</small></div><div class="sub">サポート期間</div></div>
+      <div class="plan feat">
+        <div class="pop">Most Popular</div>
+        <div class="tier">Pro</div><div class="pname">プロ会員</div>
+        <div class="period"><div class="big">6<small>ヶ月</small></div><div class="s">Support Period</div></div>
         <ul>
-          <li><span class="ck">✓</span>じっくり事業として育てたい方</li>
-          <li><span class="ck">✓</span>組織化まで視野に入れている方</li>
-          <li><span class="ck">✓</span>仕入先の共有</li>
-          <li><span class="ck">✓</span>動画講座（全6STEP・約7時間）</li>
-          <li><span class="ck">✓</span>チャット個別サポート</li>
+          <li><svg><use href="#i-check"/></svg>本業と両立しながら進めたい方</li>
+          <li><svg><use href="#i-check"/></svg>コストと期間のバランス重視の方</li>
+          <li><svg><use href="#i-check"/></svg>仕入先の共有</li>
+          <li><svg><use href="#i-check"/></svg>動画講座（全6STEP・約7h）</li>
+          <li><svg><use href="#i-check"/></svg>チャット個別サポート</li>
         </ul>
-        <a class="btn ghost" href="#cta">このプランで相談</a>
+        <a class="btn" href="#cta">このプランで相談</a>
+      </div>
+      <div class="plan">
+        <div class="tier">Master</div><div class="pname">マスター会員</div>
+        <div class="period"><div class="big">12<small>ヶ月</small></div><div class="s">Support Period</div></div>
+        <ul>
+          <li><svg><use href="#i-check"/></svg>じっくり事業として育てたい方</li>
+          <li><svg><use href="#i-check"/></svg>組織化まで視野に入れる方</li>
+          <li><svg><use href="#i-check"/></svg>仕入先の共有</li>
+          <li><svg><use href="#i-check"/></svg>動画講座（全6STEP・約7h）</li>
+          <li><svg><use href="#i-check"/></svg>チャット個別サポート</li>
+        </ul>
+        <a class="btn" href="#cta">このプランで相談</a>
       </div>
     </div>
     <p class="note">※ 価格の詳細はお問い合わせ時にご案内いたします。提供方法：クレジットカード決済後、1営業日以内に会員サイトをメールにて送付します。</p>
@@ -541,9 +537,10 @@
 <section id="cta">
   <div class="wrap">
     <div class="cta reveal">
-      <h2>海外ブランド販売、<br>今日から本気で。</h2>
-      <p>仕入先・ノウハウ・サポート。売上を伸ばすために必要なものを、Nova Primeでまとめて手に入れましょう。</p>
-      <a class="btn" href="#price">プランを見て相談する →</a>
+      <span class="eyebrow">Start Today</span>
+      <h2>世界を仕入れて、<br>ビジネスを次のステージへ。</h2>
+      <p>仕入先・ノウハウ・サポート。売上を伸ばすために必要なものを、Nova Prime でまとめて手に入れましょう。</p>
+      <a class="btn" href="#price">プランを見て相談する</a>
     </div>
   </div>
 </section>
@@ -554,13 +551,14 @@
     <div class="head reveal">
       <span class="eyebrow">FAQ</span>
       <h2>よくあるご質問</h2>
+      <div class="rule"></div>
     </div>
-    <div class="faq">
-      <details class="reveal"><summary>初心者でも始められますか？<span class="pm">+</span></summary><div class="ans">はい。動画講座はECモールの基礎知識（STEP1）からスタートし、利益が出る仕組みから丁寧に解説します。分からない点はチャットワークでいつでもご質問いただけます。</div></details>
-      <details class="reveal"><summary>仕入先はどのようなものですか？<span class="pm">+</span></summary><div class="ans">海外バイヤー15ヶ国以上、直営店直送20社以上の連携、セレクトショップのVIP価格卸、有在庫卸など、弊社が提携する複数の仕入れルートを共有します。</div></details>
-      <details class="reveal"><summary>サポートはどのように受けられますか？<span class="pm">+</span></summary><div class="ans">チャットワークを用いた個別コンサルティングです。いつでも質問を送っていただけます。プランによってサポート期間（3／6／12ヶ月）が異なります。</div></details>
-      <details class="reveal"><summary>申し込み後、どのくらいで始められますか？<span class="pm">+</span></summary><div class="ans">クレジットカード決済後、1営業日以内に会員サイトをメールにて送付します。登録確認後、チャットワークで専用サイトのURLをお送りします。</div></details>
-      <details class="reveal"><summary>本業と両立できますか？<span class="pm">+</span></summary><div class="ans">はい。本業と両立しながら進めたい方にはプロ会員（6ヶ月）がおすすめです。外注化（STEP6）まで学べるため、徐々に手離れさせる仕組みづくりも可能です。</div></details>
+    <div class="faq reveal">
+      <details><summary>初心者でも始められますか？<span class="pm">+</span></summary><div class="ans">はい。動画講座はECモールの基礎知識（STEP1）からスタートし、利益が出る仕組みから丁寧に解説します。分からない点はチャットワークでいつでもご質問いただけます。</div></details>
+      <details><summary>仕入先はどのようなものですか？<span class="pm">+</span></summary><div class="ans">海外バイヤー15ヶ国以上、直営店直送20社以上の連携、セレクトショップのVIP価格卸、有在庫卸など、弊社が提携する複数の仕入れルートを共有します。</div></details>
+      <details><summary>サポートはどのように受けられますか？<span class="pm">+</span></summary><div class="ans">チャットワークを用いた個別コンサルティングです。いつでも質問を送っていただけます。プランによってサポート期間（3／6／12ヶ月）が異なります。</div></details>
+      <details><summary>申し込み後、どのくらいで始められますか？<span class="pm">+</span></summary><div class="ans">クレジットカード決済後、1営業日以内に会員サイトをメールにて送付します。登録確認後、チャットワークで専用サイトのURLをお送りします。</div></details>
+      <details><summary>本業と両立できますか？<span class="pm">+</span></summary><div class="ans">はい。本業と両立しながら進めたい方にはプロ会員（6ヶ月）がおすすめです。外注化（STEP6）まで学べるため、徐々に手離れさせる仕組みづくりも可能です。</div></details>
     </div>
   </div>
 </section>
@@ -570,39 +568,62 @@
   <div class="wrap">
     <div class="foot-in">
       <div>
-        <a href="#top" class="logo"><span class="dot">✦</span> Nova Prime</a>
-        <p>海外ブランド販売の売上向上を、仕入先の共有・会員限定の動画講座・個別コンサルティングでサポートするサービスです。</p>
+        <a href="#top" class="logo"><span class="mark">N</span>NOVA&nbsp;PRIME</a>
+        <p>世界中のファッションを仕入れ、海外ブランド販売の売上向上を、仕入先の共有・会員限定の動画講座・個別コンサルティングでサポートします。</p>
       </div>
       <div class="foot-links">
-        <a href="#about">サービス</a>
-        <a href="#contents">内容</a>
-        <a href="#steps">講座</a>
-        <a href="#price">料金</a>
-        <a href="#faq">FAQ</a>
+        <a href="#world">WORLD</a><a href="#about">SERVICE</a><a href="#steps">CURRICULUM</a><a href="#price">PLAN</a><a href="#faq">FAQ</a>
       </div>
     </div>
-    <div class="copy">© 2026 Nova Prime. All rights reserved.</div>
-    <p class="note">本サービスは海外ブランド販売の売上向上に関する仕入先の提供およびサポートを行うものであり、利益・成果を保証するものではありません。</p>
+    <div class="copy">© 2026 NOVA PRIME — All Rights Reserved.</div>
+    <p class="disc">本サービスは海外ブランド販売の売上向上に関する仕入先の提供およびサポートを行うものであり、利益・成果を保証するものではありません。</p>
   </div>
 </footer>
 
 <script>
-  // scatter world-fashion icons across the background
+  // scatter faint fashion line-icons across the background
   (function(){
-    const icons=['👜','👗','👠','👟','🧥','🕶️','👒','🧣','👔','👞','🥿','👛','🎒','💼','🧤','👚','🛍️','🌍','🌏','✈️'];
-    const layer=document.getElementById('scatter');
-    if(!layer) return;
-    const N=22;
+    const ids=['#i-bag','#i-heel','#i-dress','#i-coat','#i-glasses','#i-watch','#i-perfume','#i-hanger','#i-diamond','#i-tag'];
+    const layer=document.getElementById('scatter'); if(!layer) return;
+    const NS='http://www.w3.org/2000/svg', N=18;
     for(let i=0;i<N;i++){
-      const s=document.createElement('span');
-      s.textContent=icons[i%icons.length];
-      s.style.left=(2+ (i*4099%96))+'%';
-      s.style.top=(3+ (i*7919%92))+'%';
-      const dur=(16+(i*53%14));
-      s.style.animationDuration=dur+'s';
-      s.style.animationDelay=(-(i*37%dur))+'s';
-      s.style.fontSize=(1.4+ (i*31%18)/10)+'rem';
-      layer.appendChild(s);
+      const svg=document.createElementNS(NS,'svg');
+      const sz=44+(i*37%80);
+      svg.setAttribute('width',sz); svg.setAttribute('height',sz);
+      svg.setAttribute('viewBox','0 0 24 24');
+      const use=document.createElementNS(NS,'use');
+      use.setAttribute('href',ids[i%ids.length]);
+      svg.appendChild(use);
+      svg.style.left=(2+(i*4099%95))+'%';
+      svg.style.top=(2+(i*7919%94))+'%';
+      const dur=20+(i*53%16);
+      svg.style.animationDuration=dur+'s';
+      svg.style.animationDelay=(-(i*41%dur))+'s';
+      svg.style.opacity=(0.045+(i*29%5)/100).toFixed(3);
+      layer.appendChild(svg);
+    }
+  })();
+
+  // dot field suggesting landmasses in the world panel
+  (function(){
+    const g=document.getElementById('dotfield'); if(!g) return;
+    const NS='http://www.w3.org/2000/svg';
+    // rough continent clusters: [cx,cy,radius]
+    const blobs=[[300,150,120],[470,110,70],[250,300,90],[440,330,80],[770,200,140],[800,360,60]];
+    let dots='';
+    for(let x=20;x<980;x+=20){
+      for(let y=20;y<440;y+=20){
+        let inside=false;
+        for(const[bx,by,r] of blobs){ if(((x-bx)**2+((y-by)*1.3)**2) < r*r){inside=true;break;} }
+        if(inside){
+          const c=document.createElementNS(NS,'circle');
+          c.setAttribute('cx',x+ (x*7%6-3)); c.setAttribute('cy',y);
+          c.setAttribute('r', 1.5);
+          c.setAttribute('fill','#d7b46a');
+          c.setAttribute('fill-opacity', (0.12+ (x*y%9)/60).toFixed(2));
+          g.appendChild(c);
+        }
+      }
     }
   })();
 
@@ -612,13 +633,8 @@
   menu.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>menu.classList.remove('open')));
 
   // scroll reveal
-  const io=new IntersectionObserver((es)=>{
-    es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
-  },{threshold:.12});
-  document.querySelectorAll('.reveal').forEach((el,i)=>{
-    el.style.transitionDelay=(i%4*0.06)+'s';
-    io.observe(el);
-  });
+  const io=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}})},{threshold:.12});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
 </script>
 </body>
 </html>
