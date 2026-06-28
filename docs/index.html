@@ -101,13 +101,8 @@
     background:radial-gradient(circle,rgba(215,180,106,.16),transparent 60%);filter:blur(20px);top:50%;left:50%;transform:translate(-50%,-50%)}
   .globe{width:clamp(230px,38vw,330px);aspect-ratio:1;position:relative;animation:rot 40s linear infinite}
   .globe svg{width:100%;height:100%;overflow:visible}
-  .globe .node{position:absolute;width:34px;height:34px;margin:-17px;display:grid;place-items:center;
-    border:1px solid var(--gold);border-radius:50%;background:rgba(10,10,15,.85);color:var(--gold);
-    box-shadow:0 0 18px rgba(215,180,106,.35);animation:counter 40s linear infinite}
-  .globe .node svg{width:18px;height:18px}
   @keyframes rot{to{transform:rotate(360deg)}}
-  @keyframes counter{to{transform:rotate(-360deg)}}
-  @media(prefers-reduced-motion:reduce){.globe,.globe .node{animation:none}}
+  @media(prefers-reduced-motion:reduce){.globe{animation:none}}
 
   .hero-stats{display:flex;gap:clamp(26px,6vw,80px);justify-content:center;flex-wrap:wrap;margin-top:70px}
   .stat .num{font-family:"Playfair Display",serif;font-weight:800;font-size:clamp(2.2rem,5vw,3.4rem);
@@ -311,21 +306,38 @@
       <div class="ggrad"></div>
       <div class="globe">
         <svg viewBox="0 0 200 200">
-          <defs><radialGradient id="gg" cx="40%" cy="35%" r="75%">
-            <stop offset="0%" stop-color="#2a2438"/><stop offset="100%" stop-color="#0c0c14"/>
-          </radialGradient></defs>
+          <defs>
+            <radialGradient id="gg" cx="40%" cy="35%" r="75%">
+              <stop offset="0%" stop-color="#2a2438"/><stop offset="100%" stop-color="#0c0c14"/>
+            </radialGradient>
+            <clipPath id="globeClip"><circle cx="100" cy="100" r="92"/></clipPath>
+          </defs>
+          <!-- ocean sphere -->
           <circle cx="100" cy="100" r="92" fill="url(#gg)" stroke="#d7b46a" stroke-width="1" stroke-opacity=".7"/>
-          <g fill="none" stroke="#d7b46a" stroke-width=".8" stroke-opacity=".45">
-            <ellipse cx="100" cy="100" rx="92" ry="30"/><ellipse cx="100" cy="100" rx="92" ry="60"/>
-            <ellipse cx="100" cy="100" rx="30" ry="92"/><ellipse cx="100" cy="100" rx="60" ry="92"/>
-            <line x1="8" y1="100" x2="192" y2="100"/><line x1="100" y1="8" x2="100" y2="192"/>
+          <g clip-path="url(#globeClip)">
+            <!-- landmasses -->
+            <g fill="#d7b46a" fill-opacity=".22" stroke="#f1dca8" stroke-opacity=".4" stroke-width=".6" stroke-linejoin="round">
+              <!-- North America -->
+              <path d="M44 52c-6 4-7 13-2 17-3 6 1 13 7 13 0 5 7 7 9 2 3 3 9 1 8-4 4-2 2-9-3-10 3-7-2-14-8-13 1-6-5-10-11-8-3-3-7-2-9 1Z"/>
+              <!-- South America -->
+              <path d="M70 104c-5 4-4 15 3 21-2 11 6 20 11 13 4-6 2-19-3-25 3-7-5-14-11-9Z"/>
+              <!-- Europe -->
+              <path d="M98 58c-5 3-3 10 4 11 5-3 13-2 14 3 5-1 7-7 2-10-6-3-13-1-18-1-1-2-1-3-2-3Z"/>
+              <!-- Africa -->
+              <path d="M100 92c-6 5-5 18 2 27-2 11 7 18 12 9 5-9 3-22-2-28 3-8-6-13-12-8Z"/>
+              <!-- Asia -->
+              <path d="M120 56c-4 4 0 11 8 11 8-5 24-6 35 1 8-3 18 2 15 11-12 5-26 0-37 3-11 4-22-1-25-9-3-7 0-15 4-18 0-1 0-1 0 0Z"/>
+              <!-- Australia -->
+              <path d="M142 132c-6 3-4 14 4 16 8 2 15-5 11-12-4-6-11-6-15-4Z"/>
+            </g>
+            <!-- graticule -->
+            <g fill="none" stroke="#d7b46a" stroke-width=".7" stroke-opacity=".32">
+              <ellipse cx="100" cy="100" rx="92" ry="30"/><ellipse cx="100" cy="100" rx="92" ry="60"/>
+              <ellipse cx="100" cy="100" rx="30" ry="92"/><ellipse cx="100" cy="100" rx="60" ry="92"/>
+              <line x1="8" y1="100" x2="192" y2="100"/><line x1="100" y1="8" x2="100" y2="192"/>
+            </g>
           </g>
         </svg>
-        <span class="node" style="top:24%;left:30%"><svg><use href="#i-bag"/></svg></span>
-        <span class="node" style="top:32%;left:72%"><svg><use href="#i-glasses"/></svg></span>
-        <span class="node" style="top:64%;left:24%"><svg><use href="#i-heel"/></svg></span>
-        <span class="node" style="top:70%;left:68%"><svg><use href="#i-watch"/></svg></span>
-        <span class="node" style="top:50%;left:50%"><svg><use href="#i-diamond"/></svg></span>
       </div>
     </div>
 
