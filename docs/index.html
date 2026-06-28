@@ -119,10 +119,11 @@
   /* worldwide network */
   .world{border:1px solid var(--line);border-radius:8px;overflow:hidden;position:relative;
     background:radial-gradient(900px 500px at 50% -10%,rgba(40,38,80,.4),transparent 60%),linear-gradient(180deg,#0c0c16,#0a0a0f)}
-  .world .net{position:relative;width:100%;display:block}
-  .world .net svg{width:100%;height:auto;display:block}
+  .world .net{position:relative;width:100%;height:clamp(460px,48vw,660px);display:block}
+  .world .net canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
   .world .copy{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;
-    align-items:center;text-align:center;padding:30px}
+    align-items:center;text-align:center;padding:30px;
+    background:radial-gradient(ellipse 64% 72% at 50% 50%,rgba(8,8,13,.72),rgba(8,8,13,.35) 55%,transparent 78%)}
   .world .copy h2{font-family:"Noto Serif JP",serif;font-weight:700;font-size:clamp(1.7rem,4.6vw,3.2rem);
     line-height:1.4;text-shadow:0 4px 30px rgba(0,0,0,.6)}
   .world .copy p{margin-top:18px;max-width:600px;color:#cfc8ba;font-weight:300}
@@ -321,32 +322,7 @@
   <div class="wrap">
     <div class="world reveal">
       <div class="net" aria-hidden="true">
-        <svg viewBox="0 0 1000 460" preserveAspectRatio="xMidYMid slice">
-          <rect width="1000" height="460" fill="none"/>
-          <!-- dotted field -->
-          <g fill="#d7b46a" fill-opacity=".10">
-            <!-- generated grid of dots suggesting continents -->
-          </g>
-          <g id="dotfield"></g>
-          <!-- trade arcs from hub -->
-          <g fill="none" stroke="#d7b46a" stroke-width="1.4" stroke-opacity=".55">
-            <path class="arc" d="M815 150 Q600 40 360 150"/>
-            <path class="arc" style="animation-delay:-1s" d="M815 150 Q650 30 470 110"/>
-            <path class="arc" style="animation-delay:-2s" d="M815 150 Q500 320 250 300"/>
-            <path class="arc" style="animation-delay:-1.5s" d="M815 150 Q620 360 430 330"/>
-            <path class="arc" style="animation-delay:-2.5s" d="M815 150 Q860 280 760 360"/>
-          </g>
-          <!-- nodes -->
-          <g fill="#f1dca8">
-            <circle class="pnode" cx="360" cy="150" r="4"/>
-            <circle class="pnode" style="animation-delay:-1s" cx="470" cy="110" r="4"/>
-            <circle class="pnode" style="animation-delay:-2s" cx="250" cy="300" r="4"/>
-            <circle class="pnode" style="animation-delay:-1.4s" cx="430" cy="330" r="4"/>
-            <circle class="pnode" style="animation-delay:-2.4s" cx="760" cy="360" r="4"/>
-          </g>
-          <circle cx="815" cy="150" r="7" fill="#f1dca8"/>
-          <circle cx="815" cy="150" r="13" fill="none" stroke="#f1dca8" stroke-opacity=".5"/>
-        </svg>
+        <canvas id="worldmap-canvas"></canvas>
       </div>
       <div class="copy">
         <span class="eyebrow">Worldwide Network</span>
@@ -582,29 +558,6 @@
     }
   })();
 
-  // dot field suggesting landmasses in the world panel
-  (function(){
-    const g=document.getElementById('dotfield'); if(!g) return;
-    const NS='http://www.w3.org/2000/svg';
-    // rough continent clusters: [cx,cy,radius]
-    const blobs=[[300,150,120],[470,110,70],[250,300,90],[440,330,80],[770,200,140],[800,360,60]];
-    let dots='';
-    for(let x=20;x<980;x+=20){
-      for(let y=20;y<440;y+=20){
-        let inside=false;
-        for(const[bx,by,r] of blobs){ if(((x-bx)**2+((y-by)*1.3)**2) < r*r){inside=true;break;} }
-        if(inside){
-          const c=document.createElementNS(NS,'circle');
-          c.setAttribute('cx',x+ (x*7%6-3)); c.setAttribute('cy',y);
-          c.setAttribute('r', 1.5);
-          c.setAttribute('fill','#d7b46a');
-          c.setAttribute('fill-opacity', (0.12+ (x*y%9)/60).toFixed(2));
-          g.appendChild(c);
-        }
-      }
-    }
-  })();
-
   // mobile menu
   const toggle=document.getElementById('toggle'), menu=document.getElementById('menu');
   toggle.addEventListener('click',()=>menu.classList.toggle('open'));
@@ -614,6 +567,8 @@
   const io=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}})},{threshold:.12});
   document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
 </script>
+<script src="land-data.js" defer></script>
 <script src="globe.js" defer></script>
+<script src="worldmap.js" defer></script>
 </body>
 </html>
