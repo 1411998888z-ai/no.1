@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Nova Prime ｜ 海外ブランド販売を、もっと自由に。</title>
+<meta name="description" content="Nova Prime（ノヴァプライム）は、海外ブランド販売の売上向上を仕入先の共有・会員限定の動画講座・個別コンサルティングでサポートするサービスです。" />
+<meta name="theme-color" content="#7c3aed" />
+
+<!-- OGP -->
+<meta property="og:title" content="Nova Prime ｜ 海外ブランド販売を、もっと自由に。" />
+<meta property="og:description" content="海外バイヤー15ヶ国以上・直営店直送20社以上の仕入先を共有。BUYMA売上UPの動画講座とチャット個別サポート付き。" />
+<meta property="og:type" content="website" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Poppins:wght@600;700;800;900&display=swap" rel="stylesheet" />
+
+<style>
+  :root{
+    --pink:#ff4d8d;
+    --purple:#7c3aed;
+    --blue:#2dd4ff;
+    --yellow:#ffd23f;
+    --green:#22e3a3;
+    --orange:#ff8a3d;
+    --ink:#1a1130;
+    --paper:#fffdfa;
+    --grad: linear-gradient(120deg,#ff4d8d 0%,#7c3aed 45%,#2dd4ff 100%);
+    --grad2: linear-gradient(120deg,#ffd23f 0%,#ff8a3d 50%,#ff4d8d 100%);
+    --grad3: linear-gradient(120deg,#22e3a3 0%,#2dd4ff 100%);
+    --shadow: 0 18px 40px -18px rgba(124,58,237,.45);
+    --radius:26px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:"Noto Sans JP",sans-serif;
+    color:var(--ink);
+    background:var(--paper);
+    line-height:1.8;
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.font-display{font-family:"Poppins","Noto Sans JP",sans-serif}
+  a{color:inherit;text-decoration:none}
+  img{max-width:100%;display:block}
+  .wrap{width:min(1120px,92vw);margin-inline:auto}
+  section{position:relative;padding:clamp(70px,11vw,140px) 0}
+
+  /* ===== floating blobs background ===== */
+  .blobs{position:fixed;inset:0;z-index:-2;overflow:hidden;pointer-events:none}
+  .blob{position:absolute;border-radius:50%;filter:blur(60px);opacity:.55;animation:float 16s ease-in-out infinite}
+  .blob.b1{width:46vw;height:46vw;background:var(--pink);top:-12vw;left:-10vw}
+  .blob.b2{width:40vw;height:40vw;background:var(--blue);top:30vh;right:-12vw;animation-delay:-4s}
+  .blob.b3{width:38vw;height:38vw;background:var(--yellow);bottom:-10vw;left:20vw;animation-delay:-8s}
+  .blob.b4{width:32vw;height:32vw;background:var(--green);top:120vh;right:10vw;animation-delay:-2s}
+  @keyframes float{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(4vw,-3vw) scale(1.08)}66%{transform:translate(-3vw,3vw) scale(.95)}}
+  @media(prefers-reduced-motion:reduce){.blob{animation:none}}
+
+  /* ===== nav ===== */
+  header.nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(14px);
+    background:rgba(255,253,250,.72);border-bottom:1px solid rgba(124,58,237,.1)}
+  .nav-in{display:flex;align-items:center;justify-content:space-between;height:70px}
+  .logo{display:flex;align-items:center;gap:10px;font-family:"Poppins";font-weight:800;font-size:1.25rem;letter-spacing:.5px}
+  .logo .dot{width:30px;height:30px;border-radius:9px;background:var(--grad);box-shadow:var(--shadow);
+    display:grid;place-items:center;color:#fff;font-size:.95rem;transform:rotate(-8deg)}
+  .nav-links{display:flex;gap:28px;align-items:center;font-weight:700;font-size:.92rem}
+  .nav-links a.menu{position:relative}
+  .nav-links a.menu::after{content:"";position:absolute;left:0;bottom:-4px;width:0;height:3px;border-radius:3px;background:var(--grad);transition:.3s}
+  .nav-links a.menu:hover::after{width:100%}
+  .btn{display:inline-flex;align-items:center;gap:8px;font-weight:800;font-family:"Noto Sans JP";
+    padding:13px 26px;border-radius:999px;background:var(--grad);color:#fff;box-shadow:var(--shadow);
+    transition:transform .2s ease, box-shadow .2s ease;border:none;cursor:pointer;font-size:.95rem}
+  .btn:hover{transform:translateY(-3px) scale(1.03);box-shadow:0 24px 50px -18px rgba(255,77,141,.6)}
+  .btn.ghost{background:#fff;color:var(--purple);border:2px solid rgba(124,58,237,.18);box-shadow:none}
+  .btn.ghost:hover{border-color:var(--purple)}
+  .nav-toggle{display:none;background:none;border:none;font-size:1.6rem;cursor:pointer;color:var(--purple)}
+
+  /* ===== hero ===== */
+  .hero{padding-top:clamp(50px,8vw,90px);text-align:center}
+  .badge{display:inline-flex;align-items:center;gap:8px;background:#fff;border:2px solid rgba(124,58,237,.15);
+    border-radius:999px;padding:8px 18px;font-weight:700;font-size:.85rem;box-shadow:var(--shadow);margin-bottom:26px}
+  .badge .pulse{width:9px;height:9px;border-radius:50%;background:var(--green);box-shadow:0 0 0 0 rgba(34,227,163,.7);animation:pulse 2s infinite}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(34,227,163,.6)}70%{box-shadow:0 0 0 12px rgba(34,227,163,0)}100%{box-shadow:0 0 0 0 rgba(34,227,163,0)}}
+  .hero h1{font-size:clamp(2.4rem,7vw,5rem);line-height:1.12;font-weight:900;letter-spacing:-1px}
+  .hero h1 .grad{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .hero p.lead{font-size:clamp(1rem,2.3vw,1.3rem);max-width:680px;margin:26px auto 0;color:#4a3f63;font-weight:500}
+  .hero-cta{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-top:38px}
+  .hero-stats{display:flex;gap:clamp(20px,5vw,64px);justify-content:center;flex-wrap:wrap;margin-top:64px}
+  .stat .num{font-family:"Poppins";font-weight:900;font-size:clamp(2rem,5vw,3.2rem);background:var(--grad2);
+    -webkit-background-clip:text;background-clip:text;color:transparent;line-height:1}
+  .stat .lbl{font-weight:700;font-size:.85rem;color:#6b5f85;margin-top:6px}
+
+  /* marquee */
+  .marquee{margin-top:70px;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);
+    mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent)}
+  .marquee-in{display:flex;gap:18px;width:max-content;animation:scroll 28s linear infinite}
+  .marquee:hover .marquee-in{animation-play-state:paused}
+  .chip{white-space:nowrap;font-weight:800;font-size:.95rem;padding:12px 22px;border-radius:999px;background:#fff;
+    border:2px solid rgba(124,58,237,.12);box-shadow:0 8px 20px -12px rgba(124,58,237,.4)}
+  .chip span{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+  @keyframes scroll{to{transform:translateX(-50%)}}
+
+  /* ===== section heading ===== */
+  .head{text-align:center;margin-bottom:60px}
+  .eyebrow{display:inline-block;font-family:"Poppins";font-weight:800;letter-spacing:3px;font-size:.8rem;
+    padding:6px 16px;border-radius:999px;color:#fff;background:var(--grad);margin-bottom:18px;text-transform:uppercase}
+  .head h2{font-size:clamp(1.8rem,4.5vw,2.9rem);font-weight:900;line-height:1.25}
+  .head p{margin-top:14px;color:#5b5078;font-weight:500;max-width:620px;margin-inline:auto}
+
+  /* ===== feature cards ===== */
+  .grid{display:grid;gap:24px}
+  .grid.c3{grid-template-columns:repeat(3,1fr)}
+  .grid.c2{grid-template-columns:repeat(2,1fr)}
+  .card{background:#fff;border-radius:var(--radius);padding:34px;border:1px solid rgba(124,58,237,.08);
+    box-shadow:0 24px 50px -30px rgba(124,58,237,.4);transition:transform .3s ease, box-shadow .3s ease;position:relative;overflow:hidden}
+  .card::before{content:"";position:absolute;inset:0 0 auto 0;height:6px;background:var(--grad)}
+  .card.g2::before{background:var(--grad2)}.card.g3::before{background:var(--grad3)}
+  .card:hover{transform:translateY(-8px);box-shadow:0 34px 60px -28px rgba(124,58,237,.55)}
+  .ic{width:62px;height:62px;border-radius:18px;display:grid;place-items:center;font-size:1.7rem;margin-bottom:20px;
+    background:linear-gradient(135deg,rgba(255,77,141,.15),rgba(124,58,237,.15))}
+  .card h3{font-size:1.25rem;font-weight:900;margin-bottom:10px}
+  .card p{color:#5b5078;font-weight:500;font-size:.97rem}
+
+  /* ===== steps ===== */
+  .steps{display:grid;gap:20px;grid-template-columns:repeat(3,1fr)}
+  .step{position:relative;background:#fff;border-radius:22px;padding:30px 28px 28px;border:1px solid rgba(124,58,237,.08);
+    box-shadow:0 20px 44px -30px rgba(124,58,237,.5);transition:transform .3s ease}
+  .step:hover{transform:translateY(-6px)}
+  .step .no{font-family:"Poppins";font-weight:900;font-size:2.6rem;line-height:1;background:var(--grad);
+    -webkit-background-clip:text;background-clip:text;color:transparent}
+  .step .tag{display:inline-block;font-weight:800;font-size:.72rem;letter-spacing:1px;color:var(--purple);
+    background:rgba(124,58,237,.1);border-radius:999px;padding:4px 12px;margin:14px 0 10px}
+  .step h3{font-size:1.12rem;font-weight:900;margin-bottom:8px}
+  .step p{color:#5b5078;font-weight:500;font-size:.92rem}
+
+  /* ===== pricing ===== */
+  .plans{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;align-items:stretch}
+  .plan{background:#fff;border-radius:var(--radius);padding:38px 32px;border:2px solid rgba(124,58,237,.1);
+    box-shadow:0 24px 50px -32px rgba(124,58,237,.45);display:flex;flex-direction:column;transition:transform .3s ease;position:relative}
+  .plan:hover{transform:translateY(-8px)}
+  .plan.feat{border-color:transparent;background:linear-gradient(160deg,#fff, #fff) padding-box, var(--grad) border-box;
+    border:3px solid transparent;box-shadow:0 36px 70px -30px rgba(255,77,141,.55);transform:scale(1.04)}
+  .plan.feat:hover{transform:scale(1.04) translateY(-8px)}
+  .plan .pop{position:absolute;top:-15px;left:50%;transform:translateX(-50%);background:var(--grad2);color:#fff;
+    font-weight:900;font-size:.78rem;letter-spacing:1px;padding:7px 18px;border-radius:999px;box-shadow:var(--shadow);white-space:nowrap}
+  .plan .pname{font-family:"Poppins";font-weight:900;font-size:1.4rem}
+  .plan .ptier{font-weight:800;font-size:.78rem;letter-spacing:2px;color:var(--purple);margin-bottom:6px;text-transform:uppercase}
+  .plan .period{margin:18px 0;padding:18px;border-radius:16px;background:linear-gradient(135deg,rgba(45,212,255,.1),rgba(124,58,237,.1));text-align:center}
+  .plan .period .big{font-family:"Poppins";font-weight:900;font-size:2.4rem;line-height:1;background:var(--grad);
+    -webkit-background-clip:text;background-clip:text;color:transparent}
+  .plan .period .sub{font-weight:700;font-size:.85rem;color:#6b5f85;margin-top:4px}
+  .plan ul{list-style:none;margin:8px 0 26px;display:grid;gap:12px}
+  .plan li{display:flex;gap:10px;font-weight:600;font-size:.95rem;color:#3f3559}
+  .plan li .ck{color:var(--green);font-weight:900;flex:none}
+  .plan .btn{margin-top:auto;justify-content:center;width:100%}
+  .plan.feat .btn{background:var(--grad2)}
+
+  /* ===== supplier list ===== */
+  .supply{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px}
+  .supply .item{background:#fff;border-radius:18px;padding:24px 26px;border:1px solid rgba(124,58,237,.08);
+    box-shadow:0 18px 40px -30px rgba(124,58,237,.5);display:flex;align-items:center;gap:14px;font-weight:800;transition:transform .25s}
+  .supply .item:hover{transform:translateY(-5px)}
+  .supply .item .e{font-size:1.6rem}
+
+  /* ===== support / flow ===== */
+  .split{display:grid;grid-template-columns:1.1fr .9fr;gap:50px;align-items:center}
+  .support-list{display:grid;gap:16px;margin-top:8px}
+  .support-list .row{display:flex;gap:14px;background:#fff;border-radius:18px;padding:20px 22px;
+    border:1px solid rgba(124,58,237,.08);box-shadow:0 16px 36px -30px rgba(124,58,237,.5)}
+  .support-list .row .e{font-size:1.5rem;flex:none}
+  .support-list .row h4{font-weight:900;font-size:1.02rem;margin-bottom:3px}
+  .support-list .row p{color:#5b5078;font-weight:500;font-size:.92rem}
+  .flow{background:linear-gradient(160deg,var(--purple),var(--pink));border-radius:var(--radius);padding:40px;color:#fff;box-shadow:var(--shadow)}
+  .flow h3{font-size:1.4rem;font-weight:900;margin-bottom:24px}
+  .flow ol{list-style:none;display:grid;gap:18px;counter-reset:f}
+  .flow li{counter-increment:f;display:flex;gap:16px;align-items:flex-start;font-weight:600}
+  .flow li::before{content:counter(f);font-family:"Poppins";font-weight:900;background:#fff;color:var(--purple);
+    width:34px;height:34px;border-radius:50%;display:grid;place-items:center;flex:none;font-size:1rem}
+  .flow li b{display:block;font-weight:900;margin-bottom:2px}
+  .flow li span{opacity:.92;font-size:.9rem;font-weight:500}
+
+  /* ===== CTA ===== */
+  .cta{margin:0 auto;text-align:center;color:#fff;border-radius:36px;padding:clamp(50px,8vw,90px) 30px;
+    background:var(--grad);box-shadow:0 40px 80px -30px rgba(124,58,237,.6);position:relative;overflow:hidden}
+  .cta::after{content:"";position:absolute;inset:-50% -10% auto;height:120%;
+    background:radial-gradient(circle at 30% 20%,rgba(255,255,255,.3),transparent 40%),radial-gradient(circle at 80% 60%,rgba(255,255,255,.22),transparent 45%)}
+  .cta h2{position:relative;font-size:clamp(1.9rem,5vw,3.2rem);font-weight:900;line-height:1.2}
+  .cta p{position:relative;margin:18px auto 34px;max-width:560px;font-weight:500;opacity:.95}
+  .cta .btn{position:relative;background:#fff;color:var(--purple);font-size:1.05rem;padding:17px 40px}
+  .cta .btn:hover{box-shadow:0 24px 50px -16px rgba(0,0,0,.35)}
+
+  /* ===== faq ===== */
+  .faq{max-width:760px;margin-inline:auto;display:grid;gap:14px}
+  details{background:#fff;border-radius:18px;border:1px solid rgba(124,58,237,.1);box-shadow:0 16px 36px -32px rgba(124,58,237,.5);overflow:hidden}
+  summary{cursor:pointer;list-style:none;padding:22px 26px;font-weight:800;display:flex;justify-content:space-between;gap:16px;align-items:center}
+  summary::-webkit-details-marker{display:none}
+  summary .pm{font-family:"Poppins";font-weight:900;color:var(--purple);transition:.3s;flex:none}
+  details[open] summary .pm{transform:rotate(45deg)}
+  details .ans{padding:0 26px 24px;color:#5b5078;font-weight:500}
+
+  /* ===== footer ===== */
+  footer{padding:60px 0 40px;border-top:1px solid rgba(124,58,237,.1);margin-top:40px}
+  .foot-in{display:flex;justify-content:space-between;gap:30px;flex-wrap:wrap;align-items:flex-start}
+  .foot-in p{color:#6b5f85;font-weight:500;font-size:.9rem;max-width:340px;margin-top:12px}
+  .foot-links{display:flex;gap:28px;flex-wrap:wrap;font-weight:700;font-size:.9rem}
+  .copy{margin-top:36px;text-align:center;color:#9a8fb5;font-size:.82rem;font-weight:500}
+  .note{margin-top:10px;text-align:center;color:#b3a9c9;font-size:.74rem;font-weight:500;max-width:720px;margin-inline:auto}
+
+  /* reveal */
+  .reveal{opacity:0;transform:translateY(28px);transition:opacity .7s ease, transform .7s ease}
+  .reveal.in{opacity:1;transform:none}
+
+  /* responsive */
+  @media(max-width:900px){
+    .grid.c3,.steps,.plans{grid-template-columns:1fr}
+    .grid.c2,.split{grid-template-columns:1fr}
+    .plan.feat{transform:none}.plan.feat:hover{transform:translateY(-8px)}
+    .nav-links{position:fixed;inset:70px 0 auto 0;flex-direction:column;background:rgba(255,253,250,.98);
+      backdrop-filter:blur(14px);padding:24px;gap:20px;border-bottom:1px solid rgba(124,58,237,.12);
+      transform:translateY(-130%);transition:transform .35s ease}
+    .nav-links.open{transform:none}
+    .nav-toggle{display:block}
+  }
+</style>
+</head>
+<body>
+
+<div class="blobs" aria-hidden="true">
+  <div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div><div class="blob b4"></div>
+</div>
+
+<!-- NAV -->
+<header class="nav">
+  <div class="wrap nav-in">
+    <a href="#top" class="logo"><span class="dot">✦</span> Nova Prime</a>
+    <nav class="nav-links" id="menu">
+      <a class="menu" href="#about">サービス</a>
+      <a class="menu" href="#contents">内容</a>
+      <a class="menu" href="#steps">講座</a>
+      <a class="menu" href="#price">料金</a>
+      <a class="menu" href="#faq">FAQ</a>
+      <a class="btn" href="#cta">無料で相談する</a>
+    </nav>
+    <button class="nav-toggle" id="toggle" aria-label="メニュー">☰</button>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero" id="top">
+  <div class="wrap">
+    <span class="badge reveal"><span class="pulse"></span> 海外ブランド販売 × 売上UPサポート</span>
+    <h1 class="reveal">海外ブランド販売を、<br><span class="grad">もっと自由に、もっと稼げる。</span></h1>
+    <p class="lead reveal">Nova Prime（ノヴァプライム）は、厳選した<strong>仕入先の共有</strong>・<strong>会員限定の動画講座</strong>・<strong>チャット個別サポート</strong>で、あなたのEC事業の売上を最短で伸ばすパートナーです。</p>
+    <div class="hero-cta reveal">
+      <a class="btn" href="#price">プランを見る →</a>
+      <a class="btn ghost" href="#contents">サービス内容を見る</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat reveal"><div class="num">15<small>ヶ国+</small></div><div class="lbl">海外バイヤー連携</div></div>
+      <div class="stat reveal"><div class="num">20<small>社+</small></div><div class="lbl">直営店直送ネットワーク</div></div>
+      <div class="stat reveal"><div class="num">約7<small>h</small></div><div class="lbl">動画講座コンテンツ</div></div>
+      <div class="stat reveal"><div class="num">6<small>STEP</small></div><div class="lbl">体系化されたカリキュラム</div></div>
+    </div>
+
+    <div class="marquee reveal" aria-hidden="true">
+      <div class="marquee-in">
+        <div class="chip">🌍 海外バイヤー買付</div><div class="chip"><span>直営店直送</span></div>
+        <div class="chip">🏷 セレクトショップVIP価格</div><div class="chip"><span>有在庫卸</span></div>
+        <div class="chip">📈 BUYMA売上UP</div><div class="chip"><span>SEO対策</span></div>
+        <div class="chip">🎬 画像加工テクニック</div><div class="chip"><span>外注化</span></div>
+        <div class="chip">💬 チャット個別サポート</div>
+        <!-- duplicate for seamless loop -->
+        <div class="chip">🌍 海外バイヤー買付</div><div class="chip"><span>直営店直送</span></div>
+        <div class="chip">🏷 セレクトショップVIP価格</div><div class="chip"><span>有在庫卸</span></div>
+        <div class="chip">📈 BUYMA売上UP</div><div class="chip"><span>SEO対策</span></div>
+        <div class="chip">🎬 画像加工テクニック</div><div class="chip"><span>外注化</span></div>
+        <div class="chip">💬 チャット個別サポート</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="wrap">
+    <div class="head reveal">
+      <span class="eyebrow">About</span>
+      <h2>「仕入れ」と「ノウハウ」の壁を、<br>まとめて取り払う。</h2>
+      <p>特定のECモールにおける海外ブランド販売で、売上が伸び悩む最大の理由は“仕入先”と“正しいやり方”。Nova Primeは、その両方を会員様に共有します。</p>
+    </div>
+    <div class="grid c3">
+      <div class="card reveal">
+        <div class="ic">🤝</div>
+        <h3>提携仕入先を共有</h3>
+        <p>海外バイヤー15ヶ国以上、直営店直送20社以上の連携、セレクトショップのVIP価格卸、有在庫卸など。個人では繋がれない仕入網にアクセスできます。</p>
+      </div>
+      <div class="card g2 reveal">
+        <div class="ic">🎓</div>
+        <h3>会員限定の動画講座</h3>
+        <p>長年のECモール運営で培ったBUYMA売上UPのノウハウを、実践できる動画講座に体系化。基礎から外注化まで全6STEP・約7時間。</p>
+      </div>
+      <div class="card g3 reveal">
+        <div class="ic">💬</div>
+        <h3>チャット個別サポート</h3>
+        <p>運営者とチャットワークで直接やり取り。いつでも質問を送れる個別コンサルティングで、つまずきをその場で解消します。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTENTS -->
+<section id="contents">
+  <div class="wrap">
+    <div class="head reveal">
+      <span class="eyebrow">Contents</span>
+      <h2>会員になると、受け取れるもの。</h2>
+      <p>登録確認後、専用サイトのURLをチャットワークでお送りします。必要なものはすべて、ここに。</p>
+    </div>
+    <div class="grid c2">
+      <div class="card reveal">
+        <div class="ic">🌍</div>
+        <h3>① 弊社提携の仕入先を共有</h3>
+        <p>・海外バイヤー15ヶ国以上<br>・直営店直送20社以上の連携<br>・セレクトショップVIP価格卸<br>・有在庫卸 ほか</p>
+      </div>
+      <div class="card g2 reveal">
+        <div class="ic">📺</div>
+        <h3>② 会員限定サイトの講義動画</h3>
+        <p>BUYMA売上UPのノウハウを実践するための動画講座（約7時間）。基礎知識・アカウント設計・出品ジャンル選定・画像加工・SEO・外注化までを全6STEPで網羅。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STEPS -->
+<section id="steps">
+  <div class="wrap">
+    <div class="head reveal">
+      <span class="eyebrow">Curriculum</span>
+      <h2>結果に直結する、全6STEP。</h2>
+      <p>「何から始めればいいか分からない」をなくす、体系化されたカリキュラム。</p>
+    </div>
+    <div class="steps">
+      <div class="step reveal"><div class="no">01</div><div class="tag">基礎</div><h3>ECモールの基礎知識</h3><p>利益が出る仕組みなど、海外ブランド販売の土台となる知識を解説します。</p></div>
+      <div class="step reveal"><div class="no">02</div><div class="tag">設計</div><h3>アカウント設計</h3><p>売れるアカウントのコンセプトとペルソナ設計について解説します。</p></div>
+      <div class="step reveal"><div class="no">03</div><div class="tag">選定</div><h3>出品ジャンル選定</h3><p>売れやすいブランド・商品・カテゴリの選び方を解説します。</p></div>
+      <div class="step reveal"><div class="no">04</div><div class="tag">魅せる</div><h3>画像加工テクニック</h3><p>インプレッションを最大化させるための画像加工の方法を解説します。</p></div>
+      <div class="step reveal"><div class="no">05</div><div class="tag">集客</div><h3>SEO対策テクニック</h3><p>検索で上位表示させ、アクセスを集めるためのSEO施策を解説します。</p></div>
+      <div class="step reveal"><div class="no">06</div><div class="tag">仕組化</div><h3>外注化について</h3><p>商品の質を落とさず外注化し、手離れさせていく方法を解説します。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- SUPPLIERS -->
+<section id="supply">
+  <div class="wrap">
+    <div class="head reveal">
+      <span class="eyebrow">Network</span>
+      <h2>5つの仕入れルート。</h2>
+      <p>多彩な仕入れ元を共有することで、価格競争力と品揃えを両立します。</p>
+    </div>
+    <div class="supply">
+      <div class="item reveal"><span class="e">🏬</span>国内直営店仕入れ</div>
+      <div class="item reveal"><span class="e">💎</span>海外セレクトショップVIP仕入れ</div>
+      <div class="item reveal"><span class="e">🏷</span>海外アウトレット仕入れ</div>
+      <div class="item reveal"><span class="e">🚚</span>直営店直送仕入れ</div>
+      <div class="item reveal"><span class="e">🌐</span>海外バイヤー買い付け仕入れ</div>
+    </div>
+  </div>
+</section>
+
+<!-- SUPPORT + FLOW -->
+<section id="support">
+  <div class="wrap split">
+    <div class="reveal">
+      <span class="eyebrow">Support</span>
+      <h2 style="font-size:clamp(1.8rem,4vw,2.6rem);font-weight:900;line-height:1.25;margin:14px 0 8px;font-family:'Poppins','Noto Sans JP'">一人にしない、<br>伴走サポート。</h2>
+      <div class="support-list">
+        <div class="row"><span class="e">💬</span><div><h4>チャットワークで個別コンサル</h4><p>運営者と直接やり取り。いつでも質問を送っていただけます。</p></div></div>
+        <div class="row"><span class="e">🎬</span><div><h4>学習用動画コンテンツ（約7時間）</h4><p>登録確認後、専用サイトのURLをチャットワークでお送りします。</p></div></div>
+        <div class="row"><span class="e">🤝</span><div><h4>提携仕入先の共有</h4><p>海外バイヤー15ヶ国以上・直営店直送20社以上・VIP卸・有在庫卸など。</p></div></div>
+      </div>
+    </div>
+    <div class="flow reveal">
+      <h3>ご利用の流れ</h3>
+      <ol>
+        <li><div><b>プランを選ぶ</b><span>目的に合わせてスターター／プロ／マスターから選択。</span></div></li>
+        <li><div><b>クレジットカードで決済</b><span>オンラインで手続き完了。</span></div></li>
+        <li><div><b>1営業日以内に会員サイトを送付</b><span>ご登録のメールアドレスへご案内します。</span></div></li>
+        <li><div><b>専用URL＆仕入先を受け取りスタート</b><span>チャットワークでサポート開始。</span></div></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="price">
+  <div class="wrap">
+    <div class="head reveal">
+      <span class="eyebrow">Plan</span>
+      <h2>あなたのペースで選べる、3プラン。</h2>
+      <p>サポート期間が違うだけ。受け取れる仕入先・動画講座・個別サポートはすべてのプランに含まれます。</p>
+    </div>
+    <div class="plans">
+      <div class="plan reveal">
+        <div class="ptier">Starter</div>
+        <div class="pname">スターター会員</div>
+        <div class="period"><div class="big">3<small>ヶ月</small></div><div class="sub">サポート期間</div></div>
+        <ul>
+          <li><span class="ck">✓</span>まずは短期間で試してみたい方</li>
+          <li><span class="ck">✓</span>短期集中でスタートダッシュを切りたい方</li>
+          <li><span class="ck">✓</span>仕入先の共有</li>
+          <li><span class="ck">✓</span>動画講座（全6STEP・約7時間）</li>
+          <li><span class="ck">✓</span>チャット個別サポート</li>
+        </ul>
+        <a class="btn ghost" href="#cta">このプランで相談</a>
+      </div>
+
+      <div class="plan feat reveal">
+        <div class="pop">★ 人気No.1 バランス型</div>
+        <div class="ptier">Pro</div>
+        <div class="pname">プロ会員</div>
+        <div class="period"><div class="big">6<small>ヶ月</small></div><div class="sub">サポート期間</div></div>
+        <ul>
+          <li><span class="ck">✓</span>本業と両立しながら進めたい方</li>
+          <li><span class="ck">✓</span>コストとサポート期間のバランス重視の方</li>
+          <li><span class="ck">✓</span>仕入先の共有</li>
+          <li><span class="ck">✓</span>動画講座（全6STEP・約7時間）</li>
+          <li><span class="ck">✓</span>チャット個別サポート</li>
+        </ul>
+        <a class="btn" href="#cta">このプランで相談</a>
+      </div>
+
+      <div class="plan reveal">
+        <div class="ptier">Master</div>
+        <div class="pname">マスター会員</div>
+        <div class="period"><div class="big">12<small>ヶ月</small></div><div class="sub">サポート期間</div></div>
+        <ul>
+          <li><span class="ck">✓</span>じっくり事業として育てたい方</li>
+          <li><span class="ck">✓</span>組織化まで視野に入れている方</li>
+          <li><span class="ck">✓</span>仕入先の共有</li>
+          <li><span class="ck">✓</span>動画講座（全6STEP・約7時間）</li>
+          <li><span class="ck">✓</span>チャット個別サポート</li>
+        </ul>
+        <a class="btn ghost" href="#cta">このプランで相談</a>
+      </div>
+    </div>
+    <p class="note">※ 価格の詳細はお問い合わせ時にご案内いたします。提供方法：クレジットカード決済後、1営業日以内に会員サイトをメールにて送付します。</p>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="cta">
+  <div class="wrap">
+    <div class="cta reveal">
+      <h2>海外ブランド販売、<br>今日から本気で。</h2>
+      <p>仕入先・ノウハウ・サポート。売上を伸ばすために必要なものを、Nova Primeでまとめて手に入れましょう。</p>
+      <a class="btn" href="#price">プランを見て相談する →</a>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="wrap">
+    <div class="head reveal">
+      <span class="eyebrow">FAQ</span>
+      <h2>よくあるご質問</h2>
+    </div>
+    <div class="faq">
+      <details class="reveal"><summary>初心者でも始められますか？<span class="pm">+</span></summary><div class="ans">はい。動画講座はECモールの基礎知識（STEP1）からスタートし、利益が出る仕組みから丁寧に解説します。分からない点はチャットワークでいつでもご質問いただけます。</div></details>
+      <details class="reveal"><summary>仕入先はどのようなものですか？<span class="pm">+</span></summary><div class="ans">海外バイヤー15ヶ国以上、直営店直送20社以上の連携、セレクトショップのVIP価格卸、有在庫卸など、弊社が提携する複数の仕入れルートを共有します。</div></details>
+      <details class="reveal"><summary>サポートはどのように受けられますか？<span class="pm">+</span></summary><div class="ans">チャットワークを用いた個別コンサルティングです。いつでも質問を送っていただけます。プランによってサポート期間（3／6／12ヶ月）が異なります。</div></details>
+      <details class="reveal"><summary>申し込み後、どのくらいで始められますか？<span class="pm">+</span></summary><div class="ans">クレジットカード決済後、1営業日以内に会員サイトをメールにて送付します。登録確認後、チャットワークで専用サイトのURLをお送りします。</div></details>
+      <details class="reveal"><summary>本業と両立できますか？<span class="pm">+</span></summary><div class="ans">はい。本業と両立しながら進めたい方にはプロ会員（6ヶ月）がおすすめです。外注化（STEP6）まで学べるため、徐々に手離れさせる仕組みづくりも可能です。</div></details>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <div class="foot-in">
+      <div>
+        <a href="#top" class="logo"><span class="dot">✦</span> Nova Prime</a>
+        <p>海外ブランド販売の売上向上を、仕入先の共有・会員限定の動画講座・個別コンサルティングでサポートするサービスです。</p>
+      </div>
+      <div class="foot-links">
+        <a href="#about">サービス</a>
+        <a href="#contents">内容</a>
+        <a href="#steps">講座</a>
+        <a href="#price">料金</a>
+        <a href="#faq">FAQ</a>
+      </div>
+    </div>
+    <div class="copy">© 2026 Nova Prime. All rights reserved.</div>
+    <p class="note">本サービスは海外ブランド販売の売上向上に関する仕入先の提供およびサポートを行うものであり、利益・成果を保証するものではありません。</p>
+  </div>
+</footer>
+
+<script>
+  // mobile menu
+  const toggle=document.getElementById('toggle'), menu=document.getElementById('menu');
+  toggle.addEventListener('click',()=>menu.classList.toggle('open'));
+  menu.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>menu.classList.remove('open')));
+
+  // scroll reveal
+  const io=new IntersectionObserver((es)=>{
+    es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  },{threshold:.12});
+  document.querySelectorAll('.reveal').forEach((el,i)=>{
+    el.style.transitionDelay=(i%4*0.06)+'s';
+    io.observe(el);
+  });
+</script>
+</body>
+</html>
