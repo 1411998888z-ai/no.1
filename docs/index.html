@@ -57,9 +57,7 @@
 
   /* scattered fashion line-icons */
   .scatter{position:fixed;inset:0;z-index:-2;overflow:hidden;pointer-events:none}
-  .scatter svg{position:absolute;color:var(--gold);opacity:.07;animation:drift 26s ease-in-out infinite;will-change:transform}
-  @keyframes drift{0%,100%{transform:translateY(0) rotate(-6deg)}50%{transform:translateY(-30px) rotate(6deg)}}
-  @media(prefers-reduced-motion:reduce){.scatter svg{animation:none}}
+  .scatter svg{position:absolute;top:0;left:0;color:var(--gold);will-change:transform}
 
   /* nav */
   header.nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(12px);
@@ -555,27 +553,66 @@
 </footer>
 
 <script>
-  // scatter faint fashion silhouette icons across the background
+  // zero-gravity floating fashion silhouettes that bounce off walls and each other
   (function(){
     const ids=['#f-dress','#f-heel','#f-bag','#f-coat','#f-shirt','#f-glasses','#f-watch','#f-perfume','#f-necklace','#f-hat','#f-gloves','#f-boots','#f-trousers','#f-ring','#f-tie','#f-hanger','#f-skirt','#f-earrings'];
     const layer=document.getElementById('scatter'); if(!layer) return;
     const NS='http://www.w3.org/2000/svg', N=18;
+    const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const rnd=(a,b)=>a+Math.random()*(b-a);
+    let W=window.innerWidth, H=window.innerHeight;
+    const items=[];
+
     for(let i=0;i<N;i++){
       const svg=document.createElementNS(NS,'svg');
-      const sz=44+(i*37%80);
+      const sz=46+(i*37%78);
       svg.setAttribute('width',sz); svg.setAttribute('height',sz);
       svg.setAttribute('viewBox','0 0 24 24');
       const use=document.createElementNS(NS,'use');
       use.setAttribute('href',ids[i%ids.length]);
       svg.appendChild(use);
-      svg.style.left=(2+(i*4099%95))+'%';
-      svg.style.top=(2+(i*7919%94))+'%';
-      const dur=20+(i*53%16);
-      svg.style.animationDuration=dur+'s';
-      svg.style.animationDelay=(-(i*41%dur))+'s';
-      svg.style.opacity=(0.045+(i*29%5)/100).toFixed(3);
+      svg.style.opacity=(0.05+(i*29%5)/100).toFixed(3);
       layer.appendChild(svg);
+      const r=sz*0.42;                                   // collision radius (a touch smaller than box)
+      const ang=rnd(0,Math.PI*2), spd=rnd(26,60);        // px / sec
+      items.push({el:svg, r, size:sz,
+        x:rnd(r,W-r), y:rnd(r,H-r),
+        vx:Math.cos(ang)*spd, vy:Math.sin(ang)*spd,
+        rot:rnd(0,360), vr:rnd(-10,10)});                // deg / sec
     }
+
+    function place(it){ it.el.style.transform='translate('+(it.x-it.size/2)+'px,'+(it.y-it.size/2)+'px) rotate('+it.rot+'deg)'; }
+
+    let last=performance.now();
+    function step(now){
+      let dt=(now-last)/1000; last=now; if(dt>0.05) dt=0.05;
+      for(const it of items){
+        it.x+=it.vx*dt; it.y+=it.vy*dt; it.rot+=it.vr*dt;
+        if(it.x<it.r){ it.x=it.r; it.vx=Math.abs(it.vx); }
+        else if(it.x>W-it.r){ it.x=W-it.r; it.vx=-Math.abs(it.vx); }
+        if(it.y<it.r){ it.y=it.r; it.vy=Math.abs(it.vy); }
+        else if(it.y>H-it.r){ it.y=H-it.r; it.vy=-Math.abs(it.vy); }
+      }
+      // elastic collisions (equal mass) between icons
+      for(let i=0;i<N;i++){ const a=items[i];
+        for(let j=i+1;j<N;j++){ const b=items[j];
+          let dx=b.x-a.x, dy=b.y-a.y, rr=a.r+b.r, d2=dx*dx+dy*dy;
+          if(d2<rr*rr && d2>0.0001){
+            const d=Math.sqrt(d2), nx=dx/d, ny=dy/d, ov=(rr-d)/2;
+            a.x-=nx*ov; a.y-=ny*ov; b.x+=nx*ov; b.y+=ny*ov;
+            const vn=(b.vx-a.vx)*nx+(b.vy-a.vy)*ny;
+            if(vn<0){ a.vx+=vn*nx; a.vy+=vn*ny; b.vx-=vn*nx; b.vy-=vn*ny; }
+          }
+        }
+      }
+      for(const it of items) place(it);
+      requestAnimationFrame(step);
+    }
+
+    for(const it of items) place(it);
+    if(!reduce) requestAnimationFrame(step);
+    window.addEventListener('resize', ()=>{ W=window.innerWidth; H=window.innerHeight;
+      for(const it of items){ it.x=Math.min(Math.max(it.x,it.r),W-it.r); it.y=Math.min(Math.max(it.y,it.r),H-it.r); } });
   })();
 
   // mobile menu
