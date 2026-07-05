@@ -28,6 +28,7 @@
   body::after{content:"";position:fixed;inset:0;z-index:-3;pointer-events:none;opacity:.4;
     background-image:radial-gradient(rgba(255,255,255,.04) .5px,transparent .6px);background-size:3px 3px}
   .wrap{width:min(680px,92vw);margin-inline:auto;padding:0 0 120px}
+  #confetti{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:999}
 
   /* ---------- header / progress ---------- */
   header.top{position:sticky;top:0;z-index:50;
@@ -77,7 +78,7 @@
   .q{background:linear-gradient(180deg,rgba(19,19,30,.92),rgba(14,14,22,.92));
     border:1px solid var(--line);border-radius:var(--radius);
     padding:26px 22px;margin-bottom:16px;box-shadow:0 24px 60px -34px rgba(0,0,0,.9)}
-  .q-no{font-family:var(--display);font-size:.82rem;font-weight:700;letter-spacing:.12em;color:var(--gold)}
+  .q-no{font-family:var(--serif);font-size:.82rem;font-weight:700;letter-spacing:.12em;color:var(--gold)}
   .q-text{font-family:var(--serif);font-weight:600;font-size:1.06rem;line-height:1.7;margin:8px 0 0;color:var(--cream)}
   .q-sub{font-size:.82rem;color:var(--muted);margin:9px 0 0;font-weight:300;line-height:1.8}
 
@@ -151,6 +152,7 @@
 
   @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
+<canvas id="confetti"></canvas>
 <header class="top">
   <div class="top-inner">
     <div class="brandline">
@@ -183,11 +185,10 @@
 
   <!-- DONE -->
   <section class="done" id="done">
-    <div class="seal">🎉</div>
-    <h2>STEP 0、完了です。</h2>
-    <p>おつかれさまでした。あなた専用のカリキュラム設計シートが完成しました。<br>この内容は、面談担当の講師にしっかり共有されます。</p>
+    <div class="seal"><svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="#0a0a0f" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 6"/></svg></div>
+    <h2>おつかれさまでした。</h2>
     <div class="next-card">
-      <h3>▶ 次は STEP 1（初回面談）</h3>
+      <h3>▶ 次は初回ミーティング</h3>
       <p class="arrow" id="doneEcho"></p>
     </div>
     <div class="acts">
@@ -197,7 +198,7 @@
     </div>
     <p id="submitMsg" style="margin-top:16px;color:var(--ok);font-weight:700;display:none"></p>
     <div class="acts" style="margin-top:8px">
-      <button class="btn btn-back" onclick="go(8)">← 前に戻る</button>
+      <button class="btn btn-back" onclick="go(TOTAL)">← 前に戻る</button>
     </div>
   </section>
 
@@ -254,7 +255,7 @@ const STEPS = [
     questions:[
       { id:"q8", no:"Q8",
         text:"最初の1ヶ月で「これだけはやり切る」と宣言できる行動目標は？",
-        ex:"教材を全部1周する＋出品を10件やり切ります" },
+        ex:"決めた作業時間を確実に守ります" },
       { id:"q9", no:"Q9",
         text:"3ヶ月間の自分に約束することを1つ書いてください",
         ex:"わからないことを放置せず、24時間以内に講師に質問することを約束します" },
@@ -285,32 +286,6 @@ const STEPS = [
         ],
         note:"どちらのタイプでも成果を出している先輩がいます（組み合わせ型もOK）。",
         ex:"平日はまとまった時間が取りにくいので、通勤と昼休みで出品投稿する『スキマ時間型』寄りだと思います。ただ日曜だけはまとめて時間が取れるので、出品作業は日曜に固めたいです" },
-      { id:"q14", no:"Q14", type:"check",
-        text:"最初に取り組みたいものはどれですか？",
-        sub:"先輩たちに「最初にやってよかったこと」を聞くと、よく挙がる8つです。（複数選択OK・グループをまたいでもOK）",
-        groups:[
-          { h:"グループ①：見る・分析する — 市場と売れる型のインプット", items:[
-            { v:"1 ランキング定点観測", t:"1. ランキング定点観測",
-              d:"人気ランキングを毎日同じ時間にチェックして、「昨日と変わったもの」を1つ見つける。市場の動きが肌感覚になる。" },
-            { v:"2 1日1品分析", t:"2.「なぜ売れてる？」1日1品分析",
-              d:"人気商品を1日1つ選んで、「売れてる理由」を3つ書き出す。売れる商品の共通パターンが自分の言葉で貯まっていく。" },
-            { v:"3 人気バイヤー分析", t:"3. 人気バイヤーの観察・分析",
-              d:"活躍しているバイヤーのページを見て、「なぜこの人から買いたくなるのか」を書き出す。売れる型のインプット。" },
-            { v:"4 レビュー100本ノック", t:"4. レビュー100本ノック",
-              d:"人気商品のレビューを読んで、「買った人が喜んでいるポイント」を集める。お客様が本当に求めているものが見えてくる。" },
-            { v:"5 売れ筋アンテナ", t:"5. 街とSNSの「売れ筋アンテナ」",
-              d:"日常で見かけた「流行ってるもの」をメモして検索してみる。日常のすべてがリサーチに変わる。" },
-          ]},
-          { h:"グループ②：整える・続ける — 走り続けるための土台づくり", items:[
-            { v:"6 環境セットアップ", t:"6. 作業環境と時間のセットアップ",
-              d:"作業する場所・時間・使うツールを先に固める。「始めるハードル」を物理的に下げる準備。" },
-            { v:"7 用語メモ", t:"7.「わからない用語メモ」を作る",
-              d:"出てきた知らない用語をメモしていく。意味は初回面談で講師にまとめて聞けばOK。" },
-            { v:"8 1行日記", t:"8. 学習ログを1行日記でつける",
-              d:"「今日やったこと・気づいたこと」を1行だけ記録する。積み重ねが目に見えて、自分の成長が実感できる。" },
-          ]},
-        ],
-        ex:"まずは『2. 1日1品分析』をやってみたいです。理由を考えるのは好きなので続けられそうです。あとは『8. 1行日記』も、あとで見返せたら面白そうなのでセットで始めます" },
     ]
   },
   {
@@ -319,7 +294,7 @@ const STEPS = [
     questions:[
       { id:"q15", no:"Q15",
         text:"今、正直に一番不安なことは何ですか？ どんな小さなことでもOKです",
-        ex:"本当に自分にセンスがあるのか不安です。あと、最初の仕入れで失敗したらどうしようという気持ちがあります" },
+        ex:"ファッションに特別詳しいわけではないので、商品選びができるか不安です。パソコン操作にあまり自信がなくて、ついていけるか心配です。質問するタイミングがわからなくて、遠慮してしまいそうです。" },
       { id:"q16", no:"Q16",
         text:"「これを聞いたら恥ずかしいかな」と思って聞けていないことはありますか？",
         ex:"今さらですが、BUYMAとメルカリの違いがちゃんとわかっていません…" },
@@ -328,7 +303,7 @@ const STEPS = [
         note:"教えてもらえたら、同じ轍を踏まない設計をします。",
         ex:"英語学習アプリを3週間でやめました。一人でやっていて、成長を実感できるものが何もなかったのが原因だと思います" },
       { id:"q18", no:"Q18",
-        text:"サポートを受ける上で、あなたのことで知っておいてほしいことはありますか？",
+        text:"サポートを受ける上で、伝えておきたい事はありますか？",
         ex:"理解はゆっくりめですが、一度腑に落ちれば継続は得意です。最初だけ少し丁寧めに見てもらえると助かります" },
     ]
   },
@@ -344,16 +319,10 @@ const STEPS = [
         ex:"最近サウナにハマっていて、週1で通っています。あと先週、育てていた観葉植物に新芽が出ました" },
     ]
   },
-  {
-    tag:"STEP 0-8", title:"STEP 1へ",
-    lead:"あとは、面談で会うだけ。準備はもう整っています。",
-    questions:[
-      { id:"q21", no:"Q21", key:"echo",
-        text:"STEP 1（初回面談）で講師に最初に聞きたいことは何ですか？",
-        ex:"最初の1週間で何から手をつけるべきか、優先順位を教えてほしいです" },
-    ]
-  },
 ];
+
+/* 設問番号を出現順に自動採番（設問を追加・削除しても番号が飛ばない） */
+let __qn=0; STEPS.forEach(st=>st.questions.forEach(q=>{ q.no="Q"+(++__qn); }));
 
 /* ===== 提出先（Google Apps Script のウェブアプリURL）=====
    GASをデプロイして得たURLをここに貼る。空のままだとテストモード
@@ -512,9 +481,8 @@ function go(n){
 
   if(n>TOTAL){
     done.classList.add("active");
-    document.getElementById("doneEcho").textContent = px(
-      data.q21 ? `あなたが「最初に聞きたい」と書いてくれたこと：\n「${data.q21}」\n— 面談の冒頭で、講師からお答えします。`
-               : "面談の冒頭で、あなたの疑問から一緒に整理していきます。");
+    document.getElementById("doneEcho").textContent = "業務を始める直前の打ち合わせです。";
+    fireConfetti();
     current=TOTAL+1;
   } else {
     const t=document.querySelector(`.step[data-step="${n}"]`);
@@ -650,6 +618,33 @@ function breakPeriods(root){
     });
     n.parentNode.replaceChild(frag,n);
   });
+}
+
+/* 完了画面：両サイドからクラッカー（紙吹雪）を発射する演出 */
+let __cfx=null;
+function fireConfetti(){
+  if(window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const cv=document.getElementById("confetti"); if(!cv) return;
+  const ctx=cv.getContext("2d"); const DPR=Math.min(window.devicePixelRatio||1,2);
+  cv.width=innerWidth*DPR; cv.height=innerHeight*DPR;
+  const cols=["#d7b46a","#f1dca8","#a9854a","#ece6da","#ffffff","#c9a24b","#e8c887"];
+  const parts=[];
+  const burst=(x,y,base)=>{ for(let i=0;i<90;i++){ const ang=base+(Math.random()-0.5)*1.5, sp=(9+Math.random()*11)*DPR;
+    parts.push({x,y,vx:Math.cos(ang)*sp,vy:Math.sin(ang)*sp,g:0.30*DPR,
+      w:(6+Math.random()*7)*DPR,h:(3+Math.random()*5)*DPR,rot:Math.random()*6.28,
+      vr:(Math.random()-0.5)*0.5,col:cols[(Math.random()*cols.length)|0],life:0,ttl:80+Math.random()*50}); } };
+  const fire=()=>{ burst(0,cv.height*0.97,-Math.PI/3); burst(cv.width,cv.height*0.97,-Math.PI*2/3); };
+  fire(); setTimeout(fire,200);
+  if(__cfx) cancelAnimationFrame(__cfx);
+  let frame=0;
+  const tick=()=>{ ctx.clearRect(0,0,cv.width,cv.height); frame++; let alive=0;
+    for(const p of parts){ if(p.life>p.ttl) continue; p.life++; alive++;
+      p.vy+=p.g; p.vx*=0.995; p.vy*=0.995; p.x+=p.vx; p.y+=p.vy; p.rot+=p.vr;
+      const a=Math.max(0,1-p.life/p.ttl);
+      ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.rot); ctx.globalAlpha=a;
+      ctx.fillStyle=p.col; ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h); ctx.restore(); }
+    if(alive>0 && frame<300){ __cfx=requestAnimationFrame(tick); } else { ctx.clearRect(0,0,cv.width,cv.height); __cfx=null; } };
+  __cfx=requestAnimationFrame(tick);
 }
 
 /* -------- init -------- */
