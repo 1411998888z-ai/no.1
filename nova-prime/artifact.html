@@ -1,0 +1,586 @@
+<title>STEP 0：あなた専用カリキュラム設計シート | Nova Prime</title>
+<style>
+  :root{
+    --ink:#20233a;
+    --ink-soft:#565a78;
+    --ink-faint:#8b8fac;
+    --line:#e7e8f2;
+    --bg:#f5f4fb;
+    --card:#ffffff;
+    --brand:#5b53d6;
+    --brand-deep:#3f379f;
+    --brand-soft:#eceafb;
+    --accent:#ff8a5b;
+    --accent-soft:#fff1e9;
+    --ok:#2ea36b;
+    --radius:18px;
+    --shadow:0 14px 40px -18px rgba(46,42,110,.35);
+    --font: -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN",
+            "Hiragino Sans", "Noto Sans JP", "Yu Gothic", Meiryo, sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:var(--font);
+    color:var(--ink);
+    background:
+      radial-gradient(1200px 480px at 50% -160px, #efeafd 0%, rgba(239,234,253,0) 70%),
+      var(--bg);
+    line-height:1.75;
+    -webkit-font-smoothing:antialiased;
+    letter-spacing:.01em;
+  }
+  .wrap{max-width:680px;margin:0 auto;padding:0 18px 120px}
+
+  /* ---------- header / progress ---------- */
+  header.top{
+    position:sticky;top:0;z-index:20;
+    background:rgba(245,244,251,.86);
+    backdrop-filter:saturate(180%) blur(12px);
+    -webkit-backdrop-filter:saturate(180%) blur(12px);
+    border-bottom:1px solid var(--line);
+  }
+  .top-inner{max-width:680px;margin:0 auto;padding:12px 18px 10px}
+  .brandline{
+    display:flex;align-items:center;justify-content:space-between;
+    font-size:12px;color:var(--ink-faint);font-weight:700;letter-spacing:.08em;
+  }
+  .brandline .logo{color:var(--brand-deep);letter-spacing:.16em}
+  .prog-track{height:7px;border-radius:99px;background:#e4e2f2;margin-top:10px;overflow:hidden}
+  .prog-fill{height:100%;width:0;border-radius:99px;
+    background:linear-gradient(90deg,var(--brand),var(--accent));
+    transition:width .5s cubic-bezier(.4,0,.2,1)}
+  .prog-label{margin-top:7px;font-size:12px;color:var(--ink-soft);font-weight:600;
+    display:flex;justify-content:space-between}
+  .prog-label b{color:var(--brand-deep)}
+
+  /* ---------- intro / cover ---------- */
+  .cover{text-align:center;padding:40px 6px 8px}
+  .kicker{
+    display:inline-block;font-size:12px;font-weight:800;letter-spacing:.18em;
+    color:var(--brand-deep);background:var(--brand-soft);
+    padding:6px 14px;border-radius:99px;margin-bottom:18px}
+  .cover h1{font-size:26px;line-height:1.45;margin:0 0 14px;font-weight:800}
+  .cover h1 .hl{
+    background:linear-gradient(transparent 62%, #ffe0cf 62%);padding:0 2px}
+  .cover p{color:var(--ink-soft);font-size:15px;margin:0 auto;max-width:520px}
+  .cover .meta{
+    margin-top:22px;display:inline-flex;gap:18px;flex-wrap:wrap;justify-content:center;
+    font-size:12.5px;color:var(--ink-faint);font-weight:600}
+  .cover .meta span{display:inline-flex;align-items:center;gap:6px}
+  .dot{width:6px;height:6px;border-radius:99px;background:var(--accent)}
+
+  /* ---------- step card ---------- */
+  .step{display:none;animation:rise .45s cubic-bezier(.2,.7,.2,1)}
+  .step.active{display:block}
+  @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+  .step-head{margin:26px 2px 20px}
+  .step-tag{font-size:12px;font-weight:800;letter-spacing:.14em;color:var(--accent);}
+  .step-title{font-size:21px;font-weight:800;margin:6px 0 6px}
+  .step-lead{font-size:14px;color:var(--ink-soft);margin:0}
+
+  .q{
+    background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+    padding:22px 20px;margin-bottom:16px;box-shadow:var(--shadow)}
+  .q-no{font-size:11.5px;font-weight:800;letter-spacing:.1em;color:var(--brand);}
+  .q-text{font-size:16.5px;font-weight:700;margin:6px 0 0;line-height:1.6}
+  .q-sub{font-size:13px;color:var(--ink-soft);margin:8px 0 0}
+
+  textarea,input[type=text]{
+    width:100%;margin-top:14px;padding:13px 14px;font-family:var(--font);
+    font-size:15px;color:var(--ink);line-height:1.7;
+    border:1.5px solid var(--line);border-radius:12px;background:#fcfcff;
+    resize:vertical;transition:border-color .2s, box-shadow .2s}
+  textarea{min-height:104px}
+  textarea:focus,input[type=text]:focus{
+    outline:none;border-color:var(--brand);box-shadow:0 0 0 4px var(--brand-soft)}
+
+  .example{
+    margin-top:12px;font-size:13px;color:var(--ink-soft);
+    background:var(--accent-soft);border-radius:12px;padding:11px 13px;
+    border:1px solid #ffe2d2}
+  .example b{color:#c85a2e;font-weight:800;font-size:11.5px;letter-spacing:.08em;
+    display:inline-block;margin-bottom:2px}
+  .note{
+    margin-top:12px;font-size:12.5px;color:var(--brand-deep);
+    background:var(--brand-soft);border-radius:10px;padding:9px 12px;
+    display:flex;gap:7px;align-items:flex-start}
+  .note::before{content:"✓";font-weight:900}
+
+  /* ---------- type choice (Q13) ---------- */
+  .choices{display:grid;gap:12px;margin-top:14px}
+  .choice{
+    position:relative;border:1.5px solid var(--line);border-radius:14px;
+    padding:15px 16px 15px 48px;cursor:pointer;background:#fcfcff;transition:.18s}
+  .choice:hover{border-color:#c9c6ee}
+  .choice input{position:absolute;left:16px;top:18px;width:18px;height:18px;accent-color:var(--brand)}
+  .choice .c-title{font-weight:800;font-size:15px}
+  .choice .c-desc{font-size:13px;color:var(--ink-soft);margin-top:4px}
+  .choice.sel{border-color:var(--brand);background:var(--brand-soft)}
+
+  /* ---------- Q14 checklist ---------- */
+  .grp{margin-top:16px}
+  .grp-h{font-size:13px;font-weight:800;color:var(--brand-deep);margin:0 0 10px;
+    padding-left:10px;border-left:3px solid var(--accent)}
+  .opt{
+    position:relative;border:1.5px solid var(--line);border-radius:12px;
+    padding:12px 14px 12px 44px;cursor:pointer;background:#fcfcff;
+    margin-bottom:9px;transition:.16s}
+  .opt:hover{border-color:#c9c6ee}
+  .opt input{position:absolute;left:14px;top:15px;width:17px;height:17px;accent-color:var(--brand)}
+  .opt .o-title{font-weight:700;font-size:14px}
+  .opt .o-desc{font-size:12.5px;color:var(--ink-soft);margin-top:3px}
+  .opt.sel{border-color:var(--brand);background:var(--brand-soft)}
+
+  /* ---------- nav ---------- */
+  .nav{display:flex;gap:12px;margin-top:26px;align-items:center}
+  button.btn{
+    font-family:var(--font);font-weight:800;font-size:15px;border-radius:99px;
+    border:none;cursor:pointer;padding:14px 22px;transition:.18s;letter-spacing:.02em}
+  .btn-next{
+    flex:1;color:#fff;
+    background:linear-gradient(90deg,var(--brand),var(--brand-deep));
+    box-shadow:0 10px 24px -10px rgba(91,83,214,.7)}
+  .btn-next:hover{transform:translateY(-1px)}
+  .btn-back{
+    background:#fff;color:var(--ink-soft);border:1.5px solid var(--line)}
+  .btn-back:hover{border-color:#c9c6ee}
+  .autosave{font-size:11.5px;color:var(--ink-faint);text-align:center;margin-top:14px}
+  .autosave b{color:var(--ok)}
+
+  /* ---------- done ---------- */
+  .done{display:none;text-align:center;padding:36px 8px 8px}
+  .done.active{display:block;animation:rise .5s}
+  .seal{
+    width:88px;height:88px;border-radius:99px;margin:0 auto 20px;
+    display:grid;place-items:center;font-size:40px;
+    background:linear-gradient(135deg,var(--brand),var(--accent));
+    box-shadow:0 18px 40px -14px rgba(91,83,214,.6)}
+  .done h2{font-size:24px;font-weight:800;margin:0 0 12px}
+  .done p{color:var(--ink-soft);font-size:15px;max-width:480px;margin:0 auto 8px}
+  .done .next-card{
+    margin:26px auto 0;max-width:520px;text-align:left;background:var(--card);
+    border:1px solid var(--line);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow)}
+  .next-card h3{margin:0 0 8px;font-size:15px;color:var(--brand-deep)}
+  .next-card .arrow{font-size:13px;color:var(--ink-soft);margin:0}
+  .done .acts{margin-top:24px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+  .done .acts .btn{padding:12px 18px;font-size:14px}
+  .btn-ghost{background:#fff;color:var(--brand-deep);border:1.5px solid var(--brand-soft)}
+
+  footer{text-align:center;font-size:11px;color:var(--ink-faint);margin-top:40px}
+</style>
+<header class="top">
+  <div class="top-inner">
+    <div class="brandline">
+      <span class="logo">NOVA&nbsp;PRIME</span>
+      <span id="pctText">STEP 0</span>
+    </div>
+    <div class="prog-track"><div class="prog-fill" id="progFill"></div></div>
+    <div class="prog-label"><span id="stepText">はじめに</span><span id="stepCount"></span></div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- COVER -->
+  <section class="step active" data-step="0">
+    <div class="cover">
+      <span class="kicker">STEP 0 / 専用設計シート</span>
+      <h1>あなただけの<br><span class="hl">カリキュラム設計シート</span>を<br>一緒に作りましょう</h1>
+      <p>面談の前に、あなたのこと・理想・作戦を教えてください。ここで書いてもらった内容から、担当講師が<b>あなた専用のカリキュラム</b>を組み立てます。所要 約10〜15分・途中保存OK。</p>
+      <div class="meta">
+        <span><i class="dot"></i>全8ステップ</span>
+        <span><i class="dot"></i>途中まででも自動保存</span>
+        <span><i class="dot"></i>正解はありません</span>
+      </div>
+    </div>
+    <div class="nav">
+      <button class="btn btn-next" onclick="go(1)">はじめる →</button>
+    </div>
+    <div class="autosave">入力内容はこの端末に<b>自動保存</b>されます</div>
+  </section>
+
+  <!-- steps injected here -->
+  <div id="steps"></div>
+
+  <!-- DONE -->
+  <section class="done" id="done">
+    <div class="seal">🎉</div>
+    <h2>STEP 0、完了です。</h2>
+    <p>おつかれさまでした。あなた専用のカリキュラム設計シートが完成しました。<br>この内容は、面談担当の講師にしっかり共有されます。</p>
+    <div class="next-card">
+      <h3>▶ 次は STEP 1（初回面談）</h3>
+      <p class="arrow" id="doneEcho"></p>
+    </div>
+    <div class="acts">
+      <button class="btn btn-next" style="flex:none" onclick="submitSheet()">この内容で提出する</button>
+      <button class="btn btn-ghost" onclick="copyAll()">回答をコピー</button>
+      <button class="btn btn-ghost" onclick="downloadAll()">控えを保存</button>
+    </div>
+    <p id="submitMsg" style="margin-top:16px;color:var(--ok);font-weight:700;display:none"></p>
+    <div class="acts" style="margin-top:8px">
+      <button class="btn btn-back" onclick="go(8)">← 前に戻る</button>
+    </div>
+  </section>
+
+  <footer>Nova Prime｜STEP 0 カリキュラム設計シート</footer>
+</div>
+
+<script>
+/* =========================================================
+   回答者に表示するデータのみを定義（内部設計メモは含めない）
+   ========================================================= */
+const STEPS = [
+  {
+    tag:"STEP 0-1", title:"あなたのこれまでを教えてください",
+    lead:"まずは、あなたのことを少しだけ。",
+    questions:[
+      { id:"q1", no:"Q1",
+        text:"これまでの職歴・経験を簡単に振り返って教えてください",
+        ex:"新卒でアパレル販売を3年、その後コールセンターで2年働いています。接客でお客様の好みを引き出すのは得意でした。パソコンは仕事で毎日使うので基本操作は問題ないです" },
+      { id:"q2", no:"Q2",
+        text:"あなたの1週間のスケジュールを、できるだけ詳しく教えてください",
+        ex:"平日は9〜18時勤務、帰宅は19時頃。火・木は比較的余裕があり、21〜23時は自由時間です。土曜午前は家事、日曜は丸一日空いていることが多いです" },
+    ]
+  },
+  {
+    tag:"STEP 0-2", title:"あなたが決めた理由",
+    lead:"あなたが動き出した「理由」を、言葉にしてみましょう。",
+    questions:[
+      { id:"q3", no:"Q3",
+        text:"申し込みを決めた瞬間、頭の中にあった「決め手」は何でしたか？",
+        ex:"『今の生活のまま5年後も同じ悩みを持っていたくない』と思ったことです。迷っている時間の方がもったいないと感じました" },
+      { id:"q4", no:"Q4",
+        text:"この挑戦を通じて、最終的に手に入れたいものは何ですか？",
+        ex:"収入の柱をもう1本作って、会社に依存しない安心感が欲しいです。ゆくゆくは自分の力で稼げるスキルそのものが財産になると思っています" },
+    ]
+  },
+  {
+    tag:"STEP 0-3", title:"あなたの理想の未来",
+    lead:"この先に待っている景色を、具体的に描いてみましょう。",
+    questions:[
+      { id:"q5", no:"Q5",
+        text:"月収が増えた最初の月、何に使いますか？ 具体的に教えてください",
+        ex:"まず家族と少しいい焼肉屋に行きます。残りは奨学金の繰り上げ返済と、ずっと我慢していたNikonのカメラの頭金にしたいです" },
+      { id:"q6", no:"Q6",
+        text:"1年後の理想の休日を、朝から夜まで描写してください",
+        ex:"朝はアラームなしで起きて、カフェで注文チェックを30分だけ。昼は友達とドライブ、夜は焦りなく好きな映画を観る。『日曜の夜が憂鬱じゃない』のが一番の理想です" },
+      { id:"q7", no:"Q7",
+        text:"最初の売上通知が届いた瞬間、どこで何をしていて、誰に報告したいですか？",
+        ex:"たぶん仕事の昼休みにスマホで気づくと思います。真っ先に妻にLINEして、夜は乾杯したいです" },
+    ]
+  },
+  {
+    tag:"STEP 0-4", title:"あなたの3ヶ月の作戦",
+    lead:"理想の未来から逆算して、最初の3ヶ月の作戦を立てます。",
+    questions:[
+      { id:"q8", no:"Q8",
+        text:"最初の1ヶ月で「これだけはやり切る」と宣言できる行動目標は？",
+        ex:"教材を全部1周する＋出品を10件やり切ります" },
+      { id:"q9", no:"Q9",
+        text:"3ヶ月間の自分に約束することを1つ書いてください",
+        ex:"わからないことを放置せず、24時間以内に講師に質問することを約束します" },
+      { id:"q10", no:"Q10",
+        text:"この挑戦におけるあなたのルールを1つ決めるとしたら？",
+        ex:"『やる気が出ないときこそ5分だけ触る』をルールにします" },
+      { id:"q11", no:"Q11",
+        text:"作業する曜日と時間帯を決めるとしたら、いつにしますか？",
+        sub:"Q2で書いた1週間のスケジュールを見返しながらどうぞ。",
+        ex:"火・木の21:00〜22:30と、日曜の10:00〜12:00にします" },
+      { id:"q12", no:"Q12",
+        text:"作業が中断しそうな障害と、その対処法をセットで考えてください",
+        sub:"「もし〜なら、〜する」の形式で書いてみてください。",
+        ex:"もし残業で疲れても、とりあえず10分だけ出品投稿作業をする。もし飲み会が入ったら、翌朝30分早く起きてリカバリーする" },
+    ]
+  },
+  {
+    tag:"STEP 0-5", title:"あなたの作業スタイル",
+    lead:"あなたに合った進め方を見つけましょう。",
+    questions:[
+      { id:"q13", no:"Q13", type:"choice",
+        text:"あなたはどちらのタイプに近いですか？ その理由も教えてください",
+        options:[
+          { v:"スキマ時間型", t:"スキマ時間型",
+            d:"通勤中・昼休み・寝る前など、1回10〜30分の短い時間を毎日コツコツ積み重ねるスタイル。「毎日触るから感覚が鈍らない」のが強み。" },
+          { v:"まとめて作業型", t:"まとめて作業型",
+            d:"平日は最小限にして、週1〜2回、90分以上のまとまった時間を確保して一気に集中するスタイル。「深く集中して一気に進む」のが強み。" },
+        ],
+        note:"どちらのタイプでも成果を出している先輩がいます（組み合わせ型もOK）。",
+        ex:"平日はまとまった時間が取りにくいので、通勤と昼休みで出品投稿する『スキマ時間型』寄りだと思います。ただ日曜だけはまとめて時間が取れるので、出品作業は日曜に固めたいです" },
+      { id:"q14", no:"Q14", type:"check",
+        text:"最初に取り組みたいものはどれですか？",
+        sub:"先輩たちに「最初にやってよかったこと」を聞くと、よく挙がる8つです。（複数選択OK・グループをまたいでもOK）",
+        groups:[
+          { h:"グループ①：見る・分析する — 市場と売れる型のインプット", items:[
+            { v:"1 ランキング定点観測", t:"1. ランキング定点観測",
+              d:"人気ランキングを毎日同じ時間にチェックして、「昨日と変わったもの」を1つ見つける。市場の動きが肌感覚になる。" },
+            { v:"2 1日1品分析", t:"2.「なぜ売れてる？」1日1品分析",
+              d:"人気商品を1日1つ選んで、「売れてる理由」を3つ書き出す。売れる商品の共通パターンが自分の言葉で貯まっていく。" },
+            { v:"3 人気バイヤー分析", t:"3. 人気バイヤーの観察・分析",
+              d:"活躍しているバイヤーのページを見て、「なぜこの人から買いたくなるのか」を書き出す。売れる型のインプット。" },
+            { v:"4 レビュー100本ノック", t:"4. レビュー100本ノック",
+              d:"人気商品のレビューを読んで、「買った人が喜んでいるポイント」を集める。お客様が本当に求めているものが見えてくる。" },
+            { v:"5 売れ筋アンテナ", t:"5. 街とSNSの「売れ筋アンテナ」",
+              d:"日常で見かけた「流行ってるもの」をメモして検索してみる。日常のすべてがリサーチに変わる。" },
+          ]},
+          { h:"グループ②：整える・続ける — 走り続けるための土台づくり", items:[
+            { v:"6 環境セットアップ", t:"6. 作業環境と時間のセットアップ",
+              d:"作業する場所・時間・使うツールを先に固める。「始めるハードル」を物理的に下げる準備。" },
+            { v:"7 用語メモ", t:"7.「わからない用語メモ」を作る",
+              d:"出てきた知らない用語をメモしていく。意味は初回面談で講師にまとめて聞けばOK。" },
+            { v:"8 1行日記", t:"8. 学習ログを1行日記でつける",
+              d:"「今日やったこと・気づいたこと」を1行だけ記録する。積み重ねが目に見えて、自分の成長が実感できる。" },
+          ]},
+        ],
+        ex:"まずは『2. 1日1品分析』をやってみたいです。理由を考えるのは好きなので続けられそうです。あとは『8. 1行日記』も、あとで見返せたら面白そうなのでセットで始めます" },
+    ]
+  },
+  {
+    tag:"STEP 0-6", title:"サポートを最適化するために",
+    lead:"サポートを“あなた仕様”にするために、正直な気持ちを聞かせてください。",
+    questions:[
+      { id:"q15", no:"Q15",
+        text:"今、正直に一番不安なことは何ですか？ どんな小さなことでもOKです",
+        ex:"本当に自分にセンスがあるのか不安です。あと、最初の仕入れで失敗したらどうしようという気持ちがあります" },
+      { id:"q16", no:"Q16",
+        text:"「これを聞いたら恥ずかしいかな」と思って聞けていないことはありますか？",
+        ex:"今さらですが、BUYMAとメルカリの違いがちゃんとわかっていません…" },
+      { id:"q17", no:"Q17",
+        text:"過去に何かで挫折した経験があれば、その原因は何でしたか？",
+        note:"教えてもらえたら、同じ轍を踏まない設計をします。",
+        ex:"英語学習アプリを3週間でやめました。一人でやっていて、成長を実感できるものが何もなかったのが原因だと思います" },
+      { id:"q18", no:"Q18",
+        text:"サポートを受ける上で、あなたのことで知っておいてほしいことはありますか？",
+        ex:"理解はゆっくりめですが、一度腑に落ちれば継続は得意です。最初だけ少し丁寧めに見てもらえると助かります" },
+    ]
+  },
+  {
+    tag:"STEP 0-7", title:"はじめまして、をここで",
+    lead:"最後に、担当講師へのはじめましてを。肩の力を抜いてどうぞ。",
+    questions:[
+      { id:"q19", no:"Q19",
+        text:"担当講師に一言、自己紹介をお願いします",
+        ex:"はじめまして！沖縄出身で、休日はコーヒー屋巡りをしています。飲み込みは遅い方ですが、しつこく質問するタイプなのでよろしくお願いします（笑）" },
+      { id:"q20", no:"Q20",
+        text:"最近あった嬉しかったこと・ハマっていることを教えてください",
+        ex:"最近サウナにハマっていて、週1で通っています。あと先週、育てていた観葉植物に新芽が出ました" },
+    ]
+  },
+  {
+    tag:"STEP 0-8", title:"STEP 1へ",
+    lead:"あとは、面談で会うだけ。準備はもう整っています。",
+    questions:[
+      { id:"q21", no:"Q21", key:"echo",
+        text:"STEP 1（初回面談）で講師に最初に聞きたいことは何ですか？",
+        ex:"最初の1週間で何から手をつけるべきか、優先順位を教えてほしいです" },
+    ]
+  },
+];
+
+const STORE_KEY = "nova_prime_step0_v1";
+const TOTAL = STEPS.length;           // 8
+let current = 0;                      // 0 = cover
+let data = load();
+
+/* -------- render -------- */
+function esc(s){return (s||"").replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+
+function renderSteps(){
+  const host = document.getElementById("steps");
+  host.innerHTML = STEPS.map((s, i)=>{
+    const n = i+1;
+    const body = s.questions.map(q=>renderQ(q)).join("");
+    const backBtn = `<button class="btn btn-back" onclick="go(${n-1})">← 戻る</button>`;
+    const nextLabel = (n===TOTAL) ? "完了へ →" : "次へ →";
+    return `<section class="step" data-step="${n}">
+      <div class="step-head">
+        <div class="step-tag">${esc(s.tag)}</div>
+        <div class="step-title">${esc(s.title)}</div>
+        <p class="step-lead">${esc(s.lead)}</p>
+      </div>
+      ${body}
+      <div class="nav">${backBtn}<button class="btn btn-next" onclick="go(${n+1})">${nextLabel}</button></div>
+      <div class="autosave">入力は<b>自動保存</b>済み ・ いつでも中断して再開できます</div>
+    </section>`;
+  }).join("");
+
+  // bind inputs
+  STEPS.forEach(s=>s.questions.forEach(q=>bindQ(q)));
+}
+
+function renderQ(q){
+  let head = `<div class="q-no">${esc(q.no)}</div>
+    <p class="q-text">${esc(q.text)}</p>
+    ${q.sub?`<p class="q-sub">${esc(q.sub)}</p>`:""}`;
+
+  if(q.type==="choice"){
+    const opts = q.options.map(o=>`
+      <label class="choice" data-for="${q.id}">
+        <input type="radio" name="${q.id}" value="${esc(o.v)}">
+        <div class="c-title">${esc(o.t)}</div>
+        <div class="c-desc">${esc(o.d)}</div>
+      </label>`).join("");
+    return `<div class="q">${head}
+      <div class="choices">${opts}</div>
+      ${q.note?`<div class="note">${esc(q.note)}</div>`:""}
+      <textarea id="${q.id}_r" placeholder="そう思う理由もひとこと添えてください"></textarea>
+      ${exBox(q.ex)}
+    </div>`;
+  }
+
+  if(q.type==="check"){
+    const groups = q.groups.map(g=>`
+      <div class="grp"><p class="grp-h">${esc(g.h)}</p>
+      ${g.items.map(o=>`
+        <label class="opt" data-for="${q.id}">
+          <input type="checkbox" name="${q.id}" value="${esc(o.v)}">
+          <div class="o-title">${esc(o.t)}</div>
+          <div class="o-desc">${esc(o.d)}</div>
+        </label>`).join("")}
+      </div>`).join("");
+    return `<div class="q">${head}
+      ${groups}
+      <textarea id="${q.id}_r" placeholder="選んだ理由があれば教えてください（任意）"></textarea>
+      ${exBox(q.ex)}
+    </div>`;
+  }
+
+  return `<div class="q">${head}
+    <textarea id="${q.id}"></textarea>
+    ${q.note?`<div class="note">${esc(q.note)}</div>`:""}
+    ${exBox(q.ex)}
+  </div>`;
+}
+
+function exBox(ex){
+  return `<div class="example"><b>記入例</b><br>${esc(ex)}</div>`;
+}
+
+/* -------- bind + persistence -------- */
+function bindQ(q){
+  if(q.type==="choice"){
+    document.querySelectorAll(`input[name="${q.id}"]`).forEach(el=>{
+      if(data[q.id]===el.value){el.checked=true;el.closest(".choice").classList.add("sel");}
+      el.addEventListener("change",()=>{
+        document.querySelectorAll(`.choice[data-for="${q.id}"]`).forEach(c=>c.classList.remove("sel"));
+        el.closest(".choice").classList.add("sel");
+        data[q.id]=el.value;save();
+      });
+    });
+    bindText(q.id+"_r");
+  } else if(q.type==="check"){
+    document.querySelectorAll(`input[name="${q.id}"]`).forEach(el=>{
+      const arr = data[q.id]||[];
+      if(arr.includes(el.value)){el.checked=true;el.closest(".opt").classList.add("sel");}
+      el.addEventListener("change",()=>{
+        el.closest(".opt").classList.toggle("sel",el.checked);
+        const chosen=[...document.querySelectorAll(`input[name="${q.id}"]:checked`)].map(x=>x.value);
+        data[q.id]=chosen;save();
+      });
+    });
+    bindText(q.id+"_r");
+  } else {
+    bindText(q.id);
+  }
+}
+function bindText(id){
+  const el=document.getElementById(id);
+  if(!el)return;
+  if(data[id])el.value=data[id];
+  el.addEventListener("input",()=>{data[id]=el.value;save();});
+}
+
+function load(){try{return JSON.parse(localStorage.getItem(STORE_KEY))||{}}catch(e){return {}}}
+function save(){try{localStorage.setItem(STORE_KEY,JSON.stringify(data))}catch(e){}}
+
+/* -------- navigation -------- */
+function go(n){
+  // n: 0 cover .. TOTAL steps .. TOTAL+1 done
+  document.querySelectorAll(".step").forEach(s=>s.classList.remove("active"));
+  const done=document.getElementById("done");
+  done.classList.remove("active");
+
+  if(n>TOTAL){
+    done.classList.add("active");
+    document.getElementById("doneEcho").textContent =
+      data.q21 ? `あなたが「最初に聞きたい」と書いてくれたこと：\n「${data.q21}」\n— 面談の冒頭で、講師からお答えします。`
+               : "面談の冒頭で、あなたの疑問から一緒に整理していきます。";
+    current=TOTAL+1;
+  } else {
+    const t=document.querySelector(`.step[data-step="${n}"]`);
+    if(t)t.classList.add("active");
+    current=n;
+  }
+  updateProgress();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function updateProgress(){
+  const shown = Math.min(current,TOTAL);
+  const pct = current>TOTAL ? 100 : Math.round((current/TOTAL)*100);
+  document.getElementById("progFill").style.width = pct+"%";
+  document.getElementById("pctText").textContent = current>TOTAL ? "完了" : `${pct}%`;
+  if(current===0){
+    document.getElementById("stepText").textContent="はじめに";
+    document.getElementById("stepCount").textContent="";
+  } else if(current>TOTAL){
+    document.getElementById("stepText").textContent="STEP 0 完了";
+    document.getElementById("stepCount").textContent=`${TOTAL} / ${TOTAL}`;
+  } else {
+    document.getElementById("stepText").textContent=STEPS[current-1].title;
+    document.getElementById("stepCount").textContent=`STEP ${current} / ${TOTAL}`;
+  }
+}
+
+/* -------- output -------- */
+function compile(){
+  let out=`■ STEP 0：あなた専用カリキュラム設計シート\n\n`;
+  STEPS.forEach(s=>{
+    out+=`【${s.tag}｜${s.title}】\n`;
+    s.questions.forEach(q=>{
+      out+=`${q.no} ${q.text}\n`;
+      if(q.type==="choice"){
+        out+=`→ タイプ：${data[q.id]||"（未選択）"}\n`;
+        out+=`  理由：${data[q.id+"_r"]||"（未記入）"}\n`;
+      } else if(q.type==="check"){
+        out+=`→ 選択：${(data[q.id]||[]).join(" / ")||"（未選択）"}\n`;
+        if(data[q.id+"_r"]) out+=`  理由：${data[q.id+"_r"]}\n`;
+      } else {
+        out+=`→ ${data[q.id]||"（未記入）"}\n`;
+      }
+      out+="\n";
+    });
+  });
+  return out;
+}
+
+function copyAll(){
+  navigator.clipboard.writeText(compile()).then(
+    ()=>flash("回答をコピーしました"),
+    ()=>flash("コピーできませんでした。控えを保存をお試しください")
+  );
+}
+function downloadAll(){
+  const blob=new Blob([compile()],{type:"text/plain;charset=utf-8"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");
+  a.href=url;a.download="STEP0_カリキュラム設計シート.txt";a.click();
+  URL.revokeObjectURL(url);
+  flash("控えを保存しました");
+}
+function submitSheet(){
+  /* TODO: ここに送信先（フォームAPI / GAS / LINEなど）を接続する。
+     現状はローカル保存＋控え出力までを行う。 */
+  save();
+  flash("提出を受け付けました。面談でお会いしましょう。");
+}
+function flash(msg){
+  const el=document.getElementById("submitMsg");
+  el.textContent=msg;el.style.display="block";
+}
+
+/* -------- init -------- */
+renderSteps();
+updateProgress();
+</script>
