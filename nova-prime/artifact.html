@@ -56,6 +56,10 @@
 
   /* ---------- intro / cover ---------- */
   .cover{text-align:center;padding:40px 6px 8px}
+  .who-hi{display:none;font-size:14px;font-weight:800;color:var(--brand-deep);
+    background:#fff;border:1px solid var(--brand-soft);border-radius:99px;
+    padding:7px 16px;margin:0 auto 16px;width:max-content;max-width:100%;
+    box-shadow:0 6px 18px -10px rgba(91,83,214,.5)}
   .kicker{
     display:inline-block;font-size:12px;font-weight:800;letter-spacing:.18em;
     color:var(--brand-deep);background:var(--brand-soft);
@@ -186,6 +190,7 @@
   <!-- COVER -->
   <section class="step active" data-step="0">
     <div class="cover">
+      <div class="who-hi" id="whoHi"></div>
       <span class="kicker">STEP 0 / 専用設計シート</span>
       <h1>あなただけの<br><span class="hl">カリキュラム設計シート</span>を<br>一緒に作りましょう</h1>
       <p>面談の前に、あなたのこと・理想・作戦を教えてください。ここで書いてもらった内容から、担当講師が<b>あなた専用のカリキュラム</b>を組み立てます。所要 約10〜15分・途中保存OK。</p>
@@ -214,7 +219,7 @@
       <p class="arrow" id="doneEcho"></p>
     </div>
     <div class="acts">
-      <button class="btn btn-next" style="flex:none" onclick="submitSheet()">この内容で提出する</button>
+      <button class="btn btn-next" style="flex:none" onclick="submitSheet(this)">この内容で提出する</button>
       <button class="btn btn-ghost" onclick="copyAll()">回答をコピー</button>
       <button class="btn btn-ghost" onclick="downloadAll()">控えを保存</button>
     </div>
@@ -378,7 +383,24 @@ const STEPS = [
   },
 ];
 
-const STORE_KEY = "nova_prime_step0_v1";
+/* ===== 提出先（Google Apps Script のウェブアプリURL）=====
+   GASをデプロイして得たURLをここに貼る。空のままだとテストモード
+   （送信せず控え出力のみ）で動く。例:
+   const ENDPOINT = "https://script.google.com/macros/s/XXXXX/exec"; */
+const ENDPOINT = "";
+
+/* 契約者ごとの個別リンク（?name=氏名&mentor=担当講師&cid=識別ID）を読む */
+const identity = (()=>{
+  const p = new URLSearchParams(location.search);
+  return {
+    name:   p.get("name")   || "",
+    mentor: p.get("mentor") || p.get("t") || "",
+    cid:    p.get("cid")    || p.get("c") || "",
+  };
+})();
+
+/* 回答は契約者ごとに分けて保存（同じ端末で複数人が使っても混ざらない）*/
+const STORE_KEY = "nova_prime_step0_v1" + (identity.cid ? "_"+identity.cid : "");
 const TOTAL = STEPS.length;           // 8
 let current = 0;                      // 0 = cover
 let data = load();
@@ -535,7 +557,11 @@ function updateProgress(){
 
 /* -------- output -------- */
 function compile(){
-  let out=`■ STEP 0：あなた専用カリキュラム設計シート\n\n`;
+  let out=`■ STEP 0：あなた専用カリキュラム設計シート\n`;
+  if(identity.name||identity.mentor||identity.cid){
+    out+=`氏名：${identity.name||"-"}　担当講師：${identity.mentor||"-"}　ID：${identity.cid||"-"}\n`;
+  }
+  out+=`\n`;
   STEPS.forEach(s=>{
     out+=`【${s.tag}｜${s.title}】\n`;
     s.questions.forEach(q=>{
@@ -569,18 +595,52 @@ function downloadAll(){
   URL.revokeObjectURL(url);
   flash("控えを保存しました");
 }
-function submitSheet(){
-  /* TODO: ここに送信先（フォームAPI / GAS / LINEなど）を接続する。
-     現状はローカル保存＋控え出力までを行う。 */
+async function submitSheet(btn){
   save();
-  flash("提出を受け付けました。面談でお会いしましょう。");
+  if(!ENDPOINT){
+    flash("提出先が未設定のテスト環境です。「控えを保存」で内容を確認できます。","warn");
+    return;
+  }
+  if(btn){btn.disabled=true;btn.dataset.label=btn.textContent;btn.textContent="送信中…";}
+  const payload = {
+    cid:identity.cid, name:identity.name, mentor:identity.mentor,
+    answers:data, submittedAt:new Date().toISOString(),
+    text:compile()
+  };
+  try{
+    // GAS へは text/plain で送るとプリフライトが起きず確実に届く（no-cors）
+    await fetch(ENDPOINT,{method:"POST",mode:"no-cors",
+      headers:{"Content-Type":"text/plain;charset=utf-8"},
+      body:JSON.stringify(payload)});
+    localStorage.setItem(STORE_KEY+"_submitted","1");
+    flash("提出を受け付けました。面談でお会いしましょう。","ok");
+    if(btn){btn.textContent="提出済み ✓";}
+  }catch(e){
+    flash("送信に失敗しました。通信環境を確認して、もう一度お試しください。","warn");
+    if(btn){btn.disabled=false;btn.textContent=btn.dataset.label||"この内容で提出する";}
+  }
 }
-function flash(msg){
+function flash(msg,kind){
   const el=document.getElementById("submitMsg");
-  el.textContent=msg;el.style.display="block";
+  el.textContent=msg;
+  el.style.display="block";
+  el.style.color = kind==="warn" ? "var(--accent)" : "var(--ok)";
+}
+
+/* 個別リンクで開かれたら氏名で出迎える（心理的所有感を強める）*/
+function personalize(){
+  const hi=document.getElementById("whoHi");
+  if(identity.name){
+    hi.textContent=`${identity.name} さん専用シート`;
+    hi.style.display="block";
+  }
+  if(localStorage.getItem(STORE_KEY+"_submitted")==="1"){
+    // 提出済みで開き直した場合はそのまま続き（控えは再取得可能）
+  }
 }
 
 /* -------- init -------- */
 renderSteps();
+personalize();
 updateProgress();
 </script>
