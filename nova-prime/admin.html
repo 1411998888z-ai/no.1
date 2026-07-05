@@ -45,7 +45,7 @@
 <div class="wrap">
   <div class="eyebrow">NOVA PRIME ／ 運営用</div>
   <h1>STEP 0 リンク発行ツール</h1>
-  <p class="sub">新しい契約者ごとに、氏名と担当講師を入れて個別リンクを作成します。作ったURLをLINEやメールで本人に送ってください。</p>
+  <p class="sub">新しい契約者ごとに、氏名を入れて個別リンクを作成します。作ったURLをLINEやメールで本人に送ってください。</p>
 
   <div class="card">
     <label>公開ページのURL</label>
@@ -54,9 +54,6 @@
 
     <label>契約者の氏名</label>
     <input id="name" placeholder="田中 太郎">
-
-    <label>担当講師</label>
-    <input id="mentor" placeholder="佐藤">
 
     <div class="out">
       <label>発行された個別リンク</label>
@@ -68,16 +65,9 @@
     </div>
   </div>
 
-  <div class="card tmpl">
-    <label>送信メッセージ文例（そのままコピーして送れます）</label>
-    <textarea id="tmpl" readonly></textarea>
-    <button class="btn-copy" style="margin-top:10px" onclick="copyTmpl()">文例をコピー</button>
-    <div class="msg" id="msg2"></div>
-  </div>
-
   <div class="setup">
     このツールは運営用です。契約者には配りません（<code>admin.html</code> のURLは共有しない）。
-    リンクは本人ごとに固有で、氏名・担当講師が最初から入った状態でアンケートが開きます。
+    リンクは本人ごとに固有で、氏名が最初から入った状態でアンケートが開きます。
   </div>
 </div>
 
@@ -86,7 +76,7 @@ const $ = id => document.getElementById(id);
 const BASE_KEY = "nova_prime_admin_base";
 
 // 共有URL上で開かれた場合は、このページ自身の場所から公開URLを自動検出。
-// これで営業マンは氏名・担当を入れるだけでよく、各自の設定が不要になる。
+// これで営業マンは氏名を入れるだけでよく、各自の設定が不要になる。
 (function initBase(){
   const stored = localStorage.getItem(BASE_KEY) || "";
   let auto = "";
@@ -97,7 +87,7 @@ const BASE_KEY = "nova_prime_admin_base";
   $("base").value = auto || stored;
   if(auto){
     $("base").readOnly = true;
-    $("baseHint").textContent = "このツールの場所から自動設定済み。氏名と担当講師を入れてください。";
+    $("baseHint").textContent = "このツールの場所から自動設定済み。氏名を入れてください。";
   }
 })();
 
@@ -109,7 +99,7 @@ function genCid(){
 }
 let cid = genCid();
 
-// 氏名・担当・IDを1つのURLセーフなトークンにまとめる（氏名をURLに露出させない）
+// 氏名・IDを1つのURLセーフなトークンにまとめる（氏名をURLに露出させない）
 function b64url(str){
   return btoa(unescape(encodeURIComponent(str)))
     .replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");
@@ -118,30 +108,18 @@ function b64url(str){
 function build(){
   const base=$("base").value.trim();
   const name=$("name").value.trim();
-  const mentor=$("mentor").value.trim();
   localStorage.setItem(BASE_KEY, base);
-  if(!base || !name){ $("link").value=""; $("tmpl").value=""; return; }
-  const token = b64url(JSON.stringify({n:name, m:mentor, i:cid}));
+  if(!base || !name){ $("link").value=""; return; }
+  const token = b64url(JSON.stringify({n:name, i:cid}));
   const sep = base.includes("?") ? "&" : "?";
   const url = base
     + (base.endsWith("/")||base.endsWith("html") ? "" : "/")
     + `${sep}c=${token}`;
   $("link").value = url;
-  $("tmpl").value =
-`${name}さん、この度はお申し込みありがとうございます！
-
-面談の前に、${name}さん専用の「カリキュラム設計シート（STEP 0）」をご用意しました。
-下のリンクから、スキマ時間で回答をお願いします（10〜15分・途中保存OK）。
-
-▼ ${name}さん専用ページ
-${url}
-
-いただいた内容をもとに、担当が${name}さん専用のカリキュラムを組み立てます。
-面談でお会いできるのを楽しみにしています！`;
 }
 
 // 入力のたびに新しい人として cid を振り直す（氏名を変えたら別リンク）
-["base","name","mentor"].forEach(id=> $(id).addEventListener("input", ()=>{
+["base","name"].forEach(id=> $(id).addEventListener("input", ()=>{
   if(id==="name") cid = genCid();
   build();
 }));
@@ -153,7 +131,6 @@ function copy(text, msgEl){
   );
 }
 function copyLink(){ if($("link").value) copy($("link").value, $("msg")); }
-function copyTmpl(){ if($("tmpl").value) copy($("tmpl").value, $("msg2")); }
 
 build();
 </script>
