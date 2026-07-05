@@ -386,6 +386,11 @@ const identity = (()=>{
   };
 })();
 
+/* 個別リンクに氏名があれば、本文中の「あなた」を呼び名（姓＋さん）に差し替える。
+   「山田 花子」→「山田さん」。氏名が無ければ従来どおり「あなた」のまま。 */
+const NAME = identity.name ? (identity.name.trim().split(/[\s　]+/)[0] + "さん") : "";
+function px(s){ return NAME ? s.split("あなた").join(NAME) : s; }
+
 /* 回答は契約者ごとに分けて保存（同じ端末で複数人が使っても混ざらない）*/
 const STORE_KEY = "nova_prime_step0_v1" + (identity.cid ? "_"+identity.cid : "");
 const TOTAL = STEPS.length;           // 8
@@ -512,9 +517,9 @@ function go(n){
 
   if(n>TOTAL){
     done.classList.add("active");
-    document.getElementById("doneEcho").textContent =
+    document.getElementById("doneEcho").textContent = px(
       data.q21 ? `あなたが「最初に聞きたい」と書いてくれたこと：\n「${data.q21}」\n— 面談の冒頭で、講師からお答えします。`
-               : "面談の冒頭で、あなたの疑問から一緒に整理していきます。";
+               : "面談の冒頭で、あなたの疑問から一緒に整理していきます。");
     current=TOTAL+1;
   } else {
     const t=document.querySelector(`.step[data-step="${n}"]`);
@@ -537,7 +542,7 @@ function updateProgress(){
     document.getElementById("stepText").textContent="STEP 0 完了";
     document.getElementById("stepCount").textContent=`${TOTAL} / ${TOTAL}`;
   } else {
-    document.getElementById("stepText").textContent=STEPS[current-1].title;
+    document.getElementById("stepText").textContent=px(STEPS[current-1].title);
     document.getElementById("stepCount").textContent=`STEP ${current} / ${TOTAL}`;
   }
 }
@@ -621,8 +626,12 @@ function personalize(){
     hi.textContent=`${identity.name} さん専用シート`;
     hi.style.display="block";
   }
-  if(localStorage.getItem(STORE_KEY+"_submitted")==="1"){
-    // 提出済みで開き直した場合はそのまま続き（控えは再取得可能）
+  if(NAME){
+    document.title = `STEP 0：${NAME}専用カリキュラム設計シート | Nova Prime`;
+    // 本文（表紙・設問・完了）の「あなた」をまとめて呼び名に置換
+    const walker=document.createTreeWalker(document.querySelector(".wrap"),NodeFilter.SHOW_TEXT);
+    const nodes=[]; while(walker.nextNode()) nodes.push(walker.currentNode);
+    nodes.forEach(n=>{ if(n.nodeValue.indexOf("あなた")>=0) n.nodeValue=px(n.nodeValue); });
   }
 }
 
