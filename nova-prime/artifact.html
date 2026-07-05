@@ -389,13 +389,23 @@ const STEPS = [
    const ENDPOINT = "https://script.google.com/macros/s/XXXXX/exec"; */
 const ENDPOINT = "";
 
-/* 契約者ごとの個別リンク（?name=氏名&mentor=担当講師&cid=識別ID）を読む */
+/* 契約者ごとの個別リンクを読む。
+   新形式：?c=<トークン>（氏名などを1つの暗号風文字列にまとめたもの）
+   旧形式：?name=…&mentor=…&cid=…（後方互換で残す） */
 const identity = (()=>{
   const p = new URLSearchParams(location.search);
+  const tok = p.get("c");
+  if(tok){
+    try{
+      const b64 = tok.replace(/-/g,"+").replace(/_/g,"/");
+      const o = JSON.parse(decodeURIComponent(escape(atob(b64))));
+      return { name:o.n||"", mentor:o.m||"", cid:o.i||"" };
+    }catch(e){ /* 壊れていたら素通り */ }
+  }
   return {
     name:   p.get("name")   || "",
     mentor: p.get("mentor") || p.get("t") || "",
-    cid:    p.get("cid")    || p.get("c") || "",
+    cid:    p.get("cid")    || "",
   };
 })();
 

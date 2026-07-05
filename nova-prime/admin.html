@@ -109,16 +109,23 @@ function genCid(){
 }
 let cid = genCid();
 
+// 氏名・担当・IDを1つのURLセーフなトークンにまとめる（氏名をURLに露出させない）
+function b64url(str){
+  return btoa(unescape(encodeURIComponent(str)))
+    .replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");
+}
+
 function build(){
   const base=$("base").value.trim();
   const name=$("name").value.trim();
   const mentor=$("mentor").value.trim();
   localStorage.setItem(BASE_KEY, base);
   if(!base || !name){ $("link").value=""; $("tmpl").value=""; return; }
+  const token = b64url(JSON.stringify({n:name, m:mentor, i:cid}));
   const sep = base.includes("?") ? "&" : "?";
   const url = base
     + (base.endsWith("/")||base.endsWith("html") ? "" : "/")
-    + `${sep}name=${encodeURIComponent(name)}&mentor=${encodeURIComponent(mentor)}&cid=${cid}`;
+    + `${sep}c=${token}`;
   $("link").value = url;
   $("tmpl").value =
 `${name}さん、この度はお申し込みありがとうございます！
