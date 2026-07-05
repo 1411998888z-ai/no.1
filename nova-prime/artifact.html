@@ -170,12 +170,7 @@
       <div class="who-hi" id="whoHi"></div>
       <span class="kicker">STEP 0 / 専用設計シート</span>
       <h1>あなただけの<br><span class="hl">カリキュラム設計シート</span>を<br>一緒に作りましょう</h1>
-      <p>面談の前に、あなたのこと・理想・作戦を教えてください。ここで書いてもらった内容から、担当講師が<b>あなた専用のカリキュラム</b>を組み立てます。所要 約10〜15分・途中保存OK。</p>
-      <div class="meta">
-        <span><i class="dot"></i>全8ステップ</span>
-        <span><i class="dot"></i>途中まででも自動保存</span>
-        <span><i class="dot"></i>正解はありません</span>
-      </div>
+      <p>面談の前に、あなたのこと・理想・作戦を教えてください。ここで書いてもらった内容から、<b>あなた専用のカリキュラム</b>を組み立てます。所要時間30分〜40分</p>
     </div>
     <div class="nav">
       <button class="btn btn-next" onclick="go(1)">はじめる →</button>
@@ -635,8 +630,31 @@ function personalize(){
   }
 }
 
+/* 全ページ共通：文中の「。」の後ろで改行する（読みやすさ優先） */
+function breakPeriods(root){
+  const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{
+    acceptNode(n){
+      const tag=n.parentNode&&n.parentNode.nodeName;
+      if(tag==="TEXTAREA"||tag==="INPUT"||tag==="SCRIPT"||tag==="STYLE") return NodeFilter.FILTER_REJECT;
+      return n.nodeValue.indexOf("。")>=0 ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+    }
+  });
+  const targets=[]; while(walker.nextNode()) targets.push(walker.currentNode);
+  targets.forEach(n=>{
+    const parts=n.nodeValue.split("。");
+    const frag=document.createDocumentFragment();
+    parts.forEach((seg,i)=>{
+      const last=(i===parts.length-1);
+      frag.appendChild(document.createTextNode(seg+(last?"":"。")));
+      if(!last && parts[i+1]!=="") frag.appendChild(document.createElement("br"));
+    });
+    n.parentNode.replaceChild(frag,n);
+  });
+}
+
 /* -------- init -------- */
 renderSteps();
 personalize();
+breakPeriods(document.querySelector(".wrap"));
 updateProgress();
 </script>
