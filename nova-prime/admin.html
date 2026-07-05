@@ -48,9 +48,9 @@
   <p class="sub">新しい契約者ごとに、氏名と担当講師を入れて個別リンクを作成します。作ったURLをLINEやメールで本人に送ってください。</p>
 
   <div class="card">
-    <label>公開ページのURL（最初の1回だけ設定）</label>
+    <label>公開ページのURL</label>
     <input id="base" placeholder="https://ユーザー名.github.io/リポジトリ名/nova-prime/">
-    <div class="hint">GitHub Pages を有効化すると決まるURL。末尾は <code>/nova-prime/</code> まで。ブラウザに記憶されます。</div>
+    <div class="hint" id="baseHint">このツールを共有URL上で開くと自動で入ります。手元のファイルで開いた場合だけ手入力してください（末尾は <code>/nova-prime/</code> まで）。</div>
 
     <label>契約者の氏名</label>
     <input id="name" placeholder="田中 太郎">
@@ -85,8 +85,21 @@
 const $ = id => document.getElementById(id);
 const BASE_KEY = "nova_prime_admin_base";
 
-// 記憶したベースURLを復元
-$("base").value = localStorage.getItem(BASE_KEY) || "";
+// 共有URL上で開かれた場合は、このページ自身の場所から公開URLを自動検出。
+// これで営業マンは氏名・担当を入れるだけでよく、各自の設定が不要になる。
+(function initBase(){
+  const stored = localStorage.getItem(BASE_KEY) || "";
+  let auto = "";
+  if(location.protocol==="http:"||location.protocol==="https:"){
+    auto = location.href.replace(/[?#].*$/,"").replace(/admin\.html$/,"");
+    if(!auto.endsWith("/")) auto += "/";
+  }
+  $("base").value = auto || stored;
+  if(auto){
+    $("base").readOnly = true;
+    $("baseHint").textContent = "このツールの場所から自動設定済み。氏名と担当講師を入れてください。";
+  }
+})();
 
 function genCid(){
   // 短い識別ID（英数字6桁）。本人特定・回答の分離保存に使う
