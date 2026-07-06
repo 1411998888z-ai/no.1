@@ -150,9 +150,19 @@
   footer{text-align:center;font-size:.64rem;letter-spacing:.2em;color:var(--muted);margin-top:48px;
     text-transform:uppercase;font-family:var(--display)}
 
+  /* 未入力チェック */
+  textarea.missing,input.missing{border-color:#e0705a !important;box-shadow:0 0 0 3px rgba(224,112,90,.16) !important}
+  .choices.missing{outline:1px solid #e0705a;outline-offset:5px;border-radius:6px}
+  #needToast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(16px);
+    background:#241a18;border:1px solid #e0705a;color:#f0c9bd;font-size:.82rem;font-weight:500;
+    padding:11px 20px;border-radius:99px;opacity:0;pointer-events:none;transition:.3s;z-index:1000;
+    letter-spacing:.04em;max-width:90vw;text-align:center}
+  #needToast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
   @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 <canvas id="confetti"></canvas>
+<div id="needToast">未入力の項目があります。すべて記入してから次へ進んでください。</div>
 <header class="top">
   <div class="top-inner">
     <div class="brandline">
@@ -452,8 +462,45 @@ function load(){try{return JSON.parse(localStorage.getItem(STORE_KEY))||{}}catch
 function save(){try{localStorage.setItem(STORE_KEY,JSON.stringify(data))}catch(e){}}
 
 /* -------- navigation -------- */
+/* 未入力チェック：現ステップの空欄を強調し、最初の空欄を返す（無ければnull） */
+function markMissing(idx){
+  document.querySelectorAll(".missing").forEach(el=>el.classList.remove("missing"));
+  let first=null;
+  STEPS[idx-1].questions.forEach(q=>{
+    if(q.type==="choice"){
+      if(!data[q.id]){
+        const box=document.querySelector(`input[name="${q.id}"]`).closest(".choices");
+        box.classList.add("missing"); if(!first) first=box;
+      }
+      const rt=document.getElementById(q.id+"_r");
+      if(!(data[q.id+"_r"]||"").trim()){ rt.classList.add("missing"); if(!first) first=rt; }
+    } else {
+      const el=document.getElementById(q.id);
+      if(!(data[q.id]||"").trim()){ el.classList.add("missing"); if(!first) first=el; }
+    }
+  });
+  return first;
+}
+let __needT=null;
+function showNeed(){
+  const t=document.getElementById("needToast");
+  t.classList.add("show");
+  if(__needT) clearTimeout(__needT);
+  __needT=setTimeout(()=>t.classList.remove("show"),2800);
+}
+
 function go(n){
   // n: 0 cover .. TOTAL steps .. TOTAL+1 done
+  // 前進時（次へ）は現ステップの空欄をチェックし、あれば進めない
+  if(current>=1 && current<=TOTAL && n>current){
+    const first=markMissing(current);
+    if(first){
+      showNeed();
+      first.scrollIntoView({behavior:"smooth",block:"center"});
+      try{ first.focus({preventScroll:true}); }catch(e){}
+      return;
+    }
+  }
   document.querySelectorAll(".step").forEach(s=>s.classList.remove("active"));
   const done=document.getElementById("done");
   done.classList.remove("active");
@@ -631,4 +678,9 @@ renderSteps();
 personalize();
 breakPeriods(document.querySelector(".wrap"));
 updateProgress();
+
+/* 入力し始めたら未入力の強調を消す */
+const __wrap=document.querySelector(".wrap");
+__wrap.addEventListener("input",e=>e.target.classList.remove("missing"));
+__wrap.addEventListener("change",e=>{ const c=e.target.closest(".choices"); if(c)c.classList.remove("missing"); });
 </script>
