@@ -3,9 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="コピペリストをファイル別に管理し、ワンタッチでコピーできるツール" />
+  <meta name="description" content="コピペリストをファイル別に管理し、ワンタッチでコピー。ドラッグで並び替え・クラウド同期対応。" />
   <title>Copypad — コピペリスト管理</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="stylesheet" href="css/style.css" />
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%93%8B%3C/text%3E%3C/svg%3E" />
 </head>
@@ -23,7 +22,7 @@
         <button class="icon-btn" id="addFileBtn" title="ファイルを追加" aria-label="ファイルを追加">＋</button>
       </div>
 
-      <ul class="file-list" id="fileList" role="listbox" aria-label="ファイル一覧"></ul>
+      <ul class="file-list" id="fileList" aria-label="ファイル一覧"></ul>
 
       <div class="sidebar__footer">
         <button class="text-btn" id="exportBtn" title="全データをJSONで書き出し">⬇ エクスポート</button>
@@ -43,6 +42,10 @@
           <h2 id="currentFileName">—</h2>
           <span class="badge" id="itemCount">0</span>
         </div>
+        <div class="sync-status" id="syncStatus" title="保存状態">
+          <span class="sync-status__dot"></span>
+          <span class="sync-status__label" id="syncLabel">ローカル</span>
+        </div>
         <div class="search">
           <span class="search__icon">🔍</span>
           <input type="search" id="searchInput" placeholder="検索（ラベル・本文）…" aria-label="検索" />
@@ -51,6 +54,7 @@
       </header>
 
       <section class="content" id="content">
+        <p class="reorder-hint" id="reorderHint" hidden>🔀 ハンドル <span class="grip">⠿</span> をドラッグで並び替えできます</p>
         <div class="items" id="items"></div>
 
         <div class="empty" id="emptyState" hidden>
@@ -106,6 +110,13 @@
   <!-- トースト -->
   <div class="toast" id="toast" hidden></div>
 
+  <!-- SortableJS（ドラッグ並び替え・ローカル同梱） -->
+  <script src="js/vendor/Sortable.min.js"></script>
+  <!-- Firebase（クラウド同期・任意） -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+  <!-- Firebase 設定（空ならローカル保存のまま動作） -->
+  <script src="js/firebase-config.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>

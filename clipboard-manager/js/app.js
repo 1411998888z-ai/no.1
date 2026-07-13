@@ -1,20 +1,28 @@
 /* ============================================================
  * Copypad — コピペリスト管理ツール
- * データはブラウザの localStorage に保存されます（サーバー不要）。
+ * - ファイル別管理 / ワンタッチコピー / 検索
+ * - ドラッグ＆ドロップで並び替え（PC・スマホ対応）
+ * - Firebase 設定があればクラウドでリアルタイム同期（無ければローカル保存）
  * ============================================================ */
 (function () {
   "use strict";
 
   var STORAGE_KEY = "copypad.v1";
   var THEME_KEY = "copypad.theme";
+  var CLIENT_ID = "c-" + Math.floor(performance.now()).toString(36) + "-" +
+    (window.crypto && crypto.getRandomValues
+      ? crypto.getRandomValues(new Uint32Array(1))[0].toString(36)
+      : Math.floor(performance.timeOrigin || 0).toString(36));
 
   /* ---------- State ---------- */
   // state = { files: [{ id, name, items: [{ id, label, text }] }], activeId }
   var state = load();
 
   /* ---------- Utilities ---------- */
+  var seq = 0;
   function uid() {
-    return "id-" + Date.now().toString(36) + "-" + Math.floor(Math.random() * 1e6).toString(36);
+    seq += 1;
+    return "id-" + Math.floor(performance.now() * 1000).toString(36) + "-" + seq.toString(36);
   }
 
   function load() {
@@ -29,7 +37,7 @@
   }
 
   function normalize(data) {
-    data.files = data.files.map(function (f) {
+    data.files = (data.files || []).map(function (f) {
       return {
         id: f.id || uid(),
         name: typeof f.name === "string" ? f.name : "無題",
@@ -56,9 +64,25 @@
     return { files: [f1, f2], activeId: f1.id };
   }
 
-  function save() {
+  // ファイル配列のみを比較用に正規化（activeId は含めない＝同期対象は中身）
+  function filesJson(s) {
+    return JSON.stringify((s.files || []).map(function (f) {
+      return { id: f.id, name: f.name, items: f.items.map(function (it) {
+        return { id: it.id, label: it.label, text: it.text };
+      }) };
+    }));
+  }
+
+  /* ---------- Persistence（ローカル＋クラウド） ---------- */
+  function saveLocal() {
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
     catch (e) { toast("保存に失敗しました（容量制限の可能性）"); }
+  }
+
+  // 変更を保存。origin === "remote" のときはクラウドへ書き戻さない（エコー防止）。
+  function save(origin) {
+    saveLocal();
+    if (origin !== "remote") cloud.push();
   }
 
   function activeFile() {
@@ -74,6 +98,10 @@
   var currentFileName = $("currentFileName");
   var itemCount = $("itemCount");
   var searchInput = $("searchInput");
+  var reorderHint = $("reorderHint");
+
+  var fileSortable = null;
+  var itemSortable = null;
 
   /* ---------- Render ---------- */
   function render() {
@@ -82,15 +110,15 @@
   }
 
   function renderFiles() {
+    if (fileSortable) { fileSortable.destroy(); fileSortable = null; }
     fileListEl.innerHTML = "";
     state.files.forEach(function (f) {
       var li = document.createElement("li");
       li.className = "file-item" + (f.id === state.activeId ? " is-active" : "");
-      li.setAttribute("role", "option");
-      li.setAttribute("aria-selected", f.id === state.activeId ? "true" : "false");
       li.dataset.id = f.id;
 
       li.innerHTML =
+        '<span class="drag-handle" title="ドラッグで並び替え" aria-label="並び替え">⠿</span>' +
         '<span class="file-item__icon">🗂️</span>' +
         '<span class="file-item__name"></span>' +
         '<span class="file-item__count">' + f.items.length + '</span>' +
@@ -108,21 +136,40 @@
           else if (act.dataset.act === "delete-file") requestDeleteFile(f);
           return;
         }
+        if (e.target.closest(".drag-handle")) return;
         selectFile(f.id);
         closeSidebar();
       });
 
       fileListEl.appendChild(li);
     });
+
+    if (window.Sortable && state.files.length > 1) {
+      fileSortable = window.Sortable.create(fileListEl, {
+        handle: ".drag-handle",
+        animation: 150,
+        ghostClass: "sortable-ghost",
+        chosenClass: "sortable-chosen",
+        onEnd: function (evt) {
+          if (evt.oldIndex === evt.newIndex) return;
+          var moved = state.files.splice(evt.oldIndex, 1)[0];
+          state.files.splice(evt.newIndex, 0, moved);
+          save();
+          render();
+        },
+      });
+    }
   }
 
   function renderItems() {
+    if (itemSortable) { itemSortable.destroy(); itemSortable = null; }
     var f = activeFile();
 
     noFileState.hidden = !!f;
     if (!f) {
       itemsEl.innerHTML = "";
       emptyState.hidden = true;
+      reorderHint.hidden = true;
       currentFileName.textContent = "—";
       itemCount.textContent = "0";
       return;
@@ -132,13 +179,15 @@
     itemCount.textContent = String(f.items.length);
 
     var q = searchInput.value.trim().toLowerCase();
+    var filtering = q.length > 0;
     var list = f.items.filter(function (it) {
-      if (!q) return true;
+      if (!filtering) return true;
       return (it.label + "\n" + it.text).toLowerCase().indexOf(q) !== -1;
     });
 
     itemsEl.innerHTML = "";
     emptyState.hidden = f.items.length !== 0;
+    reorderHint.hidden = !(f.items.length > 1 && !filtering);
 
     if (f.items.length && list.length === 0) {
       var none = document.createElement("p");
@@ -151,6 +200,24 @@
     }
 
     list.forEach(function (it) { itemsEl.appendChild(renderCard(it)); });
+
+    // 並び替えは検索フィルタ非適用時のみ（インデックス整合のため）
+    if (window.Sortable && !filtering && f.items.length > 1) {
+      itemSortable = window.Sortable.create(itemsEl, {
+        handle: ".drag-handle",
+        draggable: ".card",
+        animation: 150,
+        ghostClass: "sortable-ghost",
+        chosenClass: "sortable-chosen",
+        onEnd: function (evt) {
+          if (evt.oldIndex === evt.newIndex) return;
+          var moved = f.items.splice(evt.oldIndex, 1)[0];
+          f.items.splice(evt.newIndex, 0, moved);
+          save();
+          render();
+        },
+      });
+    }
   }
 
   function renderCard(it) {
@@ -160,6 +227,7 @@
 
     card.innerHTML =
       '<div class="card__head">' +
+        '<span class="drag-handle" title="ドラッグで並び替え" aria-label="並び替え">⠿</span>' +
         '<div class="card__label"></div>' +
         '<div class="card__actions">' +
           '<button class="icon-btn" data-act="edit" title="編集">✎</button>' +
@@ -173,13 +241,11 @@
     var textEl = card.querySelector(".card__text");
     textEl.textContent = it.text;
 
-    // 短いテキストはフェード無し
     requestAnimationFrame(function () {
       if (textEl.scrollHeight <= textEl.clientHeight + 2) textEl.classList.add("no-fade");
     });
 
     textEl.addEventListener("click", function () { textEl.classList.toggle("is-expanded"); });
-
     card.querySelector('[data-act="edit"]').addEventListener("click", function () { openItemModal(it); });
     card.querySelector('[data-act="delete"]').addEventListener("click", function () { requestDeleteItem(it); });
     card.querySelector('[data-act="copy"]').addEventListener("click", function () { copyItem(it, card); });
@@ -231,7 +297,7 @@
   function selectFile(id) {
     state.activeId = id;
     searchInput.value = "";
-    save();
+    saveLocal(); // activeId はローカルのみ（人により違ってよい）
     render();
   }
 
@@ -241,7 +307,6 @@
     state.activeId = f.id;
     save();
     render();
-    // すぐ名前編集に入る
     var li = fileListEl.querySelector('[data-id="' + f.id + '"]');
     if (li) startRenameFile(li, f);
   }
@@ -258,7 +323,7 @@
 
     var done = function (commit) {
       var v = input.value.trim();
-      if (commit && v) { f.name = v; save(); }
+      if (commit && v && v !== f.name) { f.name = v; save(); }
       render();
     };
     input.addEventListener("keydown", function (e) {
@@ -292,6 +357,8 @@
   var itemTextInput = $("itemTextInput");
   var itemModalTitle = $("itemModalTitle");
 
+  function isModalOpen() { return !itemModal.hidden; }
+
   function openItemModal(it) {
     var f = activeFile();
     if (!f) { toast("先にファイルを作成してください"); return; }
@@ -303,7 +370,7 @@
     setTimeout(function () { itemLabelInput.focus(); }, 40);
   }
 
-  function closeItemModal() { itemModal.hidden = true; editingItemId = null; }
+  function closeItemModal() { itemModal.hidden = true; editingItemId = null; applyDeferredRemote(); }
 
   function saveItem() {
     var f = activeFile();
@@ -377,7 +444,7 @@
         var data = JSON.parse(String(reader.result));
         if (!data || !Array.isArray(data.files)) throw new Error("形式が不正です");
         confirmDialog(
-          "現在のデータを、読み込んだファイルの内容で置き換えます。よろしいですか？（先に現在のデータをエクスポートしておくと安全です）",
+          "現在のデータを、読み込んだファイルの内容で置き換えます。よろしいですか？（同期が有効な場合は共有中の全員に反映されます）",
           function () {
             state = normalize(data);
             save();
@@ -411,7 +478,6 @@
   function toggleTheme() {
     var cur = document.documentElement.getAttribute("data-theme");
     var mqDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
-    // 現在の実効テーマを判定して反転
     var effective = cur || (mqDark ? "dark" : "light");
     var next = effective === "dark" ? "light" : "dark";
     document.documentElement.setAttribute("data-theme", next);
@@ -423,6 +489,121 @@
   var scrim = $("scrim");
   function openSidebar() { sidebar.classList.add("is-open"); scrim.classList.add("is-open"); }
   function closeSidebar() { sidebar.classList.remove("is-open"); scrim.classList.remove("is-open"); }
+
+  /* ---------- Sync status UI ---------- */
+  var syncStatusEl = $("syncStatus");
+  var syncLabelEl = $("syncLabel");
+  function setSyncStatus(mode, text) {
+    // mode: "local" | "connecting" | "synced" | "saving" | "error"
+    syncStatusEl.dataset.mode = mode;
+    syncLabelEl.textContent = text;
+  }
+
+  /* ============================================================
+   * Cloud sync (Firebase Firestore) — 任意
+   * ============================================================ */
+  var cloud = (function () {
+    var cfg = window.COPYPAD_FIREBASE_CONFIG || {};
+    var workspaceId = window.COPYPAD_WORKSPACE_ID || "team-main";
+    var enabled = !!(window.firebase && cfg && cfg.apiKey && cfg.projectId);
+    var docRef = null;
+    var pushTimer = null;
+    var lastPushedJson = null;   // 自分が最後に送った内容（エコー判定用）
+    var deferredRemote = null;   // モーダル編集中に届いたリモート更新の保留
+
+    function init() {
+      if (!enabled) { setSyncStatus("local", "ローカル"); return; }
+      try {
+        firebase.initializeApp(cfg);
+        var db = firebase.firestore();
+        docRef = db.collection("workspaces").doc(workspaceId);
+        setSyncStatus("connecting", "接続中…");
+
+        docRef.onSnapshot(
+          { includeMetadataChanges: false },
+          function (snap) {
+            if (!snap.exists) {
+              // 共有ドキュメントが未作成 → 現在のローカル内容で初期化（最初の1人）
+              push(true);
+              setSyncStatus("synced", "同期中");
+              return;
+            }
+            var data = snap.data() || {};
+            if (!Array.isArray(data.files)) { setSyncStatus("synced", "同期中"); return; }
+            var incoming = { files: data.files };
+            var incomingJson = filesJson(incoming);
+            // 自分が送った内容のエコーなら無視
+            if (data.updatedByClient === CLIENT_ID && incomingJson === lastPushedJson) {
+              setSyncStatus("synced", "同期中");
+              return;
+            }
+            if (incomingJson === filesJson(state)) {
+              setSyncStatus("synced", "同期中");
+              return;
+            }
+            adoptRemote(incoming.files);
+          },
+          function (err) {
+            console.error("[Copypad] Firestore error:", err);
+            setSyncStatus("error", "同期エラー");
+            toast("同期エラー: " + (err && err.code ? err.code : err));
+          }
+        );
+      } catch (e) {
+        console.error("[Copypad] Firebase init failed:", e);
+        enabled = false;
+        setSyncStatus("error", "同期エラー");
+      }
+    }
+
+    function adoptRemote(files) {
+      var applyNow = function () {
+        var keepActive = state.activeId;
+        state = normalize({ files: JSON.parse(JSON.stringify(files)), activeId: keepActive });
+        save("remote");
+        render();
+        setSyncStatus("synced", "同期を受信");
+        setTimeout(function () { setSyncStatus("synced", "同期中"); }, 1200);
+      };
+      // 編集モーダルを開いている間は上書きを保留（入力が消えないように）
+      if (isModalOpen()) { deferredRemote = files; return; }
+      applyNow();
+    }
+
+    function flushDeferred() {
+      if (deferredRemote) {
+        var f = deferredRemote; deferredRemote = null;
+        adoptRemote(f);
+      }
+    }
+
+    function push(immediate) {
+      if (!enabled || !docRef) return;
+      clearTimeout(pushTimer);
+      var run = function () {
+        var payload = {
+          files: JSON.parse(filesJson(state)).files,
+          updatedByClient: CLIENT_ID,
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+        };
+        lastPushedJson = filesJson(state);
+        setSyncStatus("saving", "保存中…");
+        docRef.set(payload).then(function () {
+          setSyncStatus("synced", "同期中");
+        }, function (err) {
+          console.error("[Copypad] push failed:", err);
+          setSyncStatus("error", "保存失敗");
+          toast("クラウド保存に失敗: " + (err && err.code ? err.code : err));
+        });
+      };
+      if (immediate) run();
+      else pushTimer = setTimeout(run, 400);
+    }
+
+    return { init: init, push: push, flushDeferred: flushDeferred, isEnabled: function () { return enabled; } };
+  })();
+
+  function applyDeferredRemote() { cloud.flushDeferred(); }
 
   /* ---------- Wire up events ---------- */
   $("addFileBtn").addEventListener("click", addFile);
@@ -443,7 +624,6 @@
 
   searchInput.addEventListener("input", renderItems);
 
-  // モーダルの閉じる（背景・キャンセル）
   document.addEventListener("click", function (e) {
     if (e.target.closest("[data-close]")) {
       closeItemModal();
@@ -452,18 +632,13 @@
     }
   });
 
-  // キーボード
   document.addEventListener("keydown", function (e) {
     if (e.key === "Escape") {
       if (!itemModal.hidden) closeItemModal();
       else if (!confirmModal.hidden) { confirmModal.hidden = true; confirmCb = null; }
       else closeSidebar();
     }
-    // Ctrl/Cmd + Enter でモーダル保存
-    if ((e.ctrlKey || e.metaKey) && e.key === "Enter" && !itemModal.hidden) {
-      saveItem();
-    }
-    // Ctrl/Cmd + K で検索フォーカス
+    if ((e.ctrlKey || e.metaKey) && e.key === "Enter" && !itemModal.hidden) saveItem();
     if ((e.ctrlKey || e.metaKey) && (e.key === "k" || e.key === "K")) {
       e.preventDefault();
       searchInput.focus();
@@ -473,4 +648,5 @@
   /* ---------- Init ---------- */
   initTheme();
   render();
+  cloud.init();
 })();
