@@ -53,19 +53,21 @@
         <button class="btn btn--primary" id="addItemBtn">＋ 項目を追加</button>
       </header>
 
-      <section class="content" id="content">
-        <p class="reorder-hint" id="reorderHint" hidden>🔀 ハンドル <span class="grip">⠿</span> をドラッグで並び替えできます</p>
-        <div class="items" id="items"></div>
 
-        <div class="empty" id="emptyState" hidden>
-          <div class="empty__icon">📋</div>
-          <p class="empty__title">まだ項目がありません</p>
-          <p class="empty__desc">「＋ 項目を追加」からコピペしたいテキストを登録しましょう。</p>
-          <button class="btn btn--primary" id="emptyAddBtn">＋ 最初の項目を追加</button>
+      <section class="content" id="content">
+        <p class="reorder-hint" id="reorderHint" hidden>🔀 ハンドル <span class="grip">⠿</span> でグループ・項目を並び替え／項目はグループ間の移動も可能</p>
+        <div class="groups" id="groups"></div>
+        <button class="btn add-group-btn" id="addGroupBtn" hidden>＋ グループを追加</button>
+
+        <div class="empty" id="noGroupState" hidden>
+          <div class="empty__icon">🗂️</div>
+          <p class="empty__title">グループがありません</p>
+          <p class="empty__desc">「属性1」「属性2」のようにグループを作り、その中にコピペ項目を登録できます。</p>
+          <button class="btn btn--primary" id="noGroupAddBtn">＋ 最初のグループを作成</button>
         </div>
 
         <div class="empty" id="noFileState" hidden>
-          <div class="empty__icon">🗂️</div>
+          <div class="empty__icon">📁</div>
           <p class="empty__title">ファイルがありません</p>
           <p class="empty__desc">左上の「＋」からファイルを作成してください。</p>
           <button class="btn btn--primary" id="noFileAddBtn">＋ ファイルを作成</button>
@@ -79,6 +81,10 @@
     <div class="modal__backdrop" data-close></div>
     <div class="modal__panel" role="dialog" aria-modal="true" aria-labelledby="itemModalTitle">
       <h3 id="itemModalTitle">項目を追加</h3>
+      <label class="field" id="groupSelectField">
+        <span class="field__label">グループ</span>
+        <select id="itemGroupSelect"></select>
+      </label>
       <label class="field">
         <span class="field__label">ラベル（見出し）</span>
         <input type="text" id="itemLabelInput" placeholder="例: 挨拶メール 冒頭" maxlength="120" />
