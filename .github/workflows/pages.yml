@@ -19,16 +19,20 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  # 単一ジョブ構成。job に environment: を付けないことで、
-  # github-pages 環境のデプロイ許可ブランチ・ゲートによる「起動時失敗」を回避する。
+  # GitHub 公式の標準構成（単一ジョブ）。
+  # deploy-pages には environment: github-pages が必須。
+  # ※初回のみ、リポジトリの Settings → Pages で Source を「GitHub Actions」に
+  #   設定しておく必要があります（github-pages 環境の作成とブランチ許可のため）。
   deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
       - name: Configure Pages
-        # enablement: true で Pages 未設定でも自動で有効化（ソース=GitHub Actions）
         uses: actions/configure-pages@v5
         with:
           enablement: true
@@ -42,6 +46,3 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-
-      - name: Show published URL
-        run: echo "Published at ${{ steps.deployment.outputs.page_url }}"
