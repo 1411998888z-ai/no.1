@@ -19,9 +19,9 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  # 1) Pages を有効化してアーティファクトを準備（environment ゲート無し）
-  #    Pages 未設定の初回でも github-pages 環境の有無に依存せず起動できるよう分離
-  build:
+  # 単一ジョブ構成。job に environment: を付けないことで、
+  # github-pages 環境のデプロイ許可ブランチ・ゲートによる「起動時失敗」を回避する。
+  deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -39,14 +39,9 @@ jobs:
           # clipboard-manager をサイトのルートとして公開
           path: clipboard-manager
 
-  # 2) 有効化済みの github-pages 環境へデプロイ
-  deploy:
-    needs: build
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    steps:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+      - name: Show published URL
+        run: echo "Published at ${{ steps.deployment.outputs.page_url }}"
