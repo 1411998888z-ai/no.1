@@ -211,12 +211,57 @@ button, input, textarea { font-family: inherit; font-size: inherit; color: inher
   margin: 0 0 12px; font-size: 12.5px; color: var(--text-muted); text-align: center;
 }
 .reorder-hint .grip { opacity: .8; }
-.items {
+
+/* ===== Group（属性）セクション ===== */
+.groups { display: flex; flex-direction: column; gap: 18px; }
+.group {
+  border: 1px solid var(--border); border-radius: var(--radius);
+  background: var(--surface); padding: 12px; box-shadow: var(--shadow);
+}
+.group__head {
+  display: flex; align-items: center; gap: 8px; margin-bottom: 12px;
+  padding: 8px 10px; border: 1px solid var(--border); border-radius: var(--radius-sm);
+  background: var(--surface-2);
+}
+.group__name {
+  flex: 1; font-weight: 700; font-size: 15px; word-break: break-word;
+}
+.group__name:empty::before { content: "（無題グループ）"; color: var(--text-muted); font-weight: 400; }
+.group__name-input {
+  flex: 1; border: 1px solid var(--accent); border-radius: 6px;
+  padding: 5px 8px; background: var(--surface); outline: none; font-weight: 700; font-size: 15px;
+}
+.group__count {
+  font-size: 12px; color: var(--text-muted); background: var(--surface);
+  border: 1px solid var(--border); border-radius: 20px; padding: 1px 9px; flex-shrink: 0;
+}
+.group__actions { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
+.group__add {
+  border: 1px solid var(--border); background: var(--surface); color: var(--text);
+  padding: 4px 10px; border-radius: 6px; cursor: pointer; font-size: 12.5px; font-weight: 500;
+  white-space: nowrap;
+}
+.group__add:hover { background: var(--accent-weak); border-color: var(--accent); color: var(--accent); }
+.group__drag { font-size: 15px; }
+
+.group__items {
   display: grid; gap: 12px;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  align-content: start;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  align-content: start; min-height: 56px;
+}
+.group__empty {
+  grid-column: 1 / -1; text-align: center; color: var(--text-muted);
+  font-size: 13px; padding: 14px; border: 1px dashed var(--border); border-radius: var(--radius-sm);
 }
 
+.add-group-btn { margin-top: 16px; }
+
+.field select {
+  width: 100%; padding: 10px 12px; border: 1px solid var(--border);
+  border-radius: var(--radius-sm); background: var(--bg); outline: none;
+  transition: border-color .12s, box-shadow .12s;
+}
+.field select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-weak); }
 /* ===== Item card ===== */
 .card {
   background: var(--surface); border: 1px solid var(--border);
@@ -317,5 +362,6 @@ button, input, textarea { font-family: inherit; font-size: inherit; color: inher
   .topbar__title h2 { max-width: 50vw; }
   .search { order: 3; max-width: none; width: 100%; margin-left: 0; }
   .btn--primary#addItemBtn { margin-left: auto; }
-  .items { grid-template-columns: 1fr; }
+  .group__items { grid-template-columns: 1fr; }
+  .group__head { flex-wrap: wrap; }
 }
