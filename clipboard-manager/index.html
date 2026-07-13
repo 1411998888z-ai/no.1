@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="コピペリストをファイル別に管理し、ワンタッチでコピーできるツール" />
+  <title>Copypad — コピペリスト管理</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%93%8B%3C/text%3E%3C/svg%3E" />
+</head>
+<body>
+  <div id="app">
+    <!-- Sidebar: ファイル一覧 -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar__head">
+        <h1 class="brand"><span class="brand__icon">📋</span> Copypad</h1>
+        <button class="icon-btn sidebar__close" id="sidebarClose" title="閉じる" aria-label="サイドバーを閉じる">✕</button>
+      </div>
+
+      <div class="sidebar__section-title">
+        <span>ファイル</span>
+        <button class="icon-btn" id="addFileBtn" title="ファイルを追加" aria-label="ファイルを追加">＋</button>
+      </div>
+
+      <ul class="file-list" id="fileList" role="listbox" aria-label="ファイル一覧"></ul>
+
+      <div class="sidebar__footer">
+        <button class="text-btn" id="exportBtn" title="全データをJSONで書き出し">⬇ エクスポート</button>
+        <button class="text-btn" id="importBtn" title="JSONを読み込み">⬆ インポート</button>
+        <input type="file" id="importInput" accept="application/json,.json" hidden />
+        <button class="text-btn" id="themeBtn" title="テーマ切替">🌓 テーマ</button>
+      </div>
+    </aside>
+
+    <div class="scrim" id="scrim"></div>
+
+    <!-- Main -->
+    <main class="main">
+      <header class="topbar">
+        <button class="icon-btn topbar__menu" id="menuBtn" title="メニュー" aria-label="メニューを開く">☰</button>
+        <div class="topbar__title">
+          <h2 id="currentFileName">—</h2>
+          <span class="badge" id="itemCount">0</span>
+        </div>
+        <div class="search">
+          <span class="search__icon">🔍</span>
+          <input type="search" id="searchInput" placeholder="検索（ラベル・本文）…" aria-label="検索" />
+        </div>
+        <button class="btn btn--primary" id="addItemBtn">＋ 項目を追加</button>
+      </header>
+
+      <section class="content" id="content">
+        <div class="items" id="items"></div>
+
+        <div class="empty" id="emptyState" hidden>
+          <div class="empty__icon">📋</div>
+          <p class="empty__title">まだ項目がありません</p>
+          <p class="empty__desc">「＋ 項目を追加」からコピペしたいテキストを登録しましょう。</p>
+          <button class="btn btn--primary" id="emptyAddBtn">＋ 最初の項目を追加</button>
+        </div>
+
+        <div class="empty" id="noFileState" hidden>
+          <div class="empty__icon">🗂️</div>
+          <p class="empty__title">ファイルがありません</p>
+          <p class="empty__desc">左上の「＋」からファイルを作成してください。</p>
+          <button class="btn btn--primary" id="noFileAddBtn">＋ ファイルを作成</button>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- 項目 編集モーダル -->
+  <div class="modal" id="itemModal" hidden>
+    <div class="modal__backdrop" data-close></div>
+    <div class="modal__panel" role="dialog" aria-modal="true" aria-labelledby="itemModalTitle">
+      <h3 id="itemModalTitle">項目を追加</h3>
+      <label class="field">
+        <span class="field__label">ラベル（見出し）</span>
+        <input type="text" id="itemLabelInput" placeholder="例: 挨拶メール 冒頭" maxlength="120" />
+      </label>
+      <label class="field">
+        <span class="field__label">本文（コピーされる内容）</span>
+        <textarea id="itemTextInput" rows="8" placeholder="ここにコピペしたいテキストを入力…"></textarea>
+      </label>
+      <div class="modal__actions">
+        <button class="btn" data-close>キャンセル</button>
+        <button class="btn btn--primary" id="saveItemBtn">保存</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 確認ダイアログ -->
+  <div class="modal" id="confirmModal" hidden>
+    <div class="modal__backdrop" data-close></div>
+    <div class="modal__panel modal__panel--sm" role="alertdialog" aria-modal="true" aria-labelledby="confirmTitle">
+      <h3 id="confirmTitle">確認</h3>
+      <p id="confirmMessage" class="confirm__msg"></p>
+      <div class="modal__actions">
+        <button class="btn" data-close>キャンセル</button>
+        <button class="btn btn--danger" id="confirmOkBtn">削除</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- トースト -->
+  <div class="toast" id="toast" hidden></div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
