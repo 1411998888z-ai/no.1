@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>リンク発行ツール（運営用） | Nova Prime STEP 0</title>
+<style>
+  :root{
+    --ink:#20233a; --ink-soft:#565a78; --ink-faint:#8b8fac;
+    --line:#e7e8f2; --bg:#f5f4fb; --card:#fff;
+    --brand:#5b53d6; --brand-deep:#3f379f; --brand-soft:#eceafb; --accent:#ff8a5b; --ok:#2ea36b;
+    --font:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Hiragino Sans","Noto Sans JP","Yu Gothic",Meiryo,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:var(--font);color:var(--ink);background:var(--bg);line-height:1.7;padding:28px 16px 80px}
+  .wrap{max-width:620px;margin:0 auto}
+  .eyebrow{font-size:12px;font-weight:800;letter-spacing:.16em;color:var(--brand-deep)}
+  h1{font-size:22px;margin:6px 0 4px;font-weight:800}
+  .sub{color:var(--ink-soft);font-size:13.5px;margin:0 0 22px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px 20px;
+    box-shadow:0 14px 40px -22px rgba(46,42,110,.35);margin-bottom:16px}
+  label{display:block;font-size:12.5px;font-weight:700;color:var(--ink-soft);margin:14px 0 5px}
+  label:first-child{margin-top:0}
+  input{width:100%;padding:12px 13px;font-family:var(--font);font-size:15px;color:var(--ink);
+    border:1.5px solid var(--line);border-radius:11px;background:#fcfcff}
+  input:focus{outline:none;border-color:var(--brand);box-shadow:0 0 0 4px var(--brand-soft)}
+  .hint{font-size:11.5px;color:var(--ink-faint);margin-top:5px}
+  .out{margin-top:6px}
+  .link-box{display:flex;gap:8px;align-items:stretch;margin-top:8px}
+  .link-box input{font-size:13px;background:#f7f7fd}
+  button{font-family:var(--font);font-weight:800;font-size:14px;border:none;border-radius:11px;
+    cursor:pointer;padding:12px 18px;transition:.15s}
+  .btn-copy{color:#fff;background:linear-gradient(90deg,var(--brand),var(--brand-deep));white-space:nowrap}
+  .btn-copy:hover{transform:translateY(-1px)}
+  .msg{font-size:12.5px;font-weight:700;color:var(--ok);margin-top:10px;min-height:18px}
+  .tmpl{margin-top:18px}
+  textarea{width:100%;min-height:120px;padding:12px 13px;font-family:var(--font);font-size:13.5px;
+    line-height:1.7;color:var(--ink);border:1.5px solid var(--line);border-radius:11px;background:#fcfcff;resize:vertical}
+  .setup{font-size:12px;color:var(--ink-faint);background:#f0eff8;border-radius:11px;padding:12px 14px;margin-top:6px}
+  .setup code{background:#fff;padding:1px 5px;border-radius:5px;font-size:11.5px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="eyebrow">NOVA PRIME ／ 運営用</div>
+  <h1>STEP 0 リンク発行ツール</h1>
+  <p class="sub">新しい契約者ごとに、氏名を入れて個別リンクを作成します。作ったURLをLINEやメールで本人に送ってください。</p>
+
+  <div class="card">
+    <label>公開ページのURL</label>
+    <input id="base" placeholder="https://ユーザー名.github.io/リポジトリ名/nova-prime/">
+    <div class="hint" id="baseHint">このツールを共有URL上で開くと自動で入ります。手元のファイルで開いた場合だけ手入力してください（末尾は <code>/nova-prime/</code> まで）。</div>
+
+    <label>契約者の氏名</label>
+    <input id="name" placeholder="田中 太郎">
+
+    <div class="out">
+      <label>発行された個別リンク</label>
+      <div class="link-box">
+        <input id="link" readonly placeholder="上を入力すると自動で生成されます">
+        <button class="btn-copy" onclick="copyLink()">コピー</button>
+      </div>
+      <div class="msg" id="msg"></div>
+    </div>
+  </div>
+
+  <div class="setup">
+    このツールは運営用です。契約者には配りません（<code>admin.html</code> のURLは共有しない）。
+    リンクは本人ごとに固有で、氏名が最初から入った状態でアンケートが開きます。
+  </div>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+const BASE_KEY = "nova_prime_admin_base";
+
+// 共有URL上で開かれた場合は、このページ自身の場所から公開URLを自動検出。
+// これで営業マンは氏名を入れるだけでよく、各自の設定が不要になる。
+(function initBase(){
+  const stored = localStorage.getItem(BASE_KEY) || "";
+  let auto = "";
+  if(location.protocol==="http:"||location.protocol==="https:"){
+    auto = location.href.replace(/[?#].*$/,"").replace(/admin\.html$/,"");
+    if(!auto.endsWith("/")) auto += "/";
+  }
+  $("base").value = auto || stored;
+  if(auto){
+    $("base").readOnly = true;
+    $("baseHint").textContent = "このツールの場所から自動設定済み。氏名を入れてください。";
+  }
+})();
+
+function genCid(){
+  // 短い識別ID（英数字6桁）。本人特定・回答の分離保存に使う
+  const c="abcdefghijkmnpqrstuvwxyz23456789"; let s="";
+  for(let i=0;i<6;i++) s+=c[Math.floor(Math.random()*c.length)];
+  return s;
+}
+let cid = genCid();
+
+// 氏名・IDを1つのURLセーフなトークンにまとめる（氏名をURLに露出させない）
+function b64url(str){
+  return btoa(unescape(encodeURIComponent(str)))
+    .replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");
+}
+
+function build(){
+  const base=$("base").value.trim();
+  const name=$("name").value.trim();
+  localStorage.setItem(BASE_KEY, base);
+  if(!base || !name){ $("link").value=""; return; }
+  const token = b64url(JSON.stringify({n:name, i:cid}));
+  const sep = base.includes("?") ? "&" : "?";
+  const url = base
+    + (base.endsWith("/")||base.endsWith("html") ? "" : "/")
+    + `${sep}c=${token}`;
+  $("link").value = url;
+}
+
+// 入力のたびに新しい人として cid を振り直す（氏名を変えたら別リンク）
+["base","name"].forEach(id=> $(id).addEventListener("input", ()=>{
+  if(id==="name") cid = genCid();
+  build();
+}));
+
+function copy(text, msgEl){
+  navigator.clipboard.writeText(text).then(
+    ()=>{ msgEl.textContent="コピーしました ✓"; setTimeout(()=>msgEl.textContent="",2000); },
+    ()=>{ msgEl.textContent="コピーできませんでした"; }
+  );
+}
+function copyLink(){ if($("link").value) copy($("link").value, $("msg")); }
+
+build();
+</script>
+</body>
+</html>

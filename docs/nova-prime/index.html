@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>STEP 0：あなた専用カリキュラム設計シート | Nova Prime</title>
+<meta name="theme-color" content="#0a0a0f">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Noto+Sans+JP:wght@300;400;500;700&family=Noto+Serif+JP:wght@600;700&family=Playfair+Display:ital,wght@0,700;0,800;1,700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0a0f; --bg2:#101019; --panel:#13131e;
+    --gold:#d7b46a; --gold-bright:#f1dca8; --gold-deep:#a9854a;
+    --cream:#ece6da; --cream-soft:#c9c2b4; --muted:#938c7e;
+    --line:rgba(215,180,106,.22); --line-soft:rgba(215,180,106,.11);
+    --grad-gold:linear-gradient(120deg,#a9854a,#f1dca8 45%,#d7b46a);
+    --ok:#f1dca8; --accent:#e0a05a;
+    --radius:6px;
+    --sans:"Noto Sans JP",-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Hiragino Sans",Meiryo,sans-serif;
+    --serif:"Noto Serif JP","Playfair Display",serif;
+    --display:"Playfair Display","Noto Serif JP",serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:var(--sans);font-weight:400;color:var(--cream);
+    background:var(--bg);line-height:1.9;letter-spacing:.02em;
+    -webkit-font-smoothing:antialiased;overflow-x:hidden;
+  }
+  body::before{content:"";position:fixed;inset:0;z-index:-3;pointer-events:none;
+    background:
+      radial-gradient(900px 600px at 78% 4%,rgba(120,70,40,.20),transparent 60%),
+      radial-gradient(800px 700px at 12% 26%,rgba(40,38,80,.26),transparent 60%),
+      radial-gradient(1000px 800px at 50% 112%,rgba(120,90,45,.16),transparent 55%),
+      linear-gradient(180deg,#0a0a0f,#0c0c14 40%,#0a0a0f)}
+  body::after{content:"";position:fixed;inset:0;z-index:-3;pointer-events:none;opacity:.4;
+    background-image:radial-gradient(rgba(255,255,255,.04) .5px,transparent .6px);background-size:3px 3px}
+  .wrap{width:min(680px,92vw);margin-inline:auto;padding:0 0 120px}
+  #confetti{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:999}
+
+  /* ---------- header / progress ---------- */
+  header.top{position:sticky;top:0;z-index:50;
+    background:rgba(10,10,15,.72);backdrop-filter:saturate(150%) blur(12px);
+    -webkit-backdrop-filter:saturate(150%) blur(12px);border-bottom:1px solid var(--line-soft)}
+  .top-inner{width:min(680px,92vw);margin-inline:auto;padding:14px 0 12px}
+  .brandline{display:flex;align-items:center;justify-content:space-between}
+  .logo{display:flex;align-items:center;gap:10px;font-family:var(--display);font-weight:800;
+    font-size:1.02rem;letter-spacing:.14em;color:var(--cream)}
+  .logo .mark{width:26px;height:26px;display:grid;place-items:center;border:1px solid var(--gold);
+    color:var(--gold);border-radius:50%;font-size:.78rem;font-weight:700}
+  #pctText{font-size:.68rem;letter-spacing:.22em;color:var(--gold);text-transform:uppercase;font-weight:500}
+  .prog-track{height:2px;background:var(--line-soft);margin-top:13px;overflow:hidden}
+  .prog-fill{height:100%;width:0;background:var(--grad-gold);transition:width .6s cubic-bezier(.4,0,.2,1)}
+  .prog-label{margin-top:9px;display:flex;justify-content:space-between;
+    font-size:.66rem;letter-spacing:.16em;color:var(--muted);text-transform:uppercase}
+  .prog-label span:last-child{color:var(--gold)}
+
+  /* ---------- cover ---------- */
+  .cover{text-align:center;padding:58px 4px 8px}
+  .who-hi{display:none;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);
+    border:1px solid var(--line);border-radius:2px;padding:8px 18px;margin:0 auto 28px;width:max-content;max-width:100%}
+  .kicker{display:inline-flex;align-items:center;gap:14px;color:var(--gold);letter-spacing:.32em;
+    font-size:.66rem;font-weight:500;text-transform:uppercase;margin-bottom:30px}
+  .kicker::before,.kicker::after{content:"";width:30px;height:1px;background:linear-gradient(90deg,transparent,var(--gold))}
+  .kicker::after{background:linear-gradient(90deg,var(--gold),transparent)}
+  .cover h1{font-family:var(--serif);font-weight:700;font-size:clamp(1.9rem,5.6vw,2.7rem);
+    line-height:1.5;letter-spacing:.02em;text-wrap:balance}
+  .cover h1 .hl{color:transparent;background:var(--grad-gold);-webkit-background-clip:text;background-clip:text}
+  .cover p{max-width:540px;margin:26px auto 0;color:var(--cream-soft);font-weight:300;font-size:1rem;line-height:2}
+  .cover p b{color:var(--gold-bright);font-weight:500}
+  .cover .meta{margin-top:36px;display:inline-flex;gap:clamp(18px,5vw,30px);flex-wrap:wrap;justify-content:center;
+    font-size:.7rem;letter-spacing:.14em;color:var(--muted);text-transform:uppercase}
+  .cover .meta span{display:inline-flex;align-items:center;gap:8px}
+  .dot{width:4px;height:4px;border-radius:50%;background:var(--gold)}
+
+  /* ---------- step ---------- */
+  .step{display:none}
+  .step.active{display:block;animation:rise .5s cubic-bezier(.2,.7,.2,1)}
+  @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  .step-head{margin:46px 2px 28px;text-align:center}
+  .step-tag{font-size:.64rem;font-weight:500;letter-spacing:.3em;color:var(--gold);text-transform:uppercase}
+  .step-title{font-family:var(--serif);font-weight:700;font-size:clamp(1.35rem,4vw,1.85rem);margin:14px 0 0;line-height:1.5}
+  .step-lead{font-weight:300;color:var(--cream-soft);margin:14px auto 0;max-width:520px;font-size:.92rem}
+
+  /* ---------- question card ---------- */
+  .q{background:linear-gradient(180deg,rgba(19,19,30,.92),rgba(14,14,22,.92));
+    border:1px solid var(--line);border-radius:var(--radius);
+    padding:26px 22px;margin-bottom:16px;box-shadow:0 24px 60px -34px rgba(0,0,0,.9)}
+  .q-no{font-family:var(--serif);font-size:.82rem;font-weight:700;letter-spacing:.12em;color:var(--gold)}
+  .q-text{font-family:var(--serif);font-weight:600;font-size:1.06rem;line-height:1.7;margin:8px 0 0;color:var(--cream)}
+  .q-sub{font-size:.82rem;color:var(--muted);margin:9px 0 0;font-weight:300;line-height:1.8}
+
+  textarea,input[type=text]{width:100%;margin-top:16px;padding:14px 15px;font-family:var(--sans);
+    font-size:.95rem;color:var(--cream);line-height:1.9;background:#0b0b12;
+    border:1px solid var(--line-soft);border-radius:4px;resize:vertical;transition:border-color .25s,box-shadow .25s}
+  textarea{min-height:104px}
+  textarea::placeholder,input::placeholder{color:#6f6a5f}
+  textarea:focus,input[type=text]:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(215,180,106,.14)}
+
+  .example{margin-top:14px;font-size:.84rem;color:var(--cream-soft);font-weight:300;line-height:1.85;
+    background:rgba(215,180,106,.05);border-left:2px solid var(--gold-deep);border-radius:0 4px 4px 0;padding:12px 15px}
+  .example b{display:block;color:var(--gold);font-weight:600;font-size:.64rem;letter-spacing:.2em;
+    text-transform:uppercase;margin-bottom:5px}
+  .note{margin-top:14px;font-size:.8rem;color:var(--gold-bright);font-weight:300;line-height:1.8;
+    background:rgba(215,180,106,.06);border:1px solid var(--line-soft);border-radius:4px;
+    padding:10px 13px;display:flex;gap:8px;align-items:flex-start}
+  .note::before{content:"✦";color:var(--gold);font-weight:700}
+
+  /* ---------- choices (Q13) ---------- */
+  .choices{display:grid;gap:12px;margin-top:16px}
+  .choice{position:relative;border:1px solid var(--line-soft);border-radius:4px;
+    padding:16px 16px 16px 48px;cursor:pointer;background:#0c0c14;transition:.2s}
+  .choice:hover{border-color:var(--line)}
+  .choice input{position:absolute;left:16px;top:19px;width:16px;height:16px;accent-color:var(--gold)}
+  .choice .c-title{font-family:var(--serif);font-weight:600;font-size:.98rem;color:var(--cream)}
+  .choice .c-desc{font-size:.82rem;color:var(--muted);margin-top:5px;font-weight:300;line-height:1.8}
+  .choice.sel{border-color:var(--gold);background:rgba(215,180,106,.07)}
+
+  /* ---------- checklist (Q14) ---------- */
+  .grp{margin-top:18px}
+  .grp-h{font-size:.74rem;font-weight:500;color:var(--gold);letter-spacing:.1em;margin:0 0 12px;
+    padding-left:12px;border-left:2px solid var(--gold-deep)}
+  .opt{position:relative;border:1px solid var(--line-soft);border-radius:4px;
+    padding:13px 14px 13px 44px;cursor:pointer;background:#0c0c14;margin-bottom:9px;transition:.18s}
+  .opt:hover{border-color:var(--line)}
+  .opt input{position:absolute;left:15px;top:16px;width:15px;height:15px;accent-color:var(--gold)}
+  .opt .o-title{font-weight:500;font-size:.9rem;color:var(--cream)}
+  .opt .o-desc{font-size:.8rem;color:var(--muted);margin-top:4px;font-weight:300;line-height:1.75}
+  .opt.sel{border-color:var(--gold);background:rgba(215,180,106,.07)}
+
+  /* ---------- nav / buttons ---------- */
+  .nav{display:flex;gap:14px;margin-top:30px;align-items:center}
+  button.btn{font-family:var(--sans);font-weight:500;font-size:.85rem;letter-spacing:.1em;
+    border-radius:2px;border:1px solid var(--gold);cursor:pointer;padding:15px 26px;transition:.3s}
+  .btn-next{flex:1;color:#0a0a0f;background:var(--grad-gold);box-shadow:0 12px 34px -14px rgba(215,180,106,.5)}
+  .btn-next:hover{transform:translateY(-2px);box-shadow:0 18px 42px -14px rgba(241,220,168,.6)}
+  .btn-back{background:transparent;color:var(--gold-bright)}
+  .btn-back:hover{background:rgba(215,180,106,.08)}
+  .autosave{font-size:.66rem;letter-spacing:.12em;color:var(--muted);text-align:center;margin-top:18px;text-transform:uppercase}
+  .autosave b{color:var(--gold)}
+
+  /* ---------- done ---------- */
+  .done{display:none;text-align:center;padding:56px 6px 8px}
+  .done.active{display:block;animation:rise .6s}
+  .seal{width:84px;height:84px;border-radius:50%;margin:0 auto 26px;display:grid;place-items:center;
+    font-size:34px;color:#0a0a0f;background:var(--grad-gold);box-shadow:0 20px 50px -18px rgba(215,180,106,.6)}
+  .done h2{font-family:var(--serif);font-weight:700;font-size:clamp(1.6rem,4.5vw,2.1rem);margin:0 0 16px}
+  .done p{color:var(--cream-soft);font-weight:300;font-size:.98rem;max-width:480px;margin:0 auto 8px;line-height:2}
+  .done .next-card{margin:32px auto 0;max-width:520px;text-align:left;
+    background:linear-gradient(180deg,rgba(19,19,30,.92),rgba(14,14,22,.92));
+    border:1px solid var(--line);border-radius:var(--radius);padding:22px}
+  .next-card h3{margin:0 0 10px;font-family:var(--serif);font-size:1rem;color:var(--gold-bright);font-weight:600}
+  .next-card .arrow{font-size:.86rem;color:var(--cream-soft);font-weight:300;white-space:pre-line;line-height:1.9}
+  .done .acts{margin-top:28px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+  .done .acts .btn{padding:13px 20px;font-size:.8rem}
+  .btn-ghost{background:transparent;color:var(--gold-bright);border:1px solid var(--line)}
+  .btn-ghost:hover{background:rgba(215,180,106,.08)}
+  footer{text-align:center;font-size:.64rem;letter-spacing:.2em;color:var(--muted);margin-top:48px;
+    text-transform:uppercase;font-family:var(--display)}
+
+  /* 未入力チェック */
+  textarea.missing,input.missing{border-color:#e0705a !important;box-shadow:0 0 0 3px rgba(224,112,90,.16) !important}
+  .choices.missing{outline:1px solid #e0705a;outline-offset:5px;border-radius:6px}
+  #needToast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(16px);
+    background:#241a18;border:1px solid #e0705a;color:#f0c9bd;font-size:.82rem;font-weight:500;
+    padding:11px 20px;border-radius:99px;opacity:0;pointer-events:none;transition:.3s;z-index:1000;
+    letter-spacing:.04em;max-width:90vw;text-align:center}
+  #needToast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<canvas id="confetti"></canvas>
+<div id="needToast">未入力の項目があります。すべて記入してから次へ進んでください。</div>
+<header class="top">
+  <div class="top-inner">
+    <div class="brandline">
+      <span class="logo"><span class="mark">N</span>NOVA&nbsp;PRIME</span>
+      <span id="pctText">STEP 0</span>
+    </div>
+    <div class="prog-track"><div class="prog-fill" id="progFill"></div></div>
+    <div class="prog-label"><span id="stepText">はじめに</span><span id="stepCount"></span></div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- COVER -->
+  <section class="step active" data-step="0">
+    <div class="cover">
+      <div class="who-hi" id="whoHi"></div>
+      <span class="kicker">STEP 0 / 専用設計シート</span>
+      <h1>あなただけの<br><span class="hl">カリキュラム設計シート</span>を<br>一緒に作りましょう</h1>
+      <p>面談の前に、あなたのこと・理想・作戦を教えてください。ここで書いてもらった内容から、<b>あなた専用のカリキュラム</b>を組み立てます。所要時間30分〜40分</p>
+    </div>
+    <div class="nav">
+      <button class="btn btn-next" onclick="go(1)">はじめる →</button>
+    </div>
+    <div class="autosave">入力内容はこの端末に<b>自動保存</b>されます</div>
+  </section>
+
+  <!-- steps injected here -->
+  <div id="steps"></div>
+
+  <!-- DONE -->
+  <section class="done" id="done">
+    <div class="seal"><svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="#0a0a0f" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 6"/></svg></div>
+    <h2>おつかれさまでした。</h2>
+    <div class="next-card">
+      <h3>▶ 次は初回ミーティング</h3>
+      <p class="arrow" id="doneEcho"></p>
+    </div>
+    <div class="acts">
+      <button class="btn btn-next" style="flex:none" onclick="submitSheet(this)">この内容で提出する</button>
+      <button class="btn btn-ghost" onclick="copyAll()">回答をコピー</button>
+      <button class="btn btn-ghost" onclick="downloadAll()">控えを保存</button>
+    </div>
+    <p id="submitMsg" style="margin-top:16px;color:var(--ok);font-weight:700;display:none"></p>
+    <div class="acts" style="margin-top:8px">
+      <button class="btn btn-back" onclick="go(TOTAL)">← 前に戻る</button>
+    </div>
+  </section>
+
+  <footer>Nova Prime｜STEP 0 カリキュラム設計シート</footer>
+</div>
+
+<script>
+/* =========================================================
+   回答者に表示するデータのみを定義（内部設計メモは含めない）
+   ========================================================= */
+const STEPS = [
+  {
+    tag:"STEP 0-1", title:"あなたのこれまでを教えてください",
+    lead:"まずは、あなたのことを少しだけ。",
+    questions:[
+      { id:"q1", no:"Q1",
+        text:"これまでの職歴・経験を簡単に振り返って教えてください",
+        ex:"新卒でアパレル販売を3年、その後コールセンターで2年働いています。接客でお客様の好みを引き出すのは得意でした。パソコンは仕事で毎日使うので基本操作は問題ないです" },
+      { id:"q2", no:"Q2",
+        text:"1週間のスケジュールを、できるだけ詳しく教えてください",
+        ex:"平日は9〜18時勤務、帰宅は19時頃。火・木は比較的余裕があり、21〜23時は自由時間です。土曜午前は家事、日曜は丸一日空いていることが多いです" },
+    ]
+  },
+  {
+    tag:"STEP 0-2", title:"あなたが決めた理由",
+    lead:"あなたが動き出した「理由」を、言葉にしてみましょう。",
+    questions:[
+      { id:"q3", no:"Q3",
+        text:"申し込みを決めた瞬間、頭の中にあった「決め手」は何でしたか？",
+        ex:"『今の生活のまま5年後も同じ悩みを持っていたくない』と思ったことです。迷っている時間の方がもったいないと感じました" },
+      { id:"q4", no:"Q4",
+        text:"この挑戦を通じて、最終的に手に入れたいものは何ですか？",
+        ex:"収入の柱をもう1本作って、会社に依存しない安心感が欲しいです。ゆくゆくは自分の力で稼げるスキルそのものが財産になると思っています" },
+    ]
+  },
+  {
+    tag:"STEP 0-3", title:"あなたの理想の未来",
+    lead:"この先に待っている景色を、具体的に描いてみましょう。",
+    questions:[
+      { id:"q5", no:"Q5",
+        text:"時間とお金の制約がなかったら、やりたいことを10個以上書き出してください",
+        sub:"大きな夢から小さな楽しみまで、なんでもOKです。",
+        ex:"①家族で北海道旅行 ②気になってたオーダースーツを作る ③平日の昼にジムに行ける生活 ④両親に温泉をプレゼント ⑤スペインでサッカー観戦 ⑥週1で外食を気にせず楽しむ…" },
+      { id:"q6", no:"Q6",
+        text:"1年後の理想の休日を、朝から夜まで描写してください",
+        ex:"朝はアラームなしで起きて、カフェでBUYMAの受注チェックを30分だけ。昼は友達とドライブ、夜は焦りなく好きな映画を観る。『日曜の夜が憂鬱じゃない』のが一番の理想です" },
+      { id:"q7", no:"Q7",
+        text:"最初の売上通知が届いた瞬間をイメージしてみてください。どういう感情や思いが出てくると思いますか？",
+        ex:"『え、本当に売れた!?』と半信半疑になって、そのあとじわじわ嬉しさが来ると思います。金額よりも『自分にもできた』という自信が大きそうで、次の出品へのやる気が一気に湧く気がします" },
+    ]
+  },
+  {
+    tag:"STEP 0-4", title:"あなたの3ヶ月の作戦",
+    lead:"理想の未来から逆算して、最初の3ヶ月の作戦を立てます。",
+    questions:[
+      { id:"q8", no:"Q8",
+        text:"3ヶ月後、どんな自分になっていたら「やってよかった」と言えますか？",
+        ex:"売上の大小より、『自分で調べて、自分で判断して、売れるまでやり切れた』と言える自分になっていたいです。会社以外の場所で稼ぐ感覚を掴めていたら、やってよかったと言えます" },
+      { id:"q9", no:"Q9",
+        text:"最初の1ヶ月で「これだけはやり切る」と宣言できる行動目標は？",
+        ex:"やると決めた作業時間は、最初の1ヶ月間、必ず守り切ります。この積み重ねの先に最初の売上があると思います" },
+      { id:"q10", no:"Q10", type:"choice",
+        text:"どちらのタイプに近いですか？ その理由も教えてください",
+        options:[
+          { v:"スキマ時間型", t:"スキマ時間型",
+            d:"通勤中・昼休み・寝る前など、1回10〜30分の短い時間を毎日コツコツ積み重ねるスタイル。「毎日触るから感覚が鈍らない」のが強み。" },
+          { v:"まとめて作業型", t:"まとめて作業型",
+            d:"平日は最小限にして、週1〜2回、90分以上のまとまった時間を確保して一気に集中するスタイル。「深く集中して一気に進む」のが強み。" },
+        ],
+        note:"どちらのタイプでも成果を出している先輩がいます（組み合わせ型もOK）。",
+        ex:"平日はまとまった時間が取りにくいので、通勤と昼休みで出品投稿する『スキマ時間型』寄りだと思います。ただ日曜だけはまとめて時間が取れるので、出品作業は日曜に固めたいです" },
+      { id:"q11", no:"Q11",
+        text:"作業する曜日と時間帯を決めるとしたら、いつにしますか？",
+        ex:"火・木の21:00〜22:30と、日曜の10:00〜12:00にします" },
+      { id:"q12", no:"Q12",
+        text:"作業が中断しそうな障害と、その対処法をセットで考えてください",
+        sub:"「もし〜なら、〜する」の形式で書いてみてください。",
+        ex:"もし残業で疲れても、とりあえず10分だけ出品投稿作業をする。もし飲み会が入ったら、翌朝30分早く起きてリカバリーする" },
+    ]
+  },
+  {
+    tag:"STEP 0-5", title:"サポートを最適化するために",
+    lead:"サポートを“あなた仕様”にするために、正直な気持ちを聞かせてください。",
+    questions:[
+      { id:"q13", no:"Q13",
+        text:"今、正直に一番不安なことは何ですか？ どんな小さなことでもOKです",
+        ex:"ファッションに特別詳しいわけではないので、商品選びができるか不安です。パソコン操作にあまり自信がなくて、ついていけるか心配です。質問するタイミングがわからなくて、遠慮してしまいそうです。" },
+      { id:"q14", no:"Q14",
+        text:"「これを聞いたら恥ずかしいかな」と思って聞けていないことはありますか？",
+        ex:"今さらですが、BUYMAとメルカリの違いがちゃんとわかっていません…" },
+      { id:"q15", no:"Q15",
+        text:"過去に何かで挫折した経験があれば、その原因は何でしたか？",
+        note:"教えてもらえたら、同じ轍を踏まない設計をします。",
+        ex:"英語学習アプリを3週間でやめました。一人でやっていて、成長を実感できるものが何もなかったのが原因だと思います" },
+      { id:"q16", no:"Q16",
+        text:"サポートを受ける上で、伝えておきたい事はありますか？",
+        ex:"理解はゆっくりめですが、一度腑に落ちれば継続は得意です。最初だけ少し丁寧めに見てもらえると助かります" },
+    ]
+  },
+];
+
+/* 設問番号を出現順に自動採番（設問を追加・削除しても番号が飛ばない） */
+let __qn=0; STEPS.forEach(st=>st.questions.forEach(q=>{ q.no="Q"+(++__qn); }));
+
+/* ===== 提出先（Google Apps Script のウェブアプリURL）=====
+   GASをデプロイして得たURLをここに貼る。空のままだとテストモード
+   （送信せず控え出力のみ）で動く。例:
+   const ENDPOINT = "https://script.google.com/macros/s/XXXXX/exec"; */
+const ENDPOINT = "https://script.google.com/macros/s/AKfycby5UujU-L4hSGzubTSnU49CfhD5pnjJOICSI9YXCz34N6aiUJtKNKLCewiF2LMDG6n4xQ/exec";
+
+/* 契約者ごとの個別リンクを読む。
+   新形式：?c=<トークン>（氏名などを1つの暗号風文字列にまとめたもの）
+   旧形式：?name=…&mentor=…&cid=…（後方互換で残す） */
+const identity = (()=>{
+  const p = new URLSearchParams(location.search);
+  const tok = p.get("c");
+  if(tok){
+    try{
+      const b64 = tok.replace(/-/g,"+").replace(/_/g,"/");
+      const o = JSON.parse(decodeURIComponent(escape(atob(b64))));
+      return { name:o.n||"", mentor:o.m||"", cid:o.i||"" };
+    }catch(e){ /* 壊れていたら素通り */ }
+  }
+  return {
+    name:   p.get("name")   || "",
+    mentor: p.get("mentor") || p.get("t") || "",
+    cid:    p.get("cid")    || "",
+  };
+})();
+
+/* 個別リンクに氏名があれば、本文中の「あなた」を呼び名（姓＋さん）に差し替える。
+   「山田 花子」→「山田さん」。氏名が無ければ従来どおり「あなた」のまま。 */
+const NAME = identity.name ? (identity.name.trim().split(/[\s　]+/)[0] + "さん") : "";
+function px(s){ return NAME ? s.split("あなた").join(NAME) : s; }
+
+/* 回答は契約者ごとに分けて保存（同じ端末で複数人が使っても混ざらない）*/
+const STORE_KEY = "nova_prime_step0_v1" + (identity.cid ? "_"+identity.cid : "");
+const TOTAL = STEPS.length;           // 8
+let current = 0;                      // 0 = cover
+let data = load();
+
+/* -------- render -------- */
+function esc(s){return (s||"").replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+
+function renderSteps(){
+  const host = document.getElementById("steps");
+  host.innerHTML = STEPS.map((s, i)=>{
+    const n = i+1;
+    const body = s.questions.map(q=>renderQ(q)).join("");
+    const backBtn = `<button class="btn btn-back" onclick="go(${n-1})">← 戻る</button>`;
+    const nextLabel = (n===TOTAL) ? "完了へ →" : "次へ →";
+    return `<section class="step" data-step="${n}">
+      <div class="step-head">
+        <div class="step-tag">${esc(s.tag)}</div>
+        <div class="step-title">${esc(s.title)}</div>
+        <p class="step-lead">${esc(s.lead)}</p>
+      </div>
+      ${body}
+      <div class="nav">${backBtn}<button class="btn btn-next" onclick="go(${n+1})">${nextLabel}</button></div>
+      <div class="autosave">入力は<b>自動保存</b>済み ・ いつでも中断して再開できます</div>
+    </section>`;
+  }).join("");
+
+  // bind inputs
+  STEPS.forEach(s=>s.questions.forEach(q=>bindQ(q)));
+}
+
+function renderQ(q){
+  let head = `<div class="q-no">${esc(q.no)}</div>
+    <p class="q-text">${esc(q.text)}</p>
+    ${q.sub?`<p class="q-sub">${esc(q.sub)}</p>`:""}`;
+
+  if(q.type==="choice"){
+    const opts = q.options.map(o=>`
+      <label class="choice" data-for="${q.id}">
+        <input type="radio" name="${q.id}" value="${esc(o.v)}">
+        <div class="c-title">${esc(o.t)}</div>
+        <div class="c-desc">${esc(o.d)}</div>
+      </label>`).join("");
+    return `<div class="q">${head}
+      <div class="choices">${opts}</div>
+      ${q.note?`<div class="note">${esc(q.note)}</div>`:""}
+      <textarea id="${q.id}_r" placeholder="そう思う理由もひとこと添えてください"></textarea>
+      ${exBox(q.ex)}
+    </div>`;
+  }
+
+  if(q.type==="check"){
+    const groups = q.groups.map(g=>`
+      <div class="grp"><p class="grp-h">${esc(g.h)}</p>
+      ${g.items.map(o=>`
+        <label class="opt" data-for="${q.id}">
+          <input type="checkbox" name="${q.id}" value="${esc(o.v)}">
+          <div class="o-title">${esc(o.t)}</div>
+          <div class="o-desc">${esc(o.d)}</div>
+        </label>`).join("")}
+      </div>`).join("");
+    return `<div class="q">${head}
+      ${groups}
+      <textarea id="${q.id}_r" placeholder="選んだ理由があれば教えてください（任意）"></textarea>
+      ${exBox(q.ex)}
+    </div>`;
+  }
+
+  return `<div class="q">${head}
+    <textarea id="${q.id}"></textarea>
+    ${q.note?`<div class="note">${esc(q.note)}</div>`:""}
+    ${exBox(q.ex)}
+  </div>`;
+}
+
+function exBox(ex){
+  return `<div class="example"><b>記入例</b><br>${esc(ex)}</div>`;
+}
+
+/* -------- bind + persistence -------- */
+function bindQ(q){
+  if(q.type==="choice"){
+    document.querySelectorAll(`input[name="${q.id}"]`).forEach(el=>{
+      if(data[q.id]===el.value){el.checked=true;el.closest(".choice").classList.add("sel");}
+      el.addEventListener("change",()=>{
+        document.querySelectorAll(`.choice[data-for="${q.id}"]`).forEach(c=>c.classList.remove("sel"));
+        el.closest(".choice").classList.add("sel");
+        data[q.id]=el.value;save();
+      });
+    });
+    bindText(q.id+"_r");
+  } else if(q.type==="check"){
+    document.querySelectorAll(`input[name="${q.id}"]`).forEach(el=>{
+      const arr = data[q.id]||[];
+      if(arr.includes(el.value)){el.checked=true;el.closest(".opt").classList.add("sel");}
+      el.addEventListener("change",()=>{
+        el.closest(".opt").classList.toggle("sel",el.checked);
+        const chosen=[...document.querySelectorAll(`input[name="${q.id}"]:checked`)].map(x=>x.value);
+        data[q.id]=chosen;save();
+      });
+    });
+    bindText(q.id+"_r");
+  } else {
+    bindText(q.id);
+  }
+}
+function bindText(id){
+  const el=document.getElementById(id);
+  if(!el)return;
+  if(data[id])el.value=data[id];
+  el.addEventListener("input",()=>{data[id]=el.value;save();});
+}
+
+function load(){try{return JSON.parse(localStorage.getItem(STORE_KEY))||{}}catch(e){return {}}}
+function save(){try{localStorage.setItem(STORE_KEY,JSON.stringify(data))}catch(e){}}
+
+/* -------- navigation -------- */
+/* 未入力チェック：現ステップの空欄を強調し、最初の空欄を返す（無ければnull） */
+function markMissing(idx){
+  document.querySelectorAll(".missing").forEach(el=>el.classList.remove("missing"));
+  let first=null;
+  STEPS[idx-1].questions.forEach(q=>{
+    if(q.type==="choice"){
+      if(!data[q.id]){
+        const box=document.querySelector(`input[name="${q.id}"]`).closest(".choices");
+        box.classList.add("missing"); if(!first) first=box;
+      }
+      const rt=document.getElementById(q.id+"_r");
+      if(!(data[q.id+"_r"]||"").trim()){ rt.classList.add("missing"); if(!first) first=rt; }
+    } else {
+      const el=document.getElementById(q.id);
+      if(!(data[q.id]||"").trim()){ el.classList.add("missing"); if(!first) first=el; }
+    }
+  });
+  return first;
+}
+let __needT=null;
+function showNeed(){
+  const t=document.getElementById("needToast");
+  t.classList.add("show");
+  if(__needT) clearTimeout(__needT);
+  __needT=setTimeout(()=>t.classList.remove("show"),2800);
+}
+
+function go(n){
+  // n: 0 cover .. TOTAL steps .. TOTAL+1 done
+  // 前進時（次へ）は現ステップの空欄をチェックし、あれば進めない
+  if(current>=1 && current<=TOTAL && n>current){
+    const first=markMissing(current);
+    if(first){
+      showNeed();
+      first.scrollIntoView({behavior:"smooth",block:"center"});
+      try{ first.focus({preventScroll:true}); }catch(e){}
+      return;
+    }
+  }
+  document.querySelectorAll(".step").forEach(s=>s.classList.remove("active"));
+  const done=document.getElementById("done");
+  done.classList.remove("active");
+
+  if(n>TOTAL){
+    done.classList.add("active");
+    document.getElementById("doneEcho").textContent = "業務を始める直前の打ち合わせです。";
+    fireConfetti();
+    current=TOTAL+1;
+  } else {
+    const t=document.querySelector(`.step[data-step="${n}"]`);
+    if(t)t.classList.add("active");
+    current=n;
+  }
+  updateProgress();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function updateProgress(){
+  const shown = Math.min(current,TOTAL);
+  const pct = current>TOTAL ? 100 : Math.round((current/TOTAL)*100);
+  document.getElementById("progFill").style.width = pct+"%";
+  document.getElementById("pctText").textContent = current>TOTAL ? "完了" : `${pct}%`;
+  if(current===0){
+    document.getElementById("stepText").textContent="はじめに";
+    document.getElementById("stepCount").textContent="";
+  } else if(current>TOTAL){
+    document.getElementById("stepText").textContent="STEP 0 完了";
+    document.getElementById("stepCount").textContent=`${TOTAL} / ${TOTAL}`;
+  } else {
+    document.getElementById("stepText").textContent=px(STEPS[current-1].title);
+    document.getElementById("stepCount").textContent=`STEP ${current} / ${TOTAL}`;
+  }
+}
+
+/* -------- output -------- */
+function compile(){
+  let out=`■ STEP 0：あなた専用カリキュラム設計シート\n`;
+  if(identity.name||identity.mentor||identity.cid){
+    out+=`氏名：${identity.name||"-"}　担当講師：${identity.mentor||"-"}　ID：${identity.cid||"-"}\n`;
+  }
+  out+=`\n`;
+  STEPS.forEach(s=>{
+    out+=`【${s.tag}｜${s.title}】\n`;
+    s.questions.forEach(q=>{
+      out+=`${q.no} ${q.text}\n`;
+      if(q.type==="choice"){
+        out+=`→ タイプ：${data[q.id]||"（未選択）"}\n`;
+        out+=`  理由：${data[q.id+"_r"]||"（未記入）"}\n`;
+      } else if(q.type==="check"){
+        out+=`→ 選択：${(data[q.id]||[]).join(" / ")||"（未選択）"}\n`;
+        if(data[q.id+"_r"]) out+=`  理由：${data[q.id+"_r"]}\n`;
+      } else {
+        out+=`→ ${data[q.id]||"（未記入）"}\n`;
+      }
+      out+="\n";
+    });
+  });
+  return out;
+}
+
+function copyAll(){
+  navigator.clipboard.writeText(compile()).then(
+    ()=>flash("回答をコピーしました"),
+    ()=>flash("コピーできませんでした。控えを保存をお試しください")
+  );
+}
+function downloadAll(){
+  const blob=new Blob([compile()],{type:"text/plain;charset=utf-8"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");
+  a.href=url;a.download="STEP0_カリキュラム設計シート.txt";a.click();
+  URL.revokeObjectURL(url);
+  flash("控えを保存しました");
+}
+async function submitSheet(btn){
+  save();
+  if(!ENDPOINT){
+    flash("提出先が未設定のテスト環境です。「控えを保存」で内容を確認できます。","warn");
+    return;
+  }
+  if(btn){btn.disabled=true;btn.dataset.label=btn.textContent;btn.textContent="送信中…";}
+  const payload = {
+    cid:identity.cid, name:identity.name, mentor:identity.mentor,
+    answers:data, submittedAt:new Date().toISOString(),
+    text:compile()
+  };
+  try{
+    // GAS へは text/plain で送るとプリフライトが起きず確実に届く（no-cors）
+    await fetch(ENDPOINT,{method:"POST",mode:"no-cors",
+      headers:{"Content-Type":"text/plain;charset=utf-8"},
+      body:JSON.stringify(payload)});
+    localStorage.setItem(STORE_KEY+"_submitted","1");
+    flash("提出を受け付けました。面談でお会いしましょう。","ok");
+    if(btn){btn.textContent="提出済み ✓";}
+  }catch(e){
+    flash("送信に失敗しました。通信環境を確認して、もう一度お試しください。","warn");
+    if(btn){btn.disabled=false;btn.textContent=btn.dataset.label||"この内容で提出する";}
+  }
+}
+function flash(msg,kind){
+  const el=document.getElementById("submitMsg");
+  el.textContent=msg;
+  el.style.display="block";
+  el.style.color = kind==="warn" ? "var(--accent)" : "var(--ok)";
+}
+
+/* 個別リンクで開かれたら氏名で出迎える（心理的所有感を強める）*/
+function personalize(){
+  const hi=document.getElementById("whoHi");
+  if(identity.name){
+    hi.textContent=`${identity.name} さん専用シート`;
+    hi.style.display="block";
+  }
+  if(NAME){
+    document.title = `STEP 0：${NAME}専用カリキュラム設計シート | Nova Prime`;
+    // 本文（表紙・設問・完了）の「あなた」をまとめて呼び名に置換
+    const walker=document.createTreeWalker(document.querySelector(".wrap"),NodeFilter.SHOW_TEXT);
+    const nodes=[]; while(walker.nextNode()) nodes.push(walker.currentNode);
+    nodes.forEach(n=>{ if(n.nodeValue.indexOf("あなた")>=0) n.nodeValue=px(n.nodeValue); });
+  }
+}
+
+/* 全ページ共通：文中の「。」の後ろで改行する（読みやすさ優先） */
+function breakPeriods(root){
+  const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{
+    acceptNode(n){
+      const tag=n.parentNode&&n.parentNode.nodeName;
+      if(tag==="TEXTAREA"||tag==="INPUT"||tag==="SCRIPT"||tag==="STYLE") return NodeFilter.FILTER_REJECT;
+      return n.nodeValue.indexOf("。")>=0 ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+    }
+  });
+  const targets=[]; while(walker.nextNode()) targets.push(walker.currentNode);
+  targets.forEach(n=>{
+    const parts=n.nodeValue.split("。");
+    const frag=document.createDocumentFragment();
+    parts.forEach((seg,i)=>{
+      const last=(i===parts.length-1);
+      frag.appendChild(document.createTextNode(seg+(last?"":"。")));
+      if(!last && parts[i+1]!=="") frag.appendChild(document.createElement("br"));
+    });
+    n.parentNode.replaceChild(frag,n);
+  });
+}
+
+/* 完了画面：両サイドからクラッカー（紙吹雪）を発射する演出 */
+let __cfx=null;
+function fireConfetti(){
+  if(window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const cv=document.getElementById("confetti"); if(!cv) return;
+  const ctx=cv.getContext("2d"); const DPR=Math.min(window.devicePixelRatio||1,2);
+  cv.width=innerWidth*DPR; cv.height=innerHeight*DPR;
+  const cols=["#d7b46a","#f1dca8","#a9854a","#ece6da","#ffffff","#c9a24b","#e8c887"];
+  const parts=[];
+  const burst=(x,y,base)=>{ for(let i=0;i<90;i++){ const ang=base+(Math.random()-0.5)*1.5, sp=(9+Math.random()*11)*DPR;
+    parts.push({x,y,vx:Math.cos(ang)*sp,vy:Math.sin(ang)*sp,g:0.30*DPR,
+      w:(6+Math.random()*7)*DPR,h:(3+Math.random()*5)*DPR,rot:Math.random()*6.28,
+      vr:(Math.random()-0.5)*0.5,col:cols[(Math.random()*cols.length)|0],life:0,ttl:80+Math.random()*50}); } };
+  const fire=()=>{ burst(0,cv.height*0.97,-Math.PI/3); burst(cv.width,cv.height*0.97,-Math.PI*2/3); };
+  fire(); setTimeout(fire,200);
+  if(__cfx) cancelAnimationFrame(__cfx);
+  let frame=0;
+  const tick=()=>{ ctx.clearRect(0,0,cv.width,cv.height); frame++; let alive=0;
+    for(const p of parts){ if(p.life>p.ttl) continue; p.life++; alive++;
+      p.vy+=p.g; p.vx*=0.995; p.vy*=0.995; p.x+=p.vx; p.y+=p.vy; p.rot+=p.vr;
+      const a=Math.max(0,1-p.life/p.ttl);
+      ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.rot); ctx.globalAlpha=a;
+      ctx.fillStyle=p.col; ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h); ctx.restore(); }
+    if(alive>0 && frame<300){ __cfx=requestAnimationFrame(tick); } else { ctx.clearRect(0,0,cv.width,cv.height); __cfx=null; } };
+  __cfx=requestAnimationFrame(tick);
+}
+
+/* -------- init -------- */
+renderSteps();
+personalize();
+breakPeriods(document.querySelector(".wrap"));
+updateProgress();
+
+/* 入力し始めたら未入力の強調を消す */
+const __wrap=document.querySelector(".wrap");
+__wrap.addEventListener("input",e=>e.target.classList.remove("missing"));
+__wrap.addEventListener("change",e=>{ const c=e.target.closest(".choices"); if(c)c.classList.remove("missing"); });
+</script>
+</body>
+</html>
