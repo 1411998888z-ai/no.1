@@ -1,9 +1,10 @@
-name: Deploy Copypad to GitHub Pages
+name: Deploy site to GitHub Pages
 
 on:
   push:
     branches: [main]
     paths:
+      - "docs/**"
       - "clipboard-manager/**"
       - ".github/workflows/pages.yml"
   workflow_dispatch:
@@ -19,10 +20,10 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  # GitHub 公式の標準構成（単一ジョブ）。
-  # deploy-pages には environment: github-pages が必須。
-  # ※初回のみ、リポジトリの Settings → Pages で Source を「GitHub Actions」に
-  #   設定しておく必要があります（github-pages 環境の作成とブランチ許可のため）。
+  # 公開サイトを組み立てる:
+  #   - docs/            → サイトのルート（Nova Prime サービスページ・カリキュラム設計シート・admin）
+  #   - clipboard-manager → /copypad/ 以下（コピペ管理ツール Copypad）
+  # ※初回のみ、Settings → Pages で Source を「GitHub Actions」に設定
   deploy:
     environment:
       name: github-pages
@@ -32,6 +33,21 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Assemble site
+        run: |
+          set -e
+          rm -rf _site
+          mkdir -p _site
+          # 元のサイト（Nova Prime）をルートへ
+          cp -r docs/. _site/
+          # Copypad を /copypad/ へ
+          mkdir -p _site/copypad
+          cp -r clipboard-manager/. _site/copypad/
+          # 静的配信（Jekyll 無効化）
+          touch _site/.nojekyll
+          echo "----- assembled _site -----"
+          find _site -type f | sort
+
       - name: Configure Pages
         uses: actions/configure-pages@v5
         with:
@@ -40,8 +56,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # clipboard-manager をサイトのルートとして公開
-          path: clipboard-manager
+          path: _site
 
       - name: Deploy to GitHub Pages
         id: deployment
