@@ -210,6 +210,29 @@
     background:radial-gradient(700px 400px at 50% 0%,rgba(215,180,106,.12),transparent 60%),linear-gradient(180deg,#13110d,#0a0a0f)}
   .cta h2{font-family:"Noto Serif JP",serif;font-weight:700;font-size:clamp(1.9rem,5vw,3.4rem);line-height:1.4}
   .cta p{margin:22px auto 38px;max-width:560px;color:#c2bbad;font-weight:300}
+  .cta-actions{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+
+  /* contact */
+  .contact-grid{display:grid;grid-template-columns:1fr 1.1fr;gap:0;border:1px solid var(--line-soft);border-radius:8px;overflow:hidden}
+  .contact-grid .side{padding:clamp(36px,5vw,60px);background:linear-gradient(160deg,#16121f,#0d0d16);border-right:1px solid var(--line-soft)}
+  .contact-grid .side h3{font-family:"Noto Serif JP",serif;font-weight:700;font-size:clamp(1.4rem,3vw,1.9rem);line-height:1.4;margin-bottom:18px}
+  .contact-grid .side p{color:#a39c8e;font-weight:300;font-size:.94rem;margin-bottom:28px}
+  .contact-chan{display:grid;gap:14px}
+  .contact-chan a{display:flex;align-items:center;gap:14px;padding:16px 18px;border:1px solid var(--line-soft);border-radius:8px;
+    transition:border-color .3s, background .3s;font-weight:500}
+  .contact-chan a:hover{border-color:var(--gold);background:rgba(215,180,106,.06)}
+  .contact-chan a svg{width:26px;height:26px;color:var(--gold);flex:none}
+  .contact-chan a b{display:block;font-family:"Noto Serif JP",serif;font-weight:600;font-size:1rem}
+  .contact-chan a span{color:var(--muted);font-size:.8rem;font-weight:300}
+  .contact-form{padding:clamp(36px,5vw,60px)}
+  .contact-form .field{margin-bottom:20px}
+  .contact-form label{display:block;font-size:.78rem;letter-spacing:.1em;color:var(--gold);margin-bottom:8px;text-transform:uppercase}
+  .contact-form input,.contact-form select,.contact-form textarea{width:100%;background:#0c0c14;border:1px solid var(--line-soft);
+    border-radius:6px;padding:14px 16px;color:var(--cream);font-family:inherit;font-size:.96rem;transition:border-color .3s}
+  .contact-form input:focus,.contact-form select:focus,.contact-form textarea:focus{outline:none;border-color:var(--gold)}
+  .contact-form textarea{resize:vertical;min-height:120px}
+  .contact-form .btn{width:100%;justify-content:center;margin-top:6px}
+  .form-note{margin-top:14px;color:var(--muted);font-size:.76rem;font-weight:300;text-align:center;min-height:1.2em}
 
   /* faq */
   .faq{max-width:820px;margin-inline:auto;border-top:1px solid var(--line-soft)}
@@ -302,7 +325,8 @@
       <a class="menu" href="#steps">CURRICULUM</a>
       <a class="menu" href="#price">PLAN</a>
       <a class="menu" href="#faq">FAQ</a>
-      <a class="btn" href="#cta">無料で相談する</a>
+      <a class="menu" href="#contact">CONTACT</a>
+      <a class="btn" href="#contact">無料で相談する</a>
     </nav>
     <button class="nav-toggle" id="toggle" aria-label="メニュー">☰</button>
   </div>
@@ -473,7 +497,7 @@
           <li><svg><use href="#i-check"/></svg>動画講座（全6STEP・約7h）</li>
           <li><svg><use href="#i-check"/></svg>チャット個別サポート</li>
         </ul>
-        <a class="btn" href="#cta">このプランで相談</a>
+        <a class="btn" href="#contact" data-action="buy" data-tier="starter" data-plan="スターター会員（3ヶ月）">お申し込み</a>
       </div>
       <div class="plan feat">
         <div class="pop">Most Popular</div>
@@ -486,7 +510,7 @@
           <li><svg><use href="#i-check"/></svg>動画講座（全6STEP・約7h）</li>
           <li><svg><use href="#i-check"/></svg>チャット個別サポート</li>
         </ul>
-        <a class="btn" href="#cta">このプランで相談</a>
+        <a class="btn" href="#contact" data-action="buy" data-tier="pro" data-plan="プロ会員（6ヶ月）">お申し込み</a>
       </div>
       <div class="plan">
         <div class="tier">Master</div><div class="pname">マスター会員</div>
@@ -498,7 +522,7 @@
           <li><svg><use href="#i-check"/></svg>動画講座（全6STEP・約7h）</li>
           <li><svg><use href="#i-check"/></svg>チャット個別サポート</li>
         </ul>
-        <a class="btn" href="#cta">このプランで相談</a>
+        <a class="btn" href="#contact" data-action="buy" data-tier="master" data-plan="マスター会員（12ヶ月）">お申し込み</a>
       </div>
     </div>
     <p class="note">※ 価格の詳細はお問い合わせ時にご案内いたします。提供方法：クレジットカード決済後、1営業日以内に会員サイトをメールにて送付します。</p>
@@ -512,7 +536,58 @@
       <span class="eyebrow">Start Today</span>
       <h2>世界を仕入れて<br>ビジネスを次のステージへ</h2>
       <p>仕入先・ノウハウ・サポート。売上を伸ばすために必要なものを、Nova Prime でまとめて手に入れましょう。</p>
-      <a class="btn" href="#price">プランを見て相談する</a>
+      <div class="cta-actions">
+        <a class="btn" id="cta-book" href="#contact" data-action="book">個別相談を予約する</a>
+        <a class="btn ghost" href="#price">プランを見る</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="wrap">
+    <div class="head reveal">
+      <span class="eyebrow">Contact</span>
+      <h2>お問い合わせ・お申し込み</h2>
+      <div class="rule"></div>
+      <p>ご相談・ご不明点はお気軽に。個別相談のご予約、お申し込みもこちらから承ります。</p>
+    </div>
+    <div class="contact-grid reveal">
+      <div class="side">
+        <h3 class="serif">まずは気軽に<br>ご相談ください</h3>
+        <p>サービス内容・仕入先・プランのご質問など、どんな小さなことでもお答えします。</p>
+        <div class="contact-chan">
+          <a id="chan-mail" href="#"><svg><use href="#i-chat"/></svg><span><b>メールで問い合わせ</b><span id="chan-mail-sub">運営に直接メールする</span></span></a>
+          <a id="chan-book" href="#" target="_blank" rel="noopener"><svg><use href="#i-check"/></svg><span><b>個別相談を予約</b><span id="chan-book-sub">日時を選んでオンライン相談</span></span></a>
+        </div>
+      </div>
+      <form class="contact-form" id="contact-form">
+        <div class="field">
+          <label for="cf-name">お名前</label>
+          <input id="cf-name" name="name" type="text" placeholder="山田 太郎" required />
+        </div>
+        <div class="field">
+          <label for="cf-email">メールアドレス</label>
+          <input id="cf-email" name="email" type="email" placeholder="you@example.com" required />
+        </div>
+        <div class="field">
+          <label for="cf-plan">ご興味のあるプラン（任意）</label>
+          <select id="cf-plan" name="plan">
+            <option value="">選択してください</option>
+            <option value="スターター会員（3ヶ月）">スターター会員（3ヶ月）</option>
+            <option value="プロ会員（6ヶ月）">プロ会員（6ヶ月）</option>
+            <option value="マスター会員（12ヶ月）">マスター会員（12ヶ月）</option>
+            <option value="まだ決めていない／相談したい">まだ決めていない／相談したい</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="cf-msg">お問い合わせ内容</label>
+          <textarea id="cf-msg" name="message" placeholder="ご質問・ご相談内容をご記入ください" required></textarea>
+        </div>
+        <button class="btn" type="submit">送信する</button>
+        <p class="form-note" id="form-note"></p>
+      </form>
     </div>
   </div>
 </section>
@@ -544,7 +619,7 @@
         <p>世界中のファッションを仕入れ、海外ブランド販売の売上向上を、仕入先の共有・会員限定の動画講座・個別コンサルティングでサポートします。</p>
       </div>
       <div class="foot-links">
-        <a href="#world">WORLD</a><a href="#about">SERVICE</a><a href="#steps">CURRICULUM</a><a href="#price">PLAN</a><a href="#faq">FAQ</a>
+        <a href="#world">WORLD</a><a href="#about">SERVICE</a><a href="#steps">CURRICULUM</a><a href="#price">PLAN</a><a href="#faq">FAQ</a><a href="#contact">CONTACT</a>
       </div>
     </div>
     <div class="copy">© 2026 NOVA PRIME — All Rights Reserved.</div>
@@ -613,6 +688,95 @@
     if(!reduce) requestAnimationFrame(step);
     window.addEventListener('resize', ()=>{ W=window.innerWidth; H=window.innerHeight;
       for(const it of items){ it.x=Math.min(Math.max(it.x,it.r),W-it.r); it.y=Math.min(Math.max(it.y,it.r),H-it.r); } });
+  })();
+
+  /* =========================================================================
+     お問い合わせ / 予約 / 購入 の設定
+     ↓ここに実サービスのURL・メールを設定すると自動で有効化されます。
+     ------------------------------------------------------------------------- */
+  const NP_CONFIG = {
+    email: "novaprime@kizashi-ya.com",   // ← 問い合わせ先メールアドレス
+    formspree: "",                        // ← Formspreeのエンドポイント(例 https://formspree.io/f/xxxx)。空ならメールアプリ送信
+    bookingUrl: "https://timerex.net/s/12128888/dfad02ea",  // ← 個別相談の予約URL(TimeRex)
+    checkout: {                           // ← 各プランの決済/販売ページURL
+      starter: "https://univa.cc/5Z_w1H",
+      pro:     "https://univa.cc/DUUm3T",
+      master:  "https://univa.cc/MkhDmV"
+    }
+  };
+
+  (function(){
+    const $ = s => document.querySelector(s);
+    const email = NP_CONFIG.email;
+
+    // メール導線
+    const mail = $('#chan-mail');
+    if(mail){ mail.href = 'mailto:'+email+'?subject='+encodeURIComponent('Nova Prime お問い合わせ');
+      const sub = $('#chan-mail-sub'); if(sub) sub.textContent = email; }
+
+    // 予約導線（サイド）
+    const chanBook = $('#chan-book');
+    if(chanBook){
+      if(NP_CONFIG.bookingUrl){ chanBook.href = NP_CONFIG.bookingUrl; }
+      else { chanBook.href = '#contact-form';
+        const s=$('#chan-book-sub'); if(s) s.textContent='フォームからご希望日時をお知らせください';
+        chanBook.addEventListener('click',()=>focusForm()); }
+    }
+
+    function focusForm(plan){
+      const sel=$('#cf-plan'); if(plan && sel){ for(const o of sel.options){ if(o.value===plan){ sel.value=plan; break; } } }
+      const el=$('#contact'); if(el) el.scrollIntoView({behavior:'smooth'});
+      setTimeout(()=>{ const n=$('#cf-name'); if(n) n.focus(); }, 500);
+    }
+
+    // 予約ボタン（CTA）
+    document.querySelectorAll('[data-action="book"]').forEach(b=>{
+      b.addEventListener('click',(e)=>{
+        if(NP_CONFIG.bookingUrl){ e.preventDefault(); window.open(NP_CONFIG.bookingUrl,'_blank','noopener'); }
+        else { e.preventDefault(); focusForm(); }
+      });
+    });
+
+    // 申し込み/購入ボタン（各プラン）
+    document.querySelectorAll('[data-action="buy"]').forEach(b=>{
+      b.addEventListener('click',(e)=>{
+        const tier=b.getAttribute('data-tier'), plan=b.getAttribute('data-plan');
+        const url=NP_CONFIG.checkout && NP_CONFIG.checkout[tier];
+        if(url){ e.preventDefault(); window.open(url,'_blank','noopener'); }
+        else { e.preventDefault(); focusForm(plan); }
+      });
+    });
+
+    // お問い合わせフォーム送信
+    const form=$('#contact-form'), note=$('#form-note');
+    if(form){
+      form.addEventListener('submit', async (e)=>{
+        e.preventDefault();
+        const data={
+          name:  $('#cf-name').value.trim(),
+          email: $('#cf-email').value.trim(),
+          plan:  $('#cf-plan').value,
+          message: $('#cf-msg').value.trim()
+        };
+        if(!data.name || !data.email || !data.message){ if(note) note.textContent='必須項目をご入力ください。'; return; }
+
+        // Formspreeが設定されていればサイト内送信、なければメールアプリを起動
+        if(NP_CONFIG.formspree){
+          try{
+            if(note) note.textContent='送信中…';
+            const res=await fetch(NP_CONFIG.formspree,{method:'POST',headers:{'Accept':'application/json'},
+              body:JSON.stringify({name:data.name,email:data.email,plan:data.plan,message:data.message})});
+            if(res.ok){ form.reset(); if(note) note.textContent='送信しました。1営業日以内にご返信いたします。'; }
+            else { if(note) note.textContent='送信に失敗しました。メールで直接お問い合わせください: '+email; }
+          }catch(err){ if(note) note.textContent='送信に失敗しました。メールで直接お問い合わせください: '+email; }
+        } else {
+          const subject='【Nova Prime】お問い合わせ'+(data.plan? '（'+data.plan+'）':'');
+          const body='お名前: '+data.name+'\nメール: '+data.email+'\n希望プラン: '+(data.plan||'—')+'\n\n'+data.message;
+          window.location.href='mailto:'+email+'?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(body);
+          if(note) note.textContent='メールアプリが開きます。開かない場合は '+email+' 宛にお送りください。';
+        }
+      });
+    }
   })();
 
   // mobile menu
