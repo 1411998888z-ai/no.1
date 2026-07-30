@@ -497,7 +497,7 @@
           <li><svg><use href="#i-check"/></svg>動画講座（全6STEP・約7h）</li>
           <li><svg><use href="#i-check"/></svg>チャット個別サポート</li>
         </ul>
-        <a class="btn" href="#contact" data-action="buy" data-tier="starter" data-plan="スターター会員（3ヶ月）">お申し込み</a>
+        <a class="btn" href="#contact" data-action="book">このプランで相談する</a>
       </div>
       <div class="plan feat">
         <div class="pop">Most Popular</div>
@@ -510,7 +510,7 @@
           <li><svg><use href="#i-check"/></svg>動画講座（全6STEP・約7h）</li>
           <li><svg><use href="#i-check"/></svg>チャット個別サポート</li>
         </ul>
-        <a class="btn" href="#contact" data-action="buy" data-tier="pro" data-plan="プロ会員（6ヶ月）">お申し込み</a>
+        <a class="btn" href="#contact" data-action="book">このプランで相談する</a>
       </div>
       <div class="plan">
         <div class="tier">Master</div><div class="pname">マスター会員</div>
@@ -522,7 +522,7 @@
           <li><svg><use href="#i-check"/></svg>動画講座（全6STEP・約7h）</li>
           <li><svg><use href="#i-check"/></svg>チャット個別サポート</li>
         </ul>
-        <a class="btn" href="#contact" data-action="buy" data-tier="master" data-plan="マスター会員（12ヶ月）">お申し込み</a>
+        <a class="btn" href="#contact" data-action="book">このプランで相談する</a>
       </div>
     </div>
     <p class="note">※ 価格の詳細はお問い合わせ時にご案内いたします。提供方法：クレジットカード決済後、1営業日以内に会員サイトをメールにて送付します。</p>
@@ -697,11 +697,11 @@
   const NP_CONFIG = {
     email: "novaprime@kizashi-ya.com",   // ← 問い合わせ先メールアドレス
     formspree: "",                        // ← Formspreeのエンドポイント(例 https://formspree.io/f/xxxx)。空ならメールアプリ送信
-    bookingUrl: "https://timerex.net/s/12128888/dfad02ea",  // ← 個別相談の予約URL(TimeRex)
-    checkout: {                           // ← 各プランの決済/販売ページURL
-      starter: "https://univa.cc/5Z_w1H",
-      pro:     "https://univa.cc/DUUm3T",
-      master:  "https://univa.cc/MkhDmV"
+    bookingUrl: "https://timerex.net/s/12128888/dfad02ea",  // ← 個別相談の予約URL(TimeRex)。各プランの「相談する」もここへ
+    checkout: {                           // ← 各プランの決済/販売ページURL（現在は未使用）
+      starter: "",
+      pro:     "",
+      master:  ""
     }
   };
 
