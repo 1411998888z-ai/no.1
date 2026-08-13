@@ -96,6 +96,8 @@ section{padding:clamp(64px,9vw,130px) 0}
 .biz-figure{background:var(--bg-soft);border:1px solid var(--line);border-radius:14px;overflow:hidden}
 .biz-figure img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;transition:transform .7s cubic-bezier(.2,.7,.2,1)}
 .biz-figure:hover img{transform:scale(1.06)}
+.biz-figure img.brand,.biz-card .cimg img.brand{object-fit:contain}
+.biz-figure.figphoto img{aspect-ratio:1/1;object-fit:cover}
 .biz-spec{width:100%;border-collapse:collapse;margin-top:2px}
 .biz-spec th,.biz-spec td{text-align:left;padding:14px 4px;border-bottom:1px solid var(--line);font-size:14px;vertical-align:top}
 .biz-spec th{width:120px;color:var(--ink-2);font-weight:700}
