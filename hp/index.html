@@ -256,6 +256,29 @@
   .biz-figure .ph,.biz-figure img{transition:transform .7s cubic-bezier(.2,.7,.2,1)}
   .biz-figure:hover .ph,.biz-figure:hover img{transform:scale(1.06)}
 
+  /* VOICE 横スクロール */
+  .sample-note{display:inline-flex;align-items:center;gap:10px;background:#fff4d6;border:1px solid #f0dca0;color:#8a6d1a;border-radius:999px;padding:9px 18px;font-size:12.5px;font-weight:700;margin-bottom:24px;letter-spacing:.02em}
+  .voice-scroll{display:flex;gap:20px;overflow-x:auto;padding:4px 4px 26px;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch}
+  .voice-scroll::-webkit-scrollbar{height:6px}
+  .voice-scroll::-webkit-scrollbar-track{background:transparent}
+  .voice-scroll::-webkit-scrollbar-thumb{background:#d5d5d0;border-radius:3px}
+  .voice-card{flex:0 0 min(345px,82vw);scroll-snap-align:start;background:#fff;border:1px solid var(--line);border-radius:16px;overflow:hidden;display:flex;flex-direction:column}
+  .voice-card .vimg{aspect-ratio:16/10;background:var(--bg-soft);display:flex;align-items:center;justify-content:center;color:#b7b7b1;font-size:12px;font-family:var(--sans);letter-spacing:.1em;position:relative;overflow:hidden}
+  .voice-sample{position:absolute;top:12px;left:12px;background:rgba(14,14,14,.78);color:#fff;font-family:var(--sans);font-weight:700;font-size:10px;letter-spacing:.18em;padding:5px 10px;border-radius:6px}
+  .voice-biz{position:absolute;bottom:12px;right:12px;background:#fff;color:var(--ink);font-size:11px;font-weight:700;padding:5px 12px;border-radius:999px;border:1px solid var(--line)}
+  .voice-card .vbody{padding:24px 22px 28px;display:flex;flex-direction:column;gap:0}
+  .voice-badge{display:inline-block;align-self:flex-start;border:1px solid var(--line);border-radius:999px;padding:6px 14px;font-size:12px;font-weight:700;color:var(--ink-2);margin-bottom:16px}
+  .voice-card h4{font-size:18px;font-weight:800;line-height:1.55;margin-bottom:12px}
+  .voice-meta{font-size:12px;color:#9a9a95;margin-bottom:16px}
+  .voice-card p{font-size:14px;color:var(--ink-2);line-height:1.9}
+  .voice-hint{font-size:12px;color:#9a9a95;margin-top:6px;font-family:var(--sans);letter-spacing:.08em}
+
+  /* 準備中ブロック */
+  .coming{border:1px dashed #cfcfca;border-radius:16px;padding:clamp(46px,8vw,84px) 24px;text-align:center;background:var(--bg-soft)}
+  .coming .badge{display:inline-block;font-family:var(--sans);font-weight:700;font-size:11px;letter-spacing:.24em;color:#fff;background:var(--ink);padding:7px 16px;border-radius:999px;margin-bottom:18px}
+  .coming p{color:var(--ink-2);font-size:15px;letter-spacing:.06em}
+  .sec-note{max-width:560px;color:var(--ink-2);font-size:17px;margin-bottom:26px}
+
   /* reveal */
   .reveal{opacity:0;transform:translateY(30px);transition:opacity .8s ease,transform .8s cubic-bezier(.2,.7,.2,1)}
   .reveal.in{opacity:1;transform:none}
@@ -307,10 +330,11 @@
     </a>
     <button class="nav-toggle" aria-label="メニュー" id="navToggle"><span></span><span></span><span></span></button>
     <nav class="menu" id="menu">
-      <a href="#philosophy">PHILOSOPHY</a>
       <a href="#business">BUSINESS</a>
-      <a href="#flow">FLOW</a>
+      <a href="#voice">VOICE</a>
+      <a href="#member">MEMBER</a>
       <a href="#profile">COMPANY</a>
+      <a href="#news">NEWS</a>
       <a href="#contact" class="btn">CONTACT</a>
     </nav>
   </div>
@@ -477,6 +501,78 @@
   </div>
 </section>
 
+<!-- ============ VOICE ============ -->
+<section id="voice">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="en-huge">VOICE</div>
+      <span class="label">お客様の声</span>
+    </div>
+    <p class="sec-note reveal">きざし屋と歩んだ方々の声を、事業ごとにご紹介します。</p>
+    <div class="reveal"><span class="sample-note">⚠ 以下はデモ用のサンプルです。本公開前に実際のお客様の声へ差し替えてください。</span></div>
+
+    <div class="voice-scroll reveal">
+      <!-- ライバーマネジメント -->
+      <article class="voice-card">
+        <div class="vimg"><span class="voice-sample">SAMPLE</span><span class="voice-biz">ライバーマネジメント</span>［ 配信の様子 ］</div>
+        <div class="vbody">
+          <span class="voice-badge">20代・女性・ライバー</span>
+          <h4>「一人だと続かなかった配信が、習慣になりました。」</h4>
+          <div class="voice-meta">みおさん（仮）／沖縄県在住</div>
+          <p>配信の始め方から方向性まで一緒に考えてもらえて、視聴者との関わり方が変わりました。今では毎週の配信が楽しみで、応援してくれる人も少しずつ増えています。</p>
+        </div>
+      </article>
+
+      <article class="voice-card">
+        <div class="vimg"><span class="voice-sample">SAMPLE</span><span class="voice-biz">ライバーマネジメント</span>［ 打ち合わせの様子 ］</div>
+        <div class="vbody">
+          <span class="voice-badge">30代・男性・副業配信者</span>
+          <h4>「"自分の魅力"を、言葉にしてもらえた。」</h4>
+          <div class="voice-meta">Kさん（仮）／東京都在住</div>
+          <p>何を強みにすればいいか分からなかった自分に、方向性とブランディングを丁寧に示してくれました。近くで伴走してもらえる安心感が、続けられる一番の理由です。</p>
+        </div>
+      </article>
+
+      <!-- 海外ブランドFC -->
+      <article class="voice-card">
+        <div class="vimg"><span class="voice-sample">SAMPLE</span><span class="voice-biz">海外ブランドFC</span>［ 商品・物流の様子 ］</div>
+        <div class="vbody">
+          <span class="voice-badge">40代・女性・BUYMA出品者</span>
+          <h4>「仕入れの不安がなくなり、売上が伸びました。」</h4>
+          <div class="voice-meta">Aさん（仮）／神奈川県在住</div>
+          <p>信頼できる仕入れ先を共有してもらえて、検品や発送まで一貫して任せられるので安心です。出品のコンサルも受けて、月の売上が大きく変わりました。</p>
+        </div>
+      </article>
+
+      <article class="voice-card">
+        <div class="vimg"><span class="voice-sample">SAMPLE</span><span class="voice-biz">海外ブランドFC</span>［ 買い付け・検品の様子 ］</div>
+        <div class="vbody">
+          <span class="voice-badge">30代・男性・物販事業者</span>
+          <h4>「卸価格の在庫で、利益率が安定しました。」</h4>
+          <div class="voice-meta">Tさん（仮）／大阪府在住</div>
+          <p>数億円規模の在庫から選べるので、扱える商品の幅が一気に広がりました。質問にもチャットですぐ答えてもらえて、初心者でも始めやすい環境だと感じています。</p>
+        </div>
+      </article>
+    </div>
+    <p class="voice-hint reveal">← 横スクロールでご覧いただけます →</p>
+  </div>
+</section>
+
+<!-- ============ MEMBER ============ -->
+<section id="member" style="background:var(--bg-soft)">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="en-huge">MEMBER</div>
+      <span class="label">メンバー紹介</span>
+    </div>
+    <p class="sec-note reveal">想いを持って伴走する、きざし屋のメンバーをご紹介します。</p>
+    <div class="coming reveal" style="background:#fff">
+      <span class="badge">COMING SOON</span>
+      <p>メンバー紹介は準備中です。近日公開いたします。</p>
+    </div>
+  </div>
+</section>
+
 <!-- ============ FLOW ============ -->
 <section id="flow">
   <div class="wrap">
@@ -542,6 +638,20 @@
   </div>
 </section>
 
+<!-- ============ NEWS ============ -->
+<section id="news">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="en-huge">NEWS</div>
+      <span class="label">お知らせ</span>
+    </div>
+    <div class="coming reveal">
+      <span class="badge">COMING SOON</span>
+      <p>お知らせは準備中です。近日公開いたします。</p>
+    </div>
+  </div>
+</section>
+
 <!-- ============ CONTACT ============ -->
 <section id="contact">
   <div class="wrap">
@@ -579,10 +689,11 @@
       </address>
     </div>
     <nav class="foot-nav">
-      <a href="#philosophy">PHILOSOPHY</a>
       <a href="#business">BUSINESS</a>
-      <a href="#flow">FLOW</a>
+      <a href="#voice">VOICE</a>
+      <a href="#member">MEMBER</a>
       <a href="#profile">COMPANY</a>
+      <a href="#news">NEWS</a>
       <a href="#contact">CONTACT</a>
     </nav>
   </div>
