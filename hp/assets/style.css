@@ -27,7 +27,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(255,255,2
 .menu a{font-family:var(--sans);font-weight:700;font-size:13px;letter-spacing:.12em;color:var(--ink);position:relative;padding:4px 0}
 .menu a:not(.btn)::after{content:"";position:absolute;left:0;bottom:-2px;width:0;height:1.5px;background:var(--ink);transition:width .25s}
 .menu a:not(.btn):hover::after,.menu a.active:not(.btn)::after{width:100%}
-.btn{background:var(--invert);color:var(--invert-ink);padding:11px 26px;border-radius:999px;font-family:var(--sans);font-weight:700;font-size:13px;letter-spacing:.12em;transition:opacity .2s}
+.btn,.menu a.btn{background:var(--invert);color:var(--invert-ink);padding:11px 26px;border-radius:999px;font-family:var(--sans);font-weight:700;font-size:13px;letter-spacing:.12em;transition:opacity .2s}
 .btn:hover{opacity:.82}
 .nav-toggle{display:none;background:none;border:0;flex-direction:column;gap:5px;cursor:pointer;padding:6px}
 .nav-toggle span{width:24px;height:2px;background:var(--ink);display:block}
