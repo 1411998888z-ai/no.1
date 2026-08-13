@@ -5,7 +5,10 @@
   --maxw:1180px;--pad:clamp(20px,5vw,64px);
   --sans:"Helvetica Neue",Arial,"Hiragino Kaku Gothic ProN","Yu Gothic",YuGothic,"Noto Sans JP",Meiryo,sans-serif;
   --jp:"Hiragino Kaku Gothic ProN","Yu Gothic",YuGothic,"Noto Sans JP",Meiryo,sans-serif;
+  --mincho:"Hiragino Mincho ProN","Hiragino Mincho Pro","YuMincho","Yu Mincho","MS PMincho","Noto Serif JP",serif;
 }
+/* 社名は明朝体で統一 */
+.corp{font-family:var(--mincho);font-feature-settings:"palt"}
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
 body{background:var(--bg);color:var(--ink);font-family:var(--jp);line-height:1.85;font-size:15px;letter-spacing:.02em;overflow-x:hidden}
