@@ -38,8 +38,8 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(255,255,2
   background:radial-gradient(circle,transparent 0 18%,var(--line) 18% calc(18% + 1px),transparent calc(18% + 1px) 34%,var(--line) 34% calc(34% + 1px),transparent calc(34% + 1px) 52%,var(--line) 52% calc(52% + 1px),transparent calc(52% + 1px) 72%,var(--line) 72% calc(72% + 1px),transparent calc(72% + 1px) 100%)}
 .hero-inner{position:relative;z-index:1}
 .hero-copy{max-width:760px}
-.hero .enso{position:absolute;top:50%;right:-6%;transform:translateY(-50%);width:min(680px,58vw);height:auto;z-index:0;pointer-events:none;opacity:.92;animation:ensoIn 1.2s ease both}
-@keyframes ensoIn{from{opacity:0;transform:translateY(-50%) rotate(-12deg) scale(.9)}to{opacity:.92;transform:translateY(-50%) rotate(0) scale(1)}}
+.hero .enso{position:absolute;top:50%;right:-6%;transform:translateY(-50%);width:min(680px,58vw);height:auto;z-index:0;pointer-events:none;opacity:.7;animation:ensoIn 1.2s ease both}
+@keyframes ensoIn{from{opacity:0;transform:translateY(-50%) rotate(-12deg) scale(.9)}to{opacity:.7;transform:translateY(-50%) rotate(0) scale(1)}}
 .hero h1{font-family:var(--jp);font-weight:800;font-size:clamp(34px,6.6vw,74px);line-height:1.28;letter-spacing:.02em;margin:22px 0 20px}
 .hero h1 .thin{color:var(--ink-2)}
 .hero .en-sub{font-family:var(--sans);font-weight:700;letter-spacing:.22em;font-size:clamp(12px,1.5vw,15px);color:var(--ink-2);text-transform:uppercase;margin-bottom:34px}
