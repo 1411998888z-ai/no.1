@@ -114,8 +114,9 @@ section{padding:clamp(64px,9vw,130px) 0}
 .biz-card .more{font-family:var(--sans);font-weight:700;letter-spacing:.1em;font-size:13px;display:inline-flex;align-items:center;gap:8px}
 
 /* Services (導入ツール) */
-.svc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
-.svc-card{border:1px solid var(--line);border-radius:14px;aspect-ratio:3/2;display:flex;align-items:center;justify-content:center;background:#fff;color:#c2c2bc;font-size:12px;font-family:var(--sans);letter-spacing:.12em;text-align:center;padding:14px}
+.svc-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:16px}
+.svc-card{border:1px solid var(--line);border-radius:14px;aspect-ratio:3/2;display:flex;align-items:center;justify-content:center;background:#fff;color:var(--ink);font-weight:800;font-size:15px;line-height:1.35;font-family:var(--sans);letter-spacing:.01em;text-align:center;padding:14px;transition:transform .25s ease,box-shadow .25s ease,border-color .25s}
+.svc-card:hover{transform:translateY(-4px);box-shadow:0 14px 30px rgba(0,0,0,.08);border-color:#cfcfca}
 
 /* Voice */
 .sample-note{display:inline-flex;align-items:center;gap:10px;background:#fff4d6;border:1px solid #f0dca0;color:#8a6d1a;border-radius:999px;padding:9px 18px;font-size:12.5px;font-weight:700;margin-bottom:24px;letter-spacing:.02em}
@@ -231,7 +232,8 @@ footer{background:#080808;color:#cfcfca;padding:clamp(50px,7vw,80px) 0 40px}
   .biz-grid{grid-template-columns:1fr}
   .biz-figure{order:-1}
   .biz-cards{grid-template-columns:1fr}
-  .svc-grid{grid-template-columns:1fr 1fr}
+  .svc-grid{grid-template-columns:1fr 1fr;gap:12px}
+  .svc-card{font-size:14px}
   .flow-grid{grid-template-columns:1fr}
   .contact-inner{grid-template-columns:1fr}
   .contact-right{text-align:left}
