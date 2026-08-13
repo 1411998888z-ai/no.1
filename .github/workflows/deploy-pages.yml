@@ -1,0 +1,39 @@
+name: Deploy きざし屋 HP to GitHub Pages
+
+# hp/ フォルダを GitHub Pages に公開するワークフロー。
+# main にマージすると自動デプロイ。手動実行(Run workflow)も可。
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'hp/**'
+      - '.github/workflows/deploy-pages.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+      - name: Upload hp/ as artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: hp
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
