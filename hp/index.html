@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>株式会社きざし屋 | 沖縄のライバーマネジメント・海外ブランドFC事業</title>
+<meta name="description" content="株式会社きざし屋は沖縄県沖縄市を拠点に、ライバーマネジメント事業・海外ブランドFC事業（B2B EC）を展開。関わるすべての人に良い兆しを届ける事業支援会社です。">
+<meta name="keywords" content="きざし屋,沖縄,ライバーマネジメント,海外ブランド,FC事業,BUYMA,事業支援,佐久田樹">
+<link rel="canonical" href="https://kizashi-ya.com/">
+<meta name="robots" content="index,follow">
+<meta name="theme-color" content="#ffffff">
+
+<!-- OGP -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="株式会社きざし屋">
+<meta property="og:title" content="株式会社きざし屋 | 関わるすべての人に良い兆しを">
+<meta property="og:description" content="沖縄を拠点にライバーマネジメント・海外ブランドFC事業を展開する事業支援会社。">
+<meta property="og:url" content="https://kizashi-ya.com/">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:image" content="https://kizashi-ya.com/ogp.png">
+<meta name="twitter:card" content="summary_large_image">
+
+<!-- 構造化データ (JSON-LD) -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "株式会社きざし屋",
+  "alternateName": "Kizashiya Inc.",
+  "url": "https://kizashi-ya.com/",
+  "slogan": "関わるすべての人に良い兆しを",
+  "foundingDate": "2026-03",
+  "founder": { "@type": "Person", "name": "佐久田 樹" },
+  "address": {
+    "@type": "PostalAddress",
+    "addressRegion": "沖縄県",
+    "addressLocality": "沖縄市",
+    "addressCountry": "JP"
+  },
+  "telephone": "+81-70-3803-3949",
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "telephone": "+81-70-3803-3949",
+    "contactType": "customer service",
+    "availableLanguage": "Japanese",
+    "hoursAvailable": "Mo-Fr 09:00-17:00"
+  }
+}
+</script>
+
+<style>
+  :root{
+    --bg:#ffffff;
+    --bg-soft:#f4f4f2;
+    --ink:#0e0e0e;
+    --ink-2:#4a4a4a;
+    --line:#e4e4e0;
+    --accent:#0e0e0e;
+    --invert:#0d0d0d;
+    --invert-ink:#f5f5f3;
+    --maxw:1180px;
+    --pad:clamp(20px,5vw,64px);
+    --sans:"Helvetica Neue",Arial,"Hiragino Kaku Gothic ProN","Yu Gothic",YuGothic,"Noto Sans JP",Meiryo,sans-serif;
+    --jp:"Hiragino Kaku Gothic ProN","Yu Gothic",YuGothic,"Noto Sans JP",Meiryo,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+  body{
+    background:var(--bg);color:var(--ink);
+    font-family:var(--jp);line-height:1.85;
+    font-size:15px;letter-spacing:.02em;
+    overflow-x:hidden;
+  }
+  img{max-width:100%;display:block}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding-left:var(--pad);padding-right:var(--pad)}
+
+  /* 英語極太見出し */
+  .en-huge{
+    font-family:var(--sans);font-weight:800;
+    letter-spacing:-.02em;line-height:.92;
+    font-size:clamp(52px,11vw,140px);
+    color:var(--ink);
+  }
+  .en-mid{
+    font-family:var(--sans);font-weight:800;
+    letter-spacing:-.01em;line-height:1;
+    font-size:clamp(34px,6vw,72px);
+  }
+  .label{
+    font-family:var(--sans);font-weight:700;
+    font-size:12px;letter-spacing:.28em;
+    color:var(--ink-2);text-transform:uppercase;
+    display:inline-flex;align-items:center;gap:14px;
+  }
+  .label::before{content:"";width:34px;height:1px;background:var(--ink)}
+
+  /* ===== Header ===== */
+  header{
+    position:fixed;top:0;left:0;right:0;z-index:100;
+    background:rgba(255,255,255,.86);backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav{
+    max-width:var(--maxw);margin:0 auto;
+    padding:16px var(--pad);
+    display:flex;align-items:center;justify-content:space-between;gap:24px;
+  }
+  .brand{display:flex;align-items:center;gap:11px;font-weight:800;font-size:19px;letter-spacing:.02em}
+  .brand .mark{width:30px;height:30px;flex:0 0 auto}
+  .menu{display:flex;align-items:center;gap:clamp(14px,2vw,30px)}
+  .menu a{font-family:var(--sans);font-weight:700;font-size:13px;letter-spacing:.12em;color:var(--ink);position:relative;padding:4px 0}
+  .menu a:not(.btn)::after{content:"";position:absolute;left:0;bottom:-2px;width:0;height:1.5px;background:var(--ink);transition:width .25s}
+  .menu a:not(.btn):hover::after{width:100%}
+  .btn{
+    background:var(--invert);color:var(--invert-ink);
+    padding:11px 26px;border-radius:999px;
+    font-family:var(--sans);font-weight:700;font-size:13px;letter-spacing:.12em;
+    transition:opacity .2s;
+  }
+  .btn:hover{opacity:.82}
+  .nav-toggle{display:none;background:none;border:0;flex-direction:column;gap:5px;cursor:pointer;padding:6px}
+  .nav-toggle span{width:24px;height:2px;background:var(--ink);display:block}
+
+  /* ===== Hero ===== */
+  .hero{
+    padding-top:clamp(140px,20vh,220px);padding-bottom:clamp(70px,10vw,130px);
+    position:relative;overflow:hidden;
+  }
+  .hero .rings{
+    position:absolute;top:-6%;right:-14%;width:min(760px,88vw);aspect-ratio:1;
+    border-radius:50%;pointer-events:none;z-index:0;opacity:.5;
+    animation:spin 70s linear infinite;
+    background:
+      radial-gradient(circle,transparent 0 18%,var(--line) 18% calc(18% + 1px),transparent calc(18% + 1px) 34%,var(--line) 34% calc(34% + 1px),transparent calc(34% + 1px) 52%,var(--line) 52% calc(52% + 1px),transparent calc(52% + 1px) 72%,var(--line) 72% calc(72% + 1px),transparent calc(72% + 1px) 100%);
+  }
+  .hero-inner{position:relative;z-index:1}
+  .hero h1{
+    font-family:var(--jp);font-weight:800;
+    font-size:clamp(34px,6.6vw,74px);line-height:1.28;letter-spacing:.02em;
+    margin:22px 0 20px;
+  }
+  .hero h1 .thin{color:var(--ink-2)}
+  .hero .en-sub{
+    font-family:var(--sans);font-weight:700;letter-spacing:.22em;
+    font-size:clamp(12px,1.5vw,15px);color:var(--ink-2);text-transform:uppercase;
+    margin-bottom:34px;
+  }
+  .hero .lead{max-width:560px;color:var(--ink-2);font-size:16px}
+  .hero-cta{margin-top:38px;display:flex;gap:14px;flex-wrap:wrap}
+  .cta-solid{background:var(--invert);color:var(--invert-ink);padding:15px 34px;border-radius:999px;font-family:var(--sans);font-weight:700;letter-spacing:.1em;font-size:14px;transition:opacity .2s}
+  .cta-solid:hover{opacity:.82}
+  .cta-ghost{border:1px solid var(--ink);padding:15px 34px;border-radius:999px;font-family:var(--sans);font-weight:700;letter-spacing:.1em;font-size:14px;transition:background .2s,color .2s}
+  .cta-ghost:hover{background:var(--ink);color:#fff}
+
+  /* section base */
+  section{padding:clamp(64px,9vw,130px) 0}
+  .sec-head{margin-bottom:clamp(34px,5vw,64px)}
+  .sec-head .en-huge{margin-bottom:18px}
+
+  /* ===== Philosophy ===== */
+  #philosophy{background:var(--bg-soft)}
+  .philo-lead{max-width:640px;color:var(--ink-2);font-size:17px;margin-bottom:8px}
+  .philo{display:flex;flex-direction:column;gap:0;margin-top:26px}
+  .philo-row{
+    display:grid;grid-template-columns:120px 1fr auto;gap:clamp(18px,4vw,54px);
+    align-items:start;padding:40px 0;border-top:1px solid var(--line);
+  }
+  .philo-row:last-child{border-bottom:1px solid var(--line)}
+  .philo-ico{width:64px;height:64px;color:var(--ink-2)}
+  .philo-row h3{font-size:clamp(22px,3vw,30px);font-weight:800;line-height:1.4;margin-bottom:14px}
+  .philo-row p{color:var(--ink-2);max-width:620px}
+  .philo-num{font-family:var(--sans);font-weight:800;font-size:clamp(46px,7vw,88px);color:#deded9;line-height:1}
+
+  /* ===== Business ===== */
+  .biz-intro{max-width:640px;color:var(--ink-2);font-size:17px;margin-bottom:8px}
+  .biz{border-top:1px solid var(--line);padding:clamp(46px,6vw,76px) 0}
+  .biz-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(28px,5vw,64px);align-items:center}
+  .biz-num{font-family:var(--sans);font-weight:700;font-size:14px;letter-spacing:.2em;color:var(--ink-2)}
+  .biz h3{font-size:clamp(26px,4vw,40px);font-weight:800;margin:14px 0 22px;line-height:1.3}
+  .biz .catch{font-weight:800;font-size:clamp(17px,2.2vw,21px);border-left:4px solid var(--ink);padding-left:14px;margin-bottom:22px;line-height:1.5}
+  .biz p{color:var(--ink-2);margin-bottom:24px}
+  .tags{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:26px}
+  .tag{border:1px solid var(--line);border-radius:999px;padding:8px 18px;font-size:13px;font-weight:700;color:var(--ink-2)}
+  .biz-en{font-family:var(--sans);font-weight:800;letter-spacing:-.01em;font-size:clamp(30px,4.4vw,56px);line-height:1;color:var(--ink);margin-bottom:22px;word-break:break-word}
+  .biz-figure{background:var(--bg-soft);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+  .biz-figure .ph{aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;color:#b7b7b1;font-size:13px;font-family:var(--sans);letter-spacing:.1em;text-align:center;padding:20px}
+  .biz-spec{width:100%;border-collapse:collapse;margin-top:2px}
+  .biz-spec th,.biz-spec td{text-align:left;padding:14px 4px;border-bottom:1px solid var(--line);font-size:14px;vertical-align:top}
+  .biz-spec th{width:120px;color:var(--ink-2);font-weight:700}
+
+  /* ===== Flow ===== */
+  #flow{background:var(--bg-soft)}
+  .flow-grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:clamp(28px,5vw,60px)}
+  .flow-lead h3{font-size:clamp(24px,3.2vw,34px);font-weight:800;margin-bottom:16px;line-height:1.4}
+  .flow-lead p{color:var(--ink-2);max-width:340px}
+  .flow-steps{display:flex;flex-direction:column;gap:20px}
+  .flow-card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:clamp(24px,3vw,36px)}
+  .flow-card .n{display:flex;align-items:baseline;gap:14px;margin-bottom:12px}
+  .flow-card .n b{font-family:var(--sans);font-weight:800;font-size:22px;letter-spacing:.05em}
+  .flow-card .n h4{font-size:clamp(18px,2.4vw,22px);font-weight:800}
+  .flow-card p{color:var(--ink-2)}
+
+  /* ===== Leadership ===== */
+  .lead-grid{display:grid;grid-template-columns:1fr;gap:26px;max-width:820px}
+  .lead-body p{margin-bottom:22px;font-size:16px}
+  .lead-sign{margin-top:16px;text-align:right}
+  .lead-sign .role{font-size:14px;color:var(--ink-2);font-weight:700;margin-right:16px}
+  .lead-sign .name{font-size:clamp(22px,3vw,30px);font-weight:800;letter-spacing:.06em}
+
+  /* ===== Profile ===== */
+  #profile{background:var(--invert);color:var(--invert-ink)}
+  #profile .en-huge{color:#fff}
+  #profile .label{color:#9a9a95}
+  #profile .label::before{background:#fff}
+  .prof-table{width:100%;border-collapse:collapse;margin-top:10px}
+  .prof-table th,.prof-table td{text-align:left;padding:22px 6px;border-bottom:1px solid #2a2a2a;font-size:15px;vertical-align:top}
+  .prof-table th{width:min(230px,32%);color:#a5a5a0;font-weight:700}
+
+  /* ===== Contact ===== */
+  #contact{background:var(--invert);color:var(--invert-ink);border-top:1px solid #242424;padding-top:0}
+  .contact-inner{display:grid;grid-template-columns:1fr auto;gap:40px;align-items:center;padding:clamp(60px,9vw,120px) 0}
+  #contact .en-huge{color:#fff}
+  #contact .label{color:#9a9a95}#contact .label::before{background:#fff}
+  .contact-right{text-align:right}
+  .contact-right p{color:#cfcfca;margin-bottom:24px;font-size:16px}
+  .contact-tel{font-family:var(--sans);font-weight:800;font-size:clamp(28px,4vw,44px);letter-spacing:.02em;color:#fff}
+  .contact-note{color:#8f8f8a;font-size:13px;margin-top:12px}
+  .arrow-link{display:inline-flex;align-items:center;gap:14px;margin-top:26px;font-family:var(--sans);font-weight:700;letter-spacing:.1em;font-size:14px;color:#fff}
+  .arrow-link .circle{width:56px;height:56px;border:1px solid #555;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:background .2s,color .2s}
+  .arrow-link:hover .circle{background:#fff;color:#000}
+
+  /* ===== Footer ===== */
+  footer{background:#080808;color:#cfcfca;padding:clamp(50px,7vw,80px) 0 40px}
+  .foot-grid{display:grid;grid-template-columns:1.4fr 1fr;gap:40px;align-items:start}
+  .foot-brand .brand{color:#fff;margin-bottom:20px}
+  .foot-brand address{font-style:normal;color:#9a9a95;font-size:14px;line-height:2}
+  .foot-nav{display:flex;flex-direction:column;gap:14px;text-align:right}
+  .foot-nav a{font-family:var(--sans);font-weight:700;letter-spacing:.12em;font-size:13px;color:#cfcfca;transition:color .2s}
+  .foot-nav a:hover{color:#fff}
+  .copy{margin-top:48px;padding-top:24px;border-top:1px solid #1e1e1e;color:#6f6f6a;font-size:12px;font-family:var(--sans);letter-spacing:.08em;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+
+  @keyframes spin{to{transform:rotate(360deg)}}
+
+  /* ===== Marquee (横に流れる) ===== */
+  .marquee{overflow:hidden;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:22px 0;background:var(--bg);position:relative}
+  .marquee-track{display:flex;width:max-content;animation:marquee 26s linear infinite}
+  .marquee:hover .marquee-track{animation-play-state:paused}
+  .marquee-item{font-family:var(--sans);font-weight:800;font-size:clamp(20px,3.2vw,40px);letter-spacing:-.01em;color:var(--ink);white-space:nowrap;display:inline-flex;align-items:center;gap:34px;padding-right:34px}
+  .marquee-item::after{content:"";width:12px;height:12px;border-radius:50%;background:var(--ink);flex:0 0 auto;opacity:.25}
+  .marquee.rev .marquee-track{animation-direction:reverse}
+  @keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+  /* 画像ホバーの動き */
+  .biz-figure{overflow:hidden}
+  .biz-figure .ph,.biz-figure img{transition:transform .7s cubic-bezier(.2,.7,.2,1)}
+  .biz-figure:hover .ph,.biz-figure:hover img{transform:scale(1.06)}
+
+  /* reveal */
+  .reveal{opacity:0;transform:translateY(30px);transition:opacity .8s ease,transform .8s cubic-bezier(.2,.7,.2,1)}
+  .reveal.in{opacity:1;transform:none}
+  /* 大見出しは横から */
+  .sec-head .en-huge,.sec-head .en-mid{display:block;transform:translateX(-30px);opacity:0;transition:opacity .9s ease,transform .9s cubic-bezier(.2,.7,.2,1)}
+  .sec-head.in .en-huge,.sec-head.in .en-mid{transform:none;opacity:1}
+  .sec-head.in .label{transition-delay:.15s}
+  /* 子要素をずらして出す */
+  .stagger>.reveal.in:nth-child(1){transition-delay:.05s}
+  .stagger>.reveal.in:nth-child(2){transition-delay:.15s}
+  .stagger>.reveal.in:nth-child(3){transition-delay:.25s}
+
+  /* ===== Responsive ===== */
+  @media(max-width:860px){
+    .menu{display:none}
+    .nav-toggle{display:flex}
+    .menu.open{display:flex;position:absolute;top:100%;left:0;right:0;background:#fff;flex-direction:column;align-items:flex-start;gap:18px;padding:22px var(--pad);border-bottom:1px solid var(--line)}
+    .philo-row{grid-template-columns:1fr;gap:10px}
+    .philo-num{grid-row:1;justify-self:start}
+    .philo-ico{display:none}
+    .biz-grid{grid-template-columns:1fr}
+    .biz-figure{order:-1}
+    .flow-grid{grid-template-columns:1fr}
+    .contact-inner{grid-template-columns:1fr}
+    .contact-right{text-align:left}
+    .foot-grid{grid-template-columns:1fr}
+    .foot-nav{text-align:left}
+  }
+  @media(prefers-reduced-motion:reduce){
+    .reveal{transition:none;opacity:1;transform:none}
+    .sec-head .en-huge,.sec-head .en-mid{transform:none;opacity:1;transition:none}
+    .marquee-track{animation:none}
+    .hero .rings{animation:none}
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ HEADER ============ -->
+<header>
+  <div class="nav">
+    <a href="#top" class="brand" aria-label="株式会社きざし屋">
+      <svg class="mark" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+        <rect x="1" y="1" width="38" height="38" rx="9" stroke="currentColor" stroke-width="2"/>
+        <path d="M11 27c4-1 6-4 6-9 0 5 2 8 6 9M11 13c4 1 6 4 6 9 0-5 2-8 6-9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        <circle cx="20" cy="22" r="2.4" fill="currentColor"/>
+      </svg>
+      きざし屋
+    </a>
+    <button class="nav-toggle" aria-label="メニュー" id="navToggle"><span></span><span></span><span></span></button>
+    <nav class="menu" id="menu">
+      <a href="#philosophy">PHILOSOPHY</a>
+      <a href="#business">BUSINESS</a>
+      <a href="#flow">FLOW</a>
+      <a href="#profile">COMPANY</a>
+      <a href="#contact" class="btn">CONTACT</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="rings" aria-hidden="true"></div>
+  <div class="wrap hero-inner">
+    <span class="label">株式会社きざし屋</span>
+    <h1>関わるすべての人に、<br><span class="thin">良い</span>兆<span class="thin">しを。</span></h1>
+    <p class="en-sub">For Those Who Follow Their Calling.</p>
+    <p class="lead">沖縄を拠点に、ライバーマネジメントと海外ブランドFC事業を展開。一人ひとりの可能性を信じ、想いの「断片」から一緒にかたちにしていく事業支援会社です。</p>
+    <div class="hero-cta">
+      <a href="#business" class="cta-solid">事業を見る</a>
+      <a href="#contact" class="cta-ghost">お問い合わせ</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MARQUEE ============ -->
+<div class="marquee" aria-hidden="true">
+  <div class="marquee-track">
+    <span class="marquee-item">LIVER MANAGEMENT</span>
+    <span class="marquee-item">BRAND SOURCING</span>
+    <span class="marquee-item">良い兆しを</span>
+    <span class="marquee-item">OKINAWA</span>
+    <span class="marquee-item">事業支援</span>
+    <span class="marquee-item">FOR YOUR CALLING</span>
+    <span class="marquee-item">LIVER MANAGEMENT</span>
+    <span class="marquee-item">BRAND SOURCING</span>
+    <span class="marquee-item">良い兆しを</span>
+    <span class="marquee-item">OKINAWA</span>
+    <span class="marquee-item">事業支援</span>
+    <span class="marquee-item">FOR YOUR CALLING</span>
+  </div>
+</div>
+
+<!-- ============ PHILOSOPHY ============ -->
+<section id="philosophy">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="en-huge">PHILOSOPHY</div>
+      <span class="label">私たちの信念</span>
+    </div>
+    <p class="philo-lead reveal">「兆し」とは、良いことが起こる前ぶれ。私たちは、関わるすべての人の可能性の中に眠る"兆し"を見つけ、価値に変えていくことを使命としています。</p>
+
+    <div class="philo">
+      <div class="philo-row reveal">
+        <div class="philo-num">01</div>
+        <div>
+          <h3>関わるすべての人に、良い兆しを。</h3>
+          <p>お客様、パートナー、そして働く仲間まで。私たちに関わるすべての人にとって、次の一歩がより良いものになるように。人と人とのつながりの中に、新しい可能性の兆しを生み出します。</p>
+        </div>
+        <svg class="philo-ico" viewBox="0 0 48 48" fill="none" aria-hidden="true"><path d="M24 6v8M24 34v8M6 24h8M34 24h8M11 11l6 6M31 31l6 6M37 11l-6 6M17 31l-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="24" cy="24" r="5" stroke="currentColor" stroke-width="2"/></svg>
+      </div>
+
+      <div class="philo-row reveal">
+        <div class="philo-num">02</div>
+        <div>
+          <h3>一人ひとりの可能性を、価値に変える。</h3>
+          <p>経験や個性、これまでの歩みは、すべてが価値になり得ます。ライブ配信でも、モノを扱うビジネスでも、その人らしさが強みとして活きる環境と仕組みを整えます。</p>
+        </div>
+        <svg class="philo-ico" viewBox="0 0 48 48" fill="none" aria-hidden="true"><path d="M10 38l8-14 8 8 12-22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M32 10h6v6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+
+      <div class="philo-row reveal">
+        <div class="philo-num">03</div>
+        <div>
+          <h3>「断片」から始める、伴走型の支援。</h3>
+          <p>やりたいことは、まだ言葉にならない「断片」で構いません。ヒアリングから設計、実行、改善まで。一時的な成果で終わらせず、続けられる仕組みを一緒につくり、成果まで伴走します。</p>
+        </div>
+        <svg class="philo-ico" viewBox="0 0 48 48" fill="none" aria-hidden="true"><circle cx="24" cy="24" r="16" stroke="currentColor" stroke-width="2"/><circle cx="24" cy="24" r="7" stroke="currentColor" stroke-width="2"/><path d="M24 4v6M24 38v6M4 24h6M38 24h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ BUSINESS ============ -->
+<section id="business">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="en-huge">BUSINESS</div>
+      <span class="label">事業内容</span>
+    </div>
+    <p class="biz-intro reveal">私たちは「人の可能性を、かたちにする」をテーマに、ライブ配信と越境ECの領域で事業を展開しています。</p>
+  </div>
+
+  <div class="marquee rev" aria-hidden="true" style="margin:34px 0 0">
+    <div class="marquee-track">
+      <span class="marquee-item">Liver Management</span>
+      <span class="marquee-item">Brand Sourcing</span>
+      <span class="marquee-item">配信サポート</span>
+      <span class="marquee-item">海外ブランドFC</span>
+      <span class="marquee-item">BUYMA SUPPORT</span>
+      <span class="marquee-item">Liver Management</span>
+      <span class="marquee-item">Brand Sourcing</span>
+      <span class="marquee-item">配信サポート</span>
+      <span class="marquee-item">海外ブランドFC</span>
+      <span class="marquee-item">BUYMA SUPPORT</span>
+    </div>
+  </div>
+
+  <div class="wrap">
+
+    <!-- 01 ライバーマネジメント -->
+    <div class="biz reveal">
+      <div class="biz-grid">
+        <div>
+          <span class="biz-num">01 / LIVER MANAGEMENT</span>
+          <h3>ライバーマネジメント事業</h3>
+          <p class="catch">配信を、続けられる仕組みに。</p>
+          <p>ライブ配信を通じて活動するライバーのサポート・マネジメントを行っています。配信の始め方やコンテンツの方向性、SNS運用のアドバイスを通して、ライバー一人ひとりの魅力や個性がより多くの人に届くよう支援。安心して活動でき、継続的に成長していけるサポート体制を大切にしています。配信活動のサポートからブランディングまで、一人ひとりの未来の可能性を広げていきます。</p>
+          <div class="tags">
+            <span class="tag">配信の始め方</span>
+            <span class="tag">コンテンツ設計</span>
+            <span class="tag">SNS運用アドバイス</span>
+            <span class="tag">ブランディング</span>
+          </div>
+        </div>
+        <div>
+          <div class="biz-en">Liver<br>Management</div>
+          <div class="biz-figure"><div class="ph">［ 配信・ライバー活動の写真 ］</div></div>
+          <table class="biz-spec">
+            <tr><th>対象</th><td>これから配信を始める方・活動中のライバー</td></tr>
+            <tr><th>提供形態</th><td>継続サポート・マネジメント</td></tr>
+            <tr><th>対応領域</th><td>配信設計・運用・ブランディング</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- 02 海外ブランドFC -->
+    <div class="biz reveal">
+      <div class="biz-grid">
+        <div>
+          <span class="biz-num">02 / B2B EC</span>
+          <h3>海外ブランドFC事業</h3>
+          <p class="catch">確かな仕入れを、あなたのビジネスに。</p>
+          <p>BUYMAをはじめとする海外ブランド販売の売上向上に向けて、仕入先の提供とサポートを行っています。仕入先の共有、会員限定サイトの共有、チャットワークでの質問対応まで、一貫してサポート。国内・国外の在庫を合わせて数億円規模のハイブランドを卸価格でご提供し、仕入れ開拓から買い付け、検品・梱包・発送まで自社で一貫対応。出品を通じて売上を伸ばすコンサルティングも行っています。</p>
+          <div class="tags">
+            <span class="tag">仕入先の提供</span>
+            <span class="tag">会員限定サイト</span>
+            <span class="tag">一貫対応</span>
+            <span class="tag">出品コンサル</span>
+          </div>
+          <table class="biz-spec" style="max-width:520px">
+            <tr><th>仕入れ元</th><td>国内直営店仕入れ／海外セレクトショップVIP仕入れ／海外アウトレット仕入れ／直営店直送仕入れ／海外バイヤー買い付け仕入れ</td></tr>
+          </table>
+        </div>
+        <div>
+          <div class="biz-en">Brand<br>Sourcing</div>
+          <div class="biz-figure"><div class="ph">［ ハイブランド・物流の写真 ］</div></div>
+          <table class="biz-spec">
+            <tr><th>対象</th><td>BUYMA等で販売する事業者・バイヤー</td></tr>
+            <tr><th>提供形態</th><td>仕入先提供・サポート・コンサル</td></tr>
+            <tr><th>対応領域</th><td>仕入れ開拓〜買付〜検品梱包発送</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FLOW ============ -->
+<section id="flow">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="en-huge">FLOW</div>
+      <span class="label">ご依頼の流れ</span>
+    </div>
+    <div class="flow-grid">
+      <div class="flow-lead reveal">
+        <h3>完成までの道のり。</h3>
+        <p>ヒアリングから納品までの基本的な流れをご紹介します。プロジェクトの規模や内容に合わせて、柔軟にプランニングいたします。</p>
+      </div>
+      <div class="flow-steps">
+        <div class="flow-card reveal">
+          <div class="n"><b>01</b><h4>お問い合わせ・ヒアリング</h4></div>
+          <p>まずはコンタクトフォームよりお気軽にご相談ください。やりたいことの「断片」で構いません。オンラインまたは対面にて、想いや課題を丁寧にお伺いします。</p>
+        </div>
+        <div class="flow-card reveal">
+          <div class="n"><b>02</b><h4>ご提案・お見積もり</h4></div>
+          <p>ヒアリングに基づき、プロジェクトの設計図（プラン）と費用をご提案します。内容にご納得いただいたうえで、プロジェクトを開始します。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ LEADERSHIP ============ -->
+<section id="leadership">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="en-mid">LEADERSHIP</div>
+      <span class="label">代表紹介</span>
+    </div>
+    <div class="lead-grid reveal">
+      <div class="lead-body">
+        <p>人にはそれぞれ、まだ気づかれていない可能性があります。ほんの小さなきっかけ――「兆し」を見つけて育てることで、その人の人生の選択肢は大きく広がっていく。私たちはそう信じています。</p>
+        <p>きざし屋が大切にしているのは、ノウハウを渡して終わりにしないこと。一人ひとりの状況に寄り添い、想いの断片から一緒にかたちを描き、成果が出るまで伴走します。ライブ配信で自分の魅力を届けられるようになる人、確かな仕入れを手にビジネスを伸ばす人。そうした変化の瞬間に立ち会えることが、私たちの何よりの喜びです。</p>
+        <p>関わるすべての人に、良い兆しを。きざし屋は、その一歩をあなたと共に踏み出します。</p>
+      </div>
+      <div class="lead-sign">
+        <span class="role">株式会社きざし屋 代表</span>
+        <span class="name">佐久田 樹</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CORPORATE PROFILE ============ -->
+<section id="profile">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="en-huge">COMPANY</div>
+      <span class="label">会社概要</span>
+    </div>
+    <table class="prof-table reveal">
+      <tr><th>会社名</th><td>株式会社きざし屋</td></tr>
+      <tr><th>代表</th><td>佐久田 樹</td></tr>
+      <tr><th>所在地</th><td>沖縄県 沖縄市</td></tr>
+      <tr><th>設立</th><td>2026年3月</td></tr>
+      <tr><th>電話番号</th><td>070-3803-3949（受付 9:00〜17:00）</td></tr>
+      <tr><th>事業内容</th><td>ライバーマネジメント事業／海外ブランドFC事業（B2B EC）</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ============ CONTACT ============ -->
+<section id="contact">
+  <div class="wrap">
+    <div class="contact-inner">
+      <div class="reveal">
+        <div class="en-huge">CONTACT</div>
+        <span class="label">お問い合わせ</span>
+      </div>
+      <div class="contact-right reveal">
+        <p>お問い合わせ・お見積もりはお気軽にご連絡ください。通常2日以内に返信いたします（稼働状況によりお時間をいただく場合がございます）。</p>
+        <a class="contact-tel" href="tel:07038033949">070-3803-3949</a>
+        <p class="contact-note">受付時間 9:00〜17:00</p>
+        <a href="tel:07038033949" class="arrow-link">お電話でのご相談 <span class="circle" aria-hidden="true">→</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="wrap foot-grid">
+    <div class="foot-brand">
+      <div class="brand">
+        <svg class="mark" viewBox="0 0 40 40" fill="none" aria-hidden="true" style="width:28px;height:28px">
+          <rect x="1" y="1" width="38" height="38" rx="9" stroke="currentColor" stroke-width="2"/>
+          <path d="M11 27c4-1 6-4 6-9 0 5 2 8 6 9M11 13c4 1 6 4 6 9 0-5 2-8 6-9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <circle cx="20" cy="22" r="2.4" fill="currentColor"/>
+        </svg>
+        きざし屋
+      </div>
+      <address>
+        沖縄県 沖縄市<br>
+        TEL：070-3803-3949（受付 9:00〜17:00）
+      </address>
+    </div>
+    <nav class="foot-nav">
+      <a href="#philosophy">PHILOSOPHY</a>
+      <a href="#business">BUSINESS</a>
+      <a href="#flow">FLOW</a>
+      <a href="#profile">COMPANY</a>
+      <a href="#contact">CONTACT</a>
+    </nav>
+  </div>
+  <div class="wrap copy">
+    <span>&copy; 2026 株式会社きざし屋</span>
+    <span>関わるすべての人に、良い兆しを。</span>
+  </div>
+</footer>
+
+<script>
+  // モバイルメニュー
+  var t=document.getElementById('navToggle'),m=document.getElementById('menu');
+  t&&t.addEventListener('click',function(){m.classList.toggle('open')});
+  m&&m.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){m.classList.remove('open')})});
+  // スクロール表示
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.12});
+  document.querySelectorAll('.reveal').forEach(function(el){io.observe(el)});
+</script>
+</body>
+</html>
