@@ -115,8 +115,10 @@ section{padding:clamp(64px,9vw,130px) 0}
 
 /* Services (導入ツール) */
 .svc-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:16px}
-.svc-card{border:1px solid var(--line);border-radius:14px;aspect-ratio:3/2;display:flex;align-items:center;justify-content:center;background:#fff;color:var(--ink);font-weight:800;font-size:15px;line-height:1.35;font-family:var(--sans);letter-spacing:.01em;text-align:center;padding:14px;transition:transform .25s ease,box-shadow .25s ease,border-color .25s}
+.svc-card{border:1px solid var(--line);border-radius:14px;aspect-ratio:3/2;display:flex;align-items:center;justify-content:center;background:#fff;color:var(--ink);font-weight:800;font-size:15px;line-height:1.35;font-family:var(--sans);letter-spacing:.01em;text-align:center;padding:18px;transition:transform .25s ease,box-shadow .25s ease,border-color .25s}
 .svc-card:hover{transform:translateY(-4px);box-shadow:0 14px 30px rgba(0,0,0,.08);border-color:#cfcfca}
+.svc-card img{max-width:80%;max-height:60%;width:auto;height:auto;object-fit:contain;display:block}
+.svc-card .svc-txt{display:none}
 
 /* Voice */
 .sample-note{display:inline-flex;align-items:center;gap:10px;background:#fff4d6;border:1px solid #f0dca0;color:#8a6d1a;border-radius:999px;padding:9px 18px;font-size:12.5px;font-weight:700;margin-bottom:24px;letter-spacing:.02em}
