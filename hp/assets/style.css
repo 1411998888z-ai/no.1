@@ -72,6 +72,16 @@ section{padding:clamp(64px,9vw,130px) 0}
 .marquee.rev .marquee-track{animation-direction:reverse}
 @keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
+/* Photo marquee (流れる画像) */
+.photo-marquee{overflow:hidden;padding:6px 0}
+.photo-track{display:flex;gap:16px;width:max-content;animation:marquee 48s linear infinite}
+.photo-marquee.rev .photo-track{animation-direction:reverse}
+.photo-marquee:hover .photo-track{animation-play-state:paused}
+.photo-item{flex:0 0 auto;width:clamp(230px,26vw,340px);aspect-ratio:4/3;border-radius:14px;overflow:hidden;background:var(--bg-soft);border:1px solid var(--line)}
+.photo-item img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s ease}
+.photo-item:hover img{transform:scale(1.05)}
+@media(prefers-reduced-motion:reduce){.photo-track{animation:none}}
+
 /* Philosophy */
 .philo-lead{max-width:640px;color:var(--ink-2);font-size:17px;margin-bottom:8px}
 .philo{display:flex;flex-direction:column;margin-top:26px}
