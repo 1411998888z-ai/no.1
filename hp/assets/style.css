@@ -117,10 +117,10 @@ section{padding:clamp(64px,9vw,130px) 0}
 .svc-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:16px}
 .svc-card{border:1px solid var(--line);border-radius:14px;aspect-ratio:3/2;display:flex;align-items:center;justify-content:center;background:#fff;color:var(--ink);font-weight:800;font-size:15px;line-height:1.35;font-family:var(--sans);letter-spacing:.01em;text-align:center;padding:18px;transition:transform .25s ease,box-shadow .25s ease,border-color .25s}
 .svc-card:hover{transform:translateY(-4px);box-shadow:0 14px 30px rgba(0,0,0,.08);border-color:#cfcfca}
-.svc-card img{max-width:82%;max-height:52%;width:auto;height:auto;object-fit:contain;display:block}
-.svc-card[aria-label="MOSH"] img{max-height:66%}
+.svc-card img{max-width:80%;max-height:46%;width:auto;height:auto;object-fit:contain;display:block;opacity:.82;transition:opacity .25s ease}
+.svc-card:hover img{opacity:1}
+.svc-card[aria-label="MOSH"] img{max-height:64%}
 .svc-card[aria-label="GMOグローバルサイン"] img{max-height:70%}
-.svc-card[aria-label="stripe"] img{max-height:44%}
 .svc-card .svc-txt{display:none}
 
 /* Voice */
