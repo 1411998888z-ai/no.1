@@ -36,7 +36,9 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(255,255,2
 .hero{padding-top:clamp(140px,20vh,220px);padding-bottom:clamp(70px,10vw,130px);position:relative;overflow:hidden}
 .rings{position:absolute;top:-6%;right:-14%;width:min(760px,88vw);aspect-ratio:1;border-radius:50%;pointer-events:none;z-index:0;opacity:.5;animation:spin 70s linear infinite;
   background:radial-gradient(circle,transparent 0 18%,var(--line) 18% calc(18% + 1px),transparent calc(18% + 1px) 34%,var(--line) 34% calc(34% + 1px),transparent calc(34% + 1px) 52%,var(--line) 52% calc(52% + 1px),transparent calc(52% + 1px) 72%,var(--line) 72% calc(72% + 1px),transparent calc(72% + 1px) 100%)}
-.hero-inner{position:relative;z-index:1}
+.hero-inner{position:relative;z-index:1;display:grid;grid-template-columns:1.06fr .94fr;gap:clamp(30px,5vw,64px);align-items:center}
+.hero-visual{border-radius:18px;overflow:hidden;border:1px solid var(--line);aspect-ratio:5/6;background:var(--bg-soft)}
+.hero-visual img{width:100%;height:100%;object-fit:cover;display:block}
 .hero h1{font-family:var(--jp);font-weight:800;font-size:clamp(34px,6.6vw,74px);line-height:1.28;letter-spacing:.02em;margin:22px 0 20px}
 .hero h1 .thin{color:var(--ink-2)}
 .hero .en-sub{font-family:var(--sans);font-weight:700;letter-spacing:.22em;font-size:clamp(12px,1.5vw,15px);color:var(--ink-2);text-transform:uppercase;margin-bottom:34px}
@@ -91,9 +93,8 @@ section{padding:clamp(64px,9vw,130px) 0}
 .tag{border:1px solid var(--line);border-radius:999px;padding:8px 18px;font-size:13px;font-weight:700;color:var(--ink-2)}
 .biz-en{font-family:var(--sans);font-weight:800;letter-spacing:-.01em;font-size:clamp(30px,4.4vw,56px);line-height:1;color:var(--ink);margin-bottom:22px;word-break:break-word}
 .biz-figure{background:var(--bg-soft);border:1px solid var(--line);border-radius:14px;overflow:hidden}
-.biz-figure .ph{aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;color:#b7b7b1;font-size:13px;font-family:var(--sans);letter-spacing:.1em;text-align:center;padding:20px;transition:transform .7s cubic-bezier(.2,.7,.2,1)}
-.biz-figure:hover .ph,.biz-figure:hover img{transform:scale(1.06)}
-.biz-figure img{transition:transform .7s cubic-bezier(.2,.7,.2,1)}
+.biz-figure img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;transition:transform .7s cubic-bezier(.2,.7,.2,1)}
+.biz-figure:hover img{transform:scale(1.06)}
 .biz-spec{width:100%;border-collapse:collapse;margin-top:2px}
 .biz-spec th,.biz-spec td{text-align:left;padding:14px 4px;border-bottom:1px solid var(--line);font-size:14px;vertical-align:top}
 .biz-spec th{width:120px;color:var(--ink-2);font-weight:700}
@@ -102,7 +103,9 @@ section{padding:clamp(64px,9vw,130px) 0}
 .biz-cards{display:grid;grid-template-columns:1fr 1fr;gap:22px}
 .biz-card{position:relative;border:1px solid var(--line);border-radius:16px;overflow:hidden;background:#fff;transition:transform .3s ease,box-shadow .3s ease;display:block}
 .biz-card:hover{transform:translateY(-4px);box-shadow:0 18px 40px rgba(0,0,0,.07)}
-.biz-card .cimg{aspect-ratio:16/10;background:var(--bg-soft);display:flex;align-items:center;justify-content:center;color:#b7b7b1;font-size:12px;letter-spacing:.1em;font-family:var(--sans)}
+.biz-card .cimg{aspect-ratio:16/10;background:var(--bg-soft);overflow:hidden}
+.biz-card .cimg img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s cubic-bezier(.2,.7,.2,1)}
+.biz-card:hover .cimg img{transform:scale(1.05)}
 .biz-card .cbody{padding:26px 26px 30px}
 .biz-card .cnum{font-family:var(--sans);font-weight:700;font-size:13px;letter-spacing:.2em;color:var(--ink-2)}
 .biz-card h3{font-size:clamp(20px,2.6vw,26px);font-weight:800;margin:10px 0 10px}
@@ -120,7 +123,8 @@ section{padding:clamp(64px,9vw,130px) 0}
 .voice-scroll::-webkit-scrollbar-track{background:transparent}
 .voice-scroll::-webkit-scrollbar-thumb{background:#d5d5d0;border-radius:3px}
 .voice-card{flex:0 0 min(345px,82vw);scroll-snap-align:start;background:#fff;border:1px solid var(--line);border-radius:16px;overflow:hidden;display:flex;flex-direction:column}
-.voice-card .vimg{aspect-ratio:16/10;background:var(--bg-soft);display:flex;align-items:center;justify-content:center;color:#b7b7b1;font-size:12px;font-family:var(--sans);letter-spacing:.1em;position:relative;overflow:hidden}
+.voice-card .vimg{aspect-ratio:16/10;background:var(--bg-soft);position:relative;overflow:hidden}
+.voice-card .vimg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .voice-sample{position:absolute;top:12px;left:12px;background:rgba(14,14,14,.78);color:#fff;font-family:var(--sans);font-weight:700;font-size:10px;letter-spacing:.18em;padding:5px 10px;border-radius:6px}
 .voice-biz{position:absolute;bottom:12px;right:12px;background:#fff;color:var(--ink);font-size:11px;font-weight:700;padding:5px 12px;border-radius:999px;border:1px solid var(--line)}
 .voice-card .vbody{padding:24px 22px 28px;display:flex;flex-direction:column}
@@ -148,7 +152,13 @@ section{padding:clamp(64px,9vw,130px) 0}
 .flow-card p{color:var(--ink-2)}
 
 /* Leadership */
-.lead-grid{display:grid;grid-template-columns:1fr;gap:26px;max-width:820px}
+.lead-grid{display:grid;grid-template-columns:.78fr 1.22fr;gap:clamp(28px,4vw,54px);max-width:980px;align-items:start}
+.lead-portrait{border:1px solid var(--line);border-radius:16px;overflow:hidden;aspect-ratio:4/5;background:var(--bg-soft)}
+.lead-portrait img{width:100%;height:100%;object-fit:cover;display:block}
+.lead-solo{grid-template-columns:1fr;max-width:820px}
+/* Member visual */
+.member-visual{border:1px solid var(--line);border-radius:16px;overflow:hidden;margin-bottom:30px;aspect-ratio:21/9;background:var(--bg-soft)}
+.member-visual img{width:100%;height:100%;object-fit:cover;display:block}
 .lead-body p{margin-bottom:22px;font-size:16px}
 .lead-sign{margin-top:16px;text-align:right}
 .lead-sign .role{font-size:14px;color:var(--ink-2);font-weight:700;margin-right:16px}
@@ -214,6 +224,10 @@ footer{background:#080808;color:#cfcfca;padding:clamp(50px,7vw,80px) 0 40px}
   .philo-row{grid-template-columns:1fr;gap:10px}
   .philo-num{grid-row:1;justify-self:start}
   .philo-ico{display:none}
+  .hero-inner{grid-template-columns:1fr}
+  .hero-visual{display:none}
+  .lead-grid{grid-template-columns:1fr}
+  .lead-portrait{max-width:280px}
   .biz-grid{grid-template-columns:1fr}
   .biz-figure{order:-1}
   .biz-cards{grid-template-columns:1fr}

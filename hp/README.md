@@ -28,3 +28,13 @@ FrastoLink型の構成をベースに、きざし屋の実情報で作成した�
 - MEMBER / NEWS … 内容（現在「準備中」）
 - 写真素材 / ロゴ画像 / OGP画像(ogp.png) / メールアドレス
 - お問い合わせフォームの送信先連携（Formspree等のフォームサービス接続）
+
+## 画像の差し替え方法
+`assets/img/` にオンブランドのSVGプレースホルダーを配置済み（人物・事業イメージ）。
+実写に差し替えるには、同名で画像を置く or `<img src>` を実写ファイルに変更するだけ。
+- hero.svg … TOPヒーロー右のビジュアル
+- leader.svg … 代表ポートレート（company.html）
+- team.svg … メンバー集合写真（member.html）
+- portrait-1〜4.svg … お客様の声の人物写真（business.html／※本公開前に実際の声・写真へ差し替え）
+- biz-liver / biz-brand / biz-marketing / biz-insidesales.svg … 各事業のイメージ
+推奨：実写JPG/WebPを `assets/img/` に入れ、拡張子に合わせて src を変更（例 hero.jpg）。
