@@ -17,6 +17,7 @@
     --done: #3e7a5e;
     --done-soft: #e2efe8;
     --danger: #a3423a;
+    --danger-soft: #f6e4e1;
     --shadow: 0 1px 2px rgba(23, 26, 33, .06), 0 8px 24px -12px rgba(23, 26, 33, .18);
     --font-ui: "Zen Kaku Gothic New", -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif;
     --font-display: "Zen Old Mincho", "Hiragino Mincho ProN", "Yu Mincho", serif;
@@ -38,6 +39,7 @@
       --done: #6fb894;
       --done-soft: #1c2d26;
       --danger: #e08d84;
+      --danger-soft: #34211f;
       --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 10px 28px -14px rgba(0, 0, 0, .7);
     }
   }
@@ -56,6 +58,7 @@
     --done: #6fb894;
     --done-soft: #1c2d26;
     --danger: #e08d84;
+    --danger-soft: #34211f;
     --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 10px 28px -14px rgba(0, 0, 0, .7);
   }
 
@@ -150,15 +153,45 @@
     border-top: 1px solid var(--line-soft);
     padding-top: 11px;
   }
-  .hint { margin: 0; font-size: 12px; color: var(--ink-3); }
-  .hint kbd {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    border: 1px solid var(--line);
-    border-radius: 4px;
-    padding: 1px 4px;
-    color: var(--ink-2);
+  .urgent-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    min-height: 44px;
+    padding-right: 6px;
+    cursor: pointer;
+    position: relative;
+    -webkit-tap-highlight-color: transparent;
   }
+  .urgent-toggle input {
+    position: absolute;
+    width: 1px; height: 1px;
+    opacity: 0;
+    margin: 0;
+  }
+  .urgent-toggle .box {
+    width: 22px; height: 22px;
+    flex: none;
+    border: 1.8px solid var(--ink-3);
+    border-radius: 6px;
+    display: grid; place-items: center;
+    transition: border-color .15s ease, background .15s ease;
+  }
+  .urgent-toggle .box svg { width: 13px; height: 13px; display: block; }
+  .urgent-toggle .box svg path { stroke: transparent; }
+  .urgent-toggle:hover .box { border-color: var(--danger); }
+  .urgent-toggle .text {
+    font-size: 14.5px;
+    color: var(--ink-2);
+    letter-spacing: .04em;
+  }
+  #urgent-flag:checked + .box {
+    background: var(--danger);
+    border-color: var(--danger);
+  }
+  #urgent-flag:checked + .box svg path { stroke: var(--accent-ink); }
+  #urgent-flag:checked ~ .text { color: var(--danger); font-weight: 700; }
+  #urgent-flag:focus-visible + .box { outline: 2px solid var(--accent); outline-offset: 2px; }
   #add-btn {
     flex: none;
     min-height: 44px;
@@ -227,6 +260,8 @@
     border-bottom: 1px solid var(--line-soft);
   }
   .task:last-child { border-bottom: 0; }
+  .task.is-urgent { box-shadow: inset 3px 0 0 var(--danger); }
+  .task.is-urgent.is-done { box-shadow: none; }
   .task.enter { animation: rise .22s ease-out both; }
   @keyframes rise { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: none; } }
   @media (prefers-reduced-motion: reduce) { .task.enter { animation: none; } }
@@ -264,6 +299,19 @@
     overflow-wrap: anywhere;
   }
   .task.is-done .task-text { color: var(--ink-3); text-decoration: line-through; text-decoration-thickness: 1px; }
+  .flag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .1em;
+    color: var(--danger);
+    background: var(--danger-soft);
+    border-radius: 4px;
+    padding: 1px 6px;
+    margin-right: 7px;
+    vertical-align: 1px;
+  }
+  .task.is-done .flag { color: var(--ink-3); background: var(--surface-2); }
   .task-meta {
     display: block;
     font-family: var(--font-mono);
@@ -317,7 +365,11 @@
     <textarea id="compose-input" placeholder="やることを入力" rows="3" maxlength="1000"
       autocomplete="off" autocapitalize="sentences" spellcheck="false" enterkeyhint="done"></textarea>
     <div class="compose-foot">
-      <p class="hint"><kbd>Enter</kbd> で追加 / <kbd>Shift</kbd>+<kbd>Enter</kbd> で改行</p>
+      <label class="urgent-toggle" for="urgent-flag">
+        <input type="checkbox" id="urgent-flag">
+        <span class="box"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M2.5 8.5 L6 12 L13.5 4" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="text">緊急</span>
+      </label>
       <button id="add-btn" type="button" disabled>追加</button>
     </div>
   </section>
@@ -359,6 +411,7 @@
   var $ = function (id) { return document.getElementById(id); };
   var input = $("compose-input");
   var addBtn = $("add-btn");
+  var urgentFlag = $("urgent-flag");
   var pendingList = $("pending-list");
   var doneList = $("done-list");
   var pendingEmpty = $("pending-empty");
@@ -416,6 +469,7 @@
     return {
       text: text,
       done: !!raw.done,
+      urgent: !!raw.urgent,
       createdAt: Number(raw.createdAt) || 0,
       completedAt: raw.completedAt ? Number(raw.completedAt) : null
     };
@@ -451,7 +505,7 @@
 
   function buildRow(id, task) {
     var li = document.createElement("li");
-    li.className = "task" + (task.done ? " is-done" : "");
+    li.className = "task" + (task.done ? " is-done" : "") + (task.urgent ? " is-urgent" : "");
     if (!seen.has(id)) { li.classList.add("enter"); seen.add(id); }
 
     var check = document.createElement("button");
@@ -472,9 +526,17 @@
     p.textContent = task.text;
     var meta = document.createElement("span");
     meta.className = "task-meta";
-    meta.textContent = task.done ? stampLabel(task.completedAt) + " に完了" : ageLabel(task.createdAt);
+    if (task.urgent) {
+      var flag = document.createElement("span");
+      flag.className = "flag";
+      flag.textContent = "緊急";
+      meta.appendChild(flag);
+    }
+    meta.appendChild(document.createTextNode(
+      task.done ? stampLabel(task.completedAt) + " に完了" : ageLabel(task.createdAt)
+    ));
     body.appendChild(p);
-    if (meta.textContent) body.appendChild(meta);
+    body.appendChild(meta);
 
     var kill = document.createElement("button");
     kill.type = "button";
@@ -496,7 +558,10 @@
     tasks.forEach(function (task, id) {
       (task.done ? done : pend).push({ id: id, task: task });
     });
-    pend.sort(function (a, b) { return b.task.createdAt - a.task.createdAt; });
+    pend.sort(function (a, b) {
+      var urgency = (b.task.urgent ? 1 : 0) - (a.task.urgent ? 1 : 0);
+      return urgency !== 0 ? urgency : b.task.createdAt - a.task.createdAt;
+    });
     done.sort(function (a, b) { return (b.task.completedAt || 0) - (a.task.completedAt || 0); });
 
     var frag = document.createDocumentFragment();
@@ -585,6 +650,7 @@
     var next = {
       text: task.text,
       done: !task.done,
+      urgent: task.urgent,
       createdAt: task.createdAt,
       completedAt: !task.done ? Date.now() : null
     };
@@ -602,12 +668,14 @@
   function add() {
     var text = input.value.replace(/\s+$/, "").replace(/^\s+/, "");
     if (!text) { input.focus(); return; }
-    put(newId(), { text: text, done: false, createdAt: Date.now(), completedAt: null });
+    var urgent = urgentFlag.checked;
+    put(newId(), { text: text, done: false, urgent: urgent, createdAt: Date.now(), completedAt: null });
     input.value = "";
+    urgentFlag.checked = false;
     autoGrow();
     syncButton();
     input.focus();
-    say("未完了タスクに追加しました");
+    say(urgent ? "緊急として未完了タスクの先頭に追加しました" : "未完了タスクに追加しました");
   }
 
   function clearDone() {
