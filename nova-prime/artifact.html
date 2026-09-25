@@ -1,4 +1,4 @@
-<title>STEP 0：あなた専用カリキュラム設計シート | Nova Prime</title>
+<title>STEP 0：あなた専用カリキュラム設計シート</title>
 <style>
   :root{
     --bg:#0a0a0f; --bg2:#101019; --panel:#13131e;
@@ -166,7 +166,7 @@
 <header class="top">
   <div class="top-inner">
     <div class="brandline">
-      <span class="logo"><span class="mark">N</span>NOVA&nbsp;PRIME</span>
+      <span class="logo">STEP&nbsp;0</span>
       <span id="pctText">STEP 0</span>
     </div>
     <div class="prog-track"><div class="prog-fill" id="progFill"></div></div>
@@ -212,7 +212,7 @@
     </div>
   </section>
 
-  <footer>Nova Prime｜STEP 0 カリキュラム設計シート</footer>
+  <footer>STEP 0 カリキュラム設計シート</footer>
 </div>
 
 <script>
@@ -616,7 +616,7 @@ function personalize(){
     hi.style.display="block";
   }
   if(NAME){
-    document.title = `STEP 0：${NAME}専用カリキュラム設計シート | Nova Prime`;
+    document.title = `STEP 0：${NAME}専用カリキュラム設計シート`;
     // 本文（表紙・設問・完了）の「あなた」をまとめて呼び名に置換
     const walker=document.createTreeWalker(document.querySelector(".wrap"),NodeFilter.SHOW_TEXT);
     const nodes=[]; while(walker.nextNode()) nodes.push(walker.currentNode);
